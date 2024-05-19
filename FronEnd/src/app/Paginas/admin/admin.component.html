@@ -1,0 +1,120 @@
+<!-- Link para el Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+  crossorigin="anonymous">
+
+
+<!-- Recursos de fuentes -->
+<link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+<link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+<!-- .css's con estilos necesarios para algunas clases -->
+<link href="../../css/sb-admin-2.css" rel="stylesheet">
+<link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+
+<!-- Div principal que ennvuelve todo el contenido de la sidebar y la topbar -->
+<div class="d-flex div1">
+  <!-- Sidebar (ngClass sólo para celulares y ocultar la barra lateral) -->
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" [ngClass]="{'d-none': !sidebarVisible}">
+
+    <!-- logo y encabezado sidebar -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center margin-top-logo">
+      <div class="sidebar-brand-icon div3">
+      </div>
+      <div class="sidebar-brand-text mx-3">Votaciones</div>
+    </a>
+
+    <!-- Item de navegación Gestión estudiantes -->
+    <li class="nav-item margin-top-content">
+      <a class="nav-link navbar-brand" [routerLink]="['../admin/agregar-estudiantes/buscar-estudiante']" routerLinkActive="active" >
+        <i class="fa fa-graduation-cap"></i>
+        <span>Gestión estudiantes</span>
+      </a>
+    </li>
+
+    <!-- Línea divisora -->
+    <hr class="sidebar-divider">
+
+    <!-- Item de navegación Gestión Padres -->
+    <li class="nav-item">
+      <a class="nav-link navbar-brand" [routerLink]="['/admin/agregar-padres/buscar-padre']" routerLinkActive="active">
+        <i class="fa fa-fw fa-user"></i>
+        <span>Gestión Padres</span>
+      </a>
+    </li>
+
+    <!-- Línea divisora -->
+    <hr class="sidebar-divider">
+
+    <!-- Item de navegación Gestión Docentes -->
+    <li class="nav-item">
+      <a class="nav-link navbar-brand" [routerLink]="['/admin/agregar-profesores/buscar-profesor']" routerLinkActive="active">
+        <i class="fa fa-fw fa-users"></i>
+        <span>Gestión Docentes</span>
+      </a>
+    </li>
+
+    <!-- Línea divisora -->
+    <hr class="sidebar-divider">
+
+    <!-- Item de navegación Gestión Elecciones -->
+    <li class="nav-item">
+      <a class="nav-link navbar-brand" [routerLink]="['/admin/elecciones/listar-elecciones']" routerLinkActive="active">
+        <i class="fa fa-check-square"></i>
+        <span>Gestión Elecciones</span>
+      </a>
+    </li>
+
+    <!-- Línea divisora -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+
+  </ul>
+  <!-- Fin del Sidebar -->
+
+
+
+  <div id="content-wrapper" class="d-flex flex-column flex-grow-1">
+    <div id="content">
+      <!-- Topbar -->
+      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100">
+        <!-- Topbar Navbar -->
+        <ul class="navbar-nav ml-auto">
+          <!-- Botón para ocultar Sidebar (Topbar) -->
+          <form class="form-inline form-toggle-sidebar">
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" (click)="toggleSidebar()">
+              <i class="fa fa-bars"></i>
+            </button>
+          </form>
+
+          <!-- Item de navegación User Information -->
+          <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <span class="mr-2 text-gray-600 small">Admin</span>
+              <img class="img-profile rounded-circle div2">
+            </a>
+          </li>
+          <li>
+            <a class="nav-link margin-top-logout" id="logout" role="button" href="#">
+              <i class="fa fa-power-off" aria-hidden="true"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- Fin del Topbar -->
+      <!-- Router Outlet para redireccionar al componente elegido -->
+      <div class="container-fluid">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
