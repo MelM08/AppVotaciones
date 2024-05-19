@@ -11,6 +11,6 @@ export class ExcelService {
   uploadExcel(file: File) {
     const formData = new FormData();
     formData.append('excelFile', file);
-    return this.http.post<any>('http://localhost:3000/subir-excel-estudiantes', formData);
+    return this.http.post<any>('http://localhost:3000/subirExcelEstudiantes/subir-excel-estudiantes', formData);
   }
 }

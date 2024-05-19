@@ -27,11 +27,14 @@ export class RegistrarPadresComponent {
       return; // Detener la ejecución del método
     }
 
-    this.http.post<any>('http://localhost:3000/registrar-padre', data)
+    this.http.post<any>('http://localhost:3000/registrarPadres/registrar-padre', data)
       .subscribe(
         response => {
-          alert(response.message);
-          this.clearFields();
+          console.error(response.message);
+          this.documentoEstudiante = '';
+          this.documentoPadre = '';
+          this.nombrePadre = '';
+          this.apellidoPadre = '';
           alert('Padre registrado con éxito')
         },
         error => {
@@ -46,12 +49,5 @@ export class RegistrarPadresComponent {
           }
         }
       );
-  }
-
-  clearFields() {
-    this.documentoEstudiante = '';
-    this.documentoPadre = '';
-    this.nombrePadre = '';
-    this.apellidoPadre = '';
   }
 }

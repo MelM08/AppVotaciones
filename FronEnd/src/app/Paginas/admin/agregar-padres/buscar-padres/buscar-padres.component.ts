@@ -19,7 +19,7 @@ export class BuscarPadresComponent {
   }
 
   listarPadres() {
-    this.http.get<any[]>('http://localhost:3000/listar-padres').subscribe(
+    this.http.get<any[]>('http://localhost:3000/listarPadres/listar-padres').subscribe(
       padres => {
         this.padres = padres;
       },
@@ -31,7 +31,7 @@ export class BuscarPadresComponent {
   }
 
   buscarPadres() {
-    this.http.post<any[]>('http://localhost:3000/buscar-padres', {
+    this.http.post<any[]>('http://localhost:3000/buscarPadres/buscar-padres', {
         termino: this.terminoBusqueda
     }).subscribe(
         padres => {
@@ -69,7 +69,7 @@ export class BuscarPadresComponent {
     }
 
     try {
-      const response = await this.http.put<any>('http://localhost:3000/editar-padre', {
+      const response = await this.http.put<any>('http://localhost:3000/editarPadre/editar-padre', {
         padre,
         documento_padre_original: this.padreOriginal.documento_padre_original
       }).toPromise();
@@ -93,7 +93,7 @@ export class BuscarPadresComponent {
     }
 
     try {
-      this.http.delete<any>(`http://localhost:3000/eliminar-padre/${padre.documento_padre}`).toPromise();
+      this.http.delete<any>(`http://localhost:3000/eliminarPadres/eliminar-padre/${padre.documento_padre}`).toPromise();
       this.padres.splice(index, 1); // Eliminar el padre del array
       this.padres = [...this.padres]; // Actualizar la lista
     } catch (error) {

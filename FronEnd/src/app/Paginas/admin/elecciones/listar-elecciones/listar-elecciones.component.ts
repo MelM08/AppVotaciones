@@ -19,7 +19,7 @@ export class ListarEleccionesComponent implements OnInit {
   }
 
   listarElecciones() {
-    this.http.get<any[]>('http://localhost:3000/listar-elecciones').subscribe(
+    this.http.get<any[]>('http://localhost:3000/listarElecciones/listar-elecciones').subscribe(
       elecciones => {
         this.elecciones = elecciones;
       },
@@ -31,7 +31,7 @@ export class ListarEleccionesComponent implements OnInit {
   }
 
   buscarEleccion() {
-    this.http.post<any[]>('http://localhost:3000/buscar-eleccion', {
+    this.http.post<any[]>('http://localhost:3000/buscarElecciones/buscar-eleccion', {
       termino: this.terminoBusqueda
     }).subscribe(
       elecciones => {
@@ -62,7 +62,7 @@ export class ListarEleccionesComponent implements OnInit {
     }
 
     try {
-      const response = await this.http.put<any>('http://localhost:3000/editar-eleccion', { eleccion }).toPromise();
+      const response = await this.http.put<any>('http://localhost:3000/editarPadre/editar-eleccion', { eleccion }).toPromise();
       if (response && response.message === 'Eleccion actualizada') {
         this.elecciones[index] = eleccion; // Actualizar la elección en la lista
         this.elecciones[index].editando = false;
@@ -81,7 +81,7 @@ export class ListarEleccionesComponent implements OnInit {
     }
 
     try {
-      this.http.delete<any>(`http://localhost:3000/eliminar-eleccion/${eleccion.id}`).toPromise();
+      this.http.delete<any>(`http://localhost:3000/eliminarEleccion/eliminar-eleccion/${eleccion.id}`).toPromise();
       this.elecciones.splice(index, 1); // Eliminar la elección del array
     } catch (error) {
       console.error('Error al eliminar la elección:', error);

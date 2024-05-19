@@ -29,7 +29,7 @@ export class AuthService {
   }
 
   verificarRol(id: string): Observable<any> {
-    return this.http.get<any>(`http://localhost:3000/usuario/${id}`).pipe(
+    return this.http.get<any>(`http://localhost:3000/auth/usuario/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = '';
         if (error.status === 404) {
@@ -44,7 +44,7 @@ export class AuthService {
   }
 
   verificarRolAdmin(id: string, password: string): Observable<any> {
-    return this.http.post<any>(`http://localhost:3000/admin`, { id, password }).pipe(
+    return this.http.post<any>(`http://localhost:3000/auth/admin`, { id, password }).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = '';
         if (error.status === 404) {

@@ -39,30 +39,7 @@ export class RegistrarEstudiantesComponent {
 
     // Continuar con la lógica para guardar el estudiante si pasa las validaciones
 
-    this.http.post<any>('http://localhost:3000/registrar-estudiante', estudiante)
-      .subscribe(
-        response => {
-          console.error(response.message);
-          alert('Estudiante guardado con éxito')
-          // Limpiar campos
-          this.documento = '';
-          this.nombre = '';
-          this.apellido = '';
-          this.grado = '';
-          this.sede = '';
-        },
-        error => {
-          if (error.status === 400) {
-            alert('Ya existe un estudiante con ese documento')
-          } else if (error.status === 401) {
-            alert('El estudiante ya existe en la base de datos.')
-          } else if (error.status === 200) {
-            alert('Estudiante guardado correctamente en la base de datos.')
-          } else if (error.status === 500) {
-            alert('Error al guardar el estudiante en la base de datos.')
-          }
-        }
-      );this.http.post<any>('http://localhost:3000/registrar-estudiante', estudiante)
+    this.http.post<any>('http://localhost:3000/registrarEstudiantes/registrar-estudiante', estudiante)
       .subscribe(
         response => {
           console.error(response.message);

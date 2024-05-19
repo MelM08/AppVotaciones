@@ -19,7 +19,7 @@
     }
 
     listarEstudiantes() {
-      this.http.get<any[]>('http://localhost:3000/listar-estudiantes').subscribe(
+      this.http.get<any[]>('http://localhost:3000/listarEstudiantes/listar-estudiantes').subscribe(
         estudiantes => {
           this.estudiantes = estudiantes;
         },
@@ -35,7 +35,7 @@
       //   alert('Debes proporcionar un término de búsqueda');
       //   return;
       // }
-      this.http.post<any[]>('http://localhost:3000/buscar-estudiantes', {
+      this.http.post<any[]>('http://localhost:3000/buscarEstudiantes/buscar-estudiantes', {
         termino: this.terminoBusqueda
       }).subscribe(
         estudiantes => {
@@ -80,7 +80,7 @@
       }
 
       try {
-        const response = await this.http.put<any>('http://localhost:3000/editar-estudiante', { estudiante }).toPromise();
+        const response = await this.http.put<any>('http://localhost:3000/editarEstudiante/editar-estudiante', { estudiante }).toPromise();
         if (response && response.message === 'Estudiante actualizado') {
           this.estudiantes[index] = estudiante; // Actualizar el estudiante en la lista
           this.estudiantes[index].editando = false;
@@ -101,7 +101,7 @@
       }
 
       try {
-        this.http.delete<any>(`http://localhost:3000/eliminar-estudiante/${estudiante.documento_estudiante}`).toPromise();
+        this.http.delete<any>(`http://localhost:3000/eliminarEstudiante/eliminar-estudiante/${estudiante.documento_estudiante}`).toPromise();
         this.estudiantes.splice(index, 1); // Eliminar el estudiante del array
       } catch (error) {
         console.error('Error al eliminar estudiante:', error);

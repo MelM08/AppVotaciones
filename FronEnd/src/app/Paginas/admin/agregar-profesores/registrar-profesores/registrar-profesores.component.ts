@@ -28,7 +28,7 @@ export class RegistrarProfesoresComponent {
       return; // Detener la ejecución del método
     }
 
-    this.http.post<any>('http://localhost:3000/registrar-profesor', profesor)
+    this.http.post<any>('http://localhost:3000/registrarProfesores/registrar-profesor', profesor)
       .subscribe(
         response => {
           console.error(response.message);

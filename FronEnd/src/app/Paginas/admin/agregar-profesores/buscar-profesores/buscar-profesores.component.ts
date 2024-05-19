@@ -19,7 +19,7 @@ export class BuscarProfesoresComponent {
   }
 
   listarDocentes() {
-    this.http.get<any[]>('http://localhost:3000/listar-docentes').subscribe(
+    this.http.get<any[]>('http://localhost:3000/listarProfesores/listar-docentes').subscribe(
       profesores => {
         this.profesores = profesores;
       },
@@ -31,7 +31,7 @@ export class BuscarProfesoresComponent {
   }
 
   buscarProfesores() {
-    this.http.post<any[]>('http://localhost:3000/buscar-profesores', {
+    this.http.post<any[]>('http://localhost:3000/buscarProfesores/buscar-profesores', {
       termino: this.terminoBusqueda
     }).subscribe(
       profesores => {
@@ -69,7 +69,7 @@ export class BuscarProfesoresComponent {
     }
 
     try {
-      const response = await this.http.put<any>('http://localhost:3000/editar-profesor', {
+      const response = await this.http.put<any>('http://localhost:3000/editarPadre/editar-profesor', {
         profesor
       }).toPromise();
 
@@ -92,7 +92,7 @@ export class BuscarProfesoresComponent {
     }
 
     try {
-      this.http.delete<any>(`http://localhost:3000/eliminar-profesor/${profesor.id}`).toPromise();
+      this.http.delete<any>(`http://localhost:3000/eliminarProfesor/eliminar-profesor/${profesor.id}`).toPromise();
       this.profesores.splice(index, 1); // Eliminar el profesor del array
       this.profesores = [...this.profesores]; // Actualizar la lista
     } catch (error) {
