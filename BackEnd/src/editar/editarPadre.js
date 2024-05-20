@@ -25,8 +25,8 @@ router.put('/editar-padre', async (req, res) => {
   
     try {
       await pool.query(
-        `UPDATE padres SET documento_padre = $1, nombre_padre = $2, apellido_padre = $3 WHERE id = $4`,
-        [padre.documento_padre, padre.nombre_padre, padre.apellido_padre, padre.id]
+        `UPDATE padres SET documento_padre = $1, nombre_padre = $2 WHERE id = $3`,
+        [padre.documento_padre, padre.nombre_padre, padre.id]
       );
   
       res.json({ message: 'Padre actualizado' });

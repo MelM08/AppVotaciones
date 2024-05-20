@@ -31,10 +31,6 @@
     }
 
     buscarEstudiante() {
-      // if (!this.terminoBusqueda.trim()) {
-      //   alert('Debes proporcionar un término de búsqueda');
-      //   return;
-      // }
       this.http.post<any[]>('http://localhost:3000/buscarEstudiantes/buscar-estudiantes', {
         termino: this.terminoBusqueda
       }).subscribe(
@@ -57,6 +53,7 @@
 
     editarEstudiante(index: number) {
       this.estudianteOriginal = { ...this.estudiantes[index] };
+      console.log('Estudiante original:', this.estudianteOriginal);
       this.estudiantes[index].editando = true;
     }
 
@@ -73,16 +70,12 @@
         return;
       }
 
-      const gradoPattern = /^(?:[1-9]|1[0-1])-[1-9]$|^1[0-1]-[1-9][0-9]$/;
-      if (!gradoPattern.test(estudiante.grado_estudiante)) {
-        alert('Formato de grado inválido. Debe ser en el formato X-X y debe de estar entre 1 y 11 el primer número.');
-        return;
-      }
-
       try {
-        const response = await this.http.put<any>('http://localhost:3000/editarEstudiante/editar-estudiante', { estudiante }).toPromise();
+        const response = await this.http.put<any>('http://localhost:3000/editarEstudiante/editar-estudiante', {
+          estudiante
+        }).toPromise();
+
         if (response && response.message === 'Estudiante actualizado') {
-          this.estudiantes[index] = estudiante; // Actualizar el estudiante en la lista
           this.estudiantes[index].editando = false;
           this.estudiantes = [...this.estudiantes];
         }

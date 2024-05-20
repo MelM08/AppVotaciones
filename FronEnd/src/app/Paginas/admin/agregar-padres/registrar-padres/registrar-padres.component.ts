@@ -10,7 +10,6 @@ export class RegistrarPadresComponent {
   documentoEstudiante: string = '';
   documentoPadre: string = '';
   nombrePadre: string = '';
-  apellidoPadre: string = '';
 
   constructor(private http: HttpClient) {}
 
@@ -19,10 +18,9 @@ export class RegistrarPadresComponent {
       documentoEstudiante: this.documentoEstudiante,
       documentoPadre: this.documentoPadre,
       nombrePadre: this.nombrePadre,
-      apellidoPadre: this.apellidoPadre
     };
 
-    if (!this.documentoEstudiante || !this.documentoPadre || !this.nombrePadre || !this.nombrePadre) {
+    if (!this.documentoEstudiante || !this.documentoPadre || !this.nombrePadre) {
       alert('Por favor, complete todos los campos.');
       return; // Detener la ejecución del método
     }
@@ -34,7 +32,6 @@ export class RegistrarPadresComponent {
           this.documentoEstudiante = '';
           this.documentoPadre = '';
           this.nombrePadre = '';
-          this.apellidoPadre = '';
           alert('Padre registrado con éxito')
         },
         error => {

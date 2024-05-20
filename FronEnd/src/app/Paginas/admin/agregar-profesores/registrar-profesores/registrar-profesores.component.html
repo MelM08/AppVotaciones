@@ -11,16 +11,6 @@
       <label for="nombre">Nombre:</label>
       <input type="text" id="nombre" name="nombre" required [(ngModel)]="nombre" class="form-control"><br>
 
-      <label for="apellido">Apellido:</label>
-      <input type="text" id="apellido" name="apellido" required [(ngModel)]="apellido" class="form-control"><br>
-
-      <label for="sede">Sede:</label>
-      <select id="sede" name="sede" required [(ngModel)]="sede" class="form-control">
-        <option value="" disabled selected>Sede</option>
-        <option value="Cordoba">Cordoba</option>
-        <option value="Manuela Beltran">Manuela Beltran</option>
-      </select><br>
-
       <button type="submit" (click)="guardarProfesor()" class="btn btn-primary boton">Guardar Estudiante</button>
     </div>
   </div>

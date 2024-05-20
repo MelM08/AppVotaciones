@@ -16,15 +16,17 @@ const pool = new Pool(config);
 router.use(fileUpload());
 
 router.post('/registrar-padre', async (req, res) => {
-    const { documentoEstudiante, documentoPadre, nombrePadre, apellidoPadre } = req.body;
+    const { documentoEstudiante, documentoPadre, nombrePadre} = req.body;
   
     try {
       // Verificar si el estudiante existe en la base de datos
-      const estudianteQuery = 'SELECT * FROM estudiantes WHERE documento_estudiante = $1';
+      const estudianteQuery = 'SELECT id FROM estudiantes WHERE documento_estudiante = $1';
       const estudianteResult = await pool.query(estudianteQuery, [documentoEstudiante]);
       if (estudianteResult.rows.length === 0) {
         return res.status(400).json({ message: 'El estudiante no existe en la base de datos.' });
       }
+  
+      const estudianteId = estudianteResult.rows[0].id;
   
       // Verificar si el padre ya está registrado
       const padreQuery = 'SELECT * FROM padres WHERE documento_padre = $1';
@@ -34,8 +36,8 @@ router.post('/registrar-padre', async (req, res) => {
       }
   
       // Insertar el padre en la base de datos
-      const insertQuery = 'INSERT INTO padres (hijo_id, documento_padre, nombre_padre, apellido_padre) VALUES ($1, $2, $3, $4)';
-      await pool.query(insertQuery, [documentoEstudiante, documentoPadre, nombrePadre, apellidoPadre]);
+      const insertQuery = 'INSERT INTO padres (hijo_id, documento_padre, nombre_padre) VALUES ($1, $2, $3)';
+      await pool.query(insertQuery, [estudianteId, documentoPadre, nombrePadre]);
   
       // Respuesta exitosa
       res.status(200).json({ message: 'Padre registrado exitosamente.' });
@@ -43,6 +45,6 @@ router.post('/registrar-padre', async (req, res) => {
       console.error('Error al registrar padre:', error);
       res.status(500).json({ message: 'Error al registrar padre.' });
     }
-  });
+});
 
 module.exports = router;

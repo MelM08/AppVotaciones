@@ -15,11 +15,11 @@ const pool = new Pool(config);
 
 router.use(fileUpload());
 
-router.delete('/eliminar-profesor/:id', async (req, res) => {
-    const id = req.params.id;
+router.delete('/eliminar-profesor/:documento', async (req, res) => {
+    const documento = req.params.documento;
   
     try {
-      await pool.query('DELETE FROM docentes WHERE id = $1', [id]);
+      await pool.query('DELETE FROM docentes WHERE documento_docente = $1', [documento]);
       res.json({ message: 'Profesor eliminado' });
     } catch (error) {
       console.error('Error al eliminar Profesor:', error);

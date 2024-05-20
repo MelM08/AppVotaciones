@@ -18,7 +18,7 @@ router.use(fileUpload());
 router.get('/listar-docentes', async (req, res) => {
     try {
       // Realiza la consulta SQL para obtener las elecciones
-      const query = 'SELECT * FROM docentes';
+      const query = 'SELECT * FROM docentes LIMIT 10';
       const result = await pool.query(query);
   
       // Envía los resultados como respuesta

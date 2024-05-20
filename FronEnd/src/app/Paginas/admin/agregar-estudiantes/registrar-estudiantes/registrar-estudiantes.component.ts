@@ -19,21 +19,13 @@ export class RegistrarEstudiantesComponent {
     const estudiante = {
       documento: this.documento,
       nombre: this.nombre,
-      apellido: this.apellido,
       grado: this.grado,
       sede: this.sede
     };
 
     // Validar si algún campo está vacío
-    if (!this.documento || !this.nombre || !this.apellido || !this.grado || !this.sede) {
+    if (!this.documento || !this.nombre || !this.grado || !this.sede) {
       alert('Por favor, complete todos los campos.');
-      return;
-    }
-
-    // Validar el formato del grado utilizando una expresión regular
-    const gradoPattern = /^(?:[1-9]|1[0-1])-[1-9]$|^1[0-1]-[1-9][0-9]$/;
-    if (!gradoPattern.test(this.grado)) {
-      alert('Formato de grado inválido. Debe ser en el formato X-X y debe de estar entre 1 y 11 el primer número.');
       return;
     }
 
@@ -47,7 +39,6 @@ export class RegistrarEstudiantesComponent {
           // Limpiar campos
           this.documento = '';
           this.nombre = '';
-          this.apellido = '';
           this.grado = '';
           this.sede = '';
         },

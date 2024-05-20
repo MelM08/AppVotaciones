@@ -50,7 +50,8 @@ export class BuscarProfesoresComponent {
 
 
   editarProfesor(index: number) {
-    this.profesorOriginal = { ...this.profesores[index], documento_padre_original: this.profesores[index].documento_padre };
+    this.profesorOriginal = { ...this.profesores[index]};
+    console.log('Estudiante original:', this.profesorOriginal);
     this.profesores[index].editando = true;
   }
 
@@ -69,7 +70,7 @@ export class BuscarProfesoresComponent {
     }
 
     try {
-      const response = await this.http.put<any>('http://localhost:3000/editarPadre/editar-profesor', {
+      const response = await this.http.put<any>('http://localhost:3000/editarProfesor/editar-profesor', {
         profesor
       }).toPromise();
 
@@ -92,7 +93,7 @@ export class BuscarProfesoresComponent {
     }
 
     try {
-      this.http.delete<any>(`http://localhost:3000/eliminarProfesor/eliminar-profesor/${profesor.id}`).toPromise();
+      this.http.delete<any>(`http://localhost:3000/eliminarProfesor/eliminar-profesor/${profesor.documento_docente}`).toPromise();
       this.profesores.splice(index, 1); // Eliminar el profesor del array
       this.profesores = [...this.profesores]; // Actualizar la lista
     } catch (error) {

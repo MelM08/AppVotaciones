@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ExcelService } from '../excelPadres.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-cargar-padres',
@@ -27,8 +28,8 @@ export class CargarPadresComponent {
           }
           alert('Archivo subido exitosamente')
         },
-        error => {
-          if(error.status(400)){
+        (error: HttpErrorResponse) => {
+          if (error.status === 400) {
             alert('No se ha seleccionado ningún archivo.')
           }else if(error.status === 401){
             alert('El archivo Excel no tiene datos para procesar.')

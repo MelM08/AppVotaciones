@@ -24,6 +24,7 @@ import { CrearEstamentoComponent } from './estamentos/crear-estamento/crear-esta
 import { ListarEstamentosComponent } from './estamentos/listar-estamentos/listar-estamentos.component';
 
 
+
 @NgModule({
   declarations: [
     AgregarEstudiantesComponent,

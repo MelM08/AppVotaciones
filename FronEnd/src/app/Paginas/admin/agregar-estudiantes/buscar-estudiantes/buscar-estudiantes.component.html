@@ -36,33 +36,43 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>Identificación</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Grado</th>
-              <th>Sede</th>
-              <th>Acciones</th>
+              <th style="width: 15%;">Identificación</th>
+              <th style="width: 25%;">Nombre</th>
+              <th style="width: 15%;">Grado</th>
+              <th style="width: 35%;">Sede</th>
+              <th style="width: 15%;">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let estudiante of estudiantes; let i = index">
               <td>
-                <input type="text" [(ngModel)]="estudiante.documento_estudiante" [disabled]="!estudiante.editando">
+                <input type="text" [(ngModel)]="estudiante.documento_estudiante" [disabled]="!estudiante.editando" class="form-control w-100" >
               </td>
               <td>
-                <input type="text" [(ngModel)]="estudiante.nombre_estudiante" [disabled]="!estudiante.editando">
+                <input type="text" [(ngModel)]="estudiante.nombre_estudiante" [disabled]="!estudiante.editando" class="form-control w-100">
               </td>
               <td>
-                <input type="text" [(ngModel)]="estudiante.apellido_estudiante" [disabled]="!estudiante.editando">
+                <select id="grado" name="grado" required [(ngModel)]="estudiante.grado_estudiante" [disabled]="!estudiante.editando" class="form-control w-100">
+                  <option value="" disabled selected>grados</option>
+                  <option value="0">Transición</option>
+                  <option value="1">Primero</option>
+                  <option value="2">Segundo</option>
+                  <option value="3">Tercero</option>
+                  <option value="4">Cuarto</option>
+                  <option value="5">Quinto</option>
+                  <option value="6">Sexto</option>
+                  <option value="7">Septimo</option>
+                  <option value="8">Octavo</option>
+                  <option value="9">Noveno</option>
+                  <option value="10">Décimo</option>
+                  <option value="11">Once</option>
+                </select>
               </td>
               <td>
-                <input type="text" [(ngModel)]="estudiante.grado_estudiante" [disabled]="!estudiante.editando">
-              </td>
-              <td>
-                <select id="sede" name="sede" required [(ngModel)]="estudiante.institucion_estudiante" class="form-control" [disabled]="!estudiante.editando">
+                <select id="sede" name="sede" required [(ngModel)]="estudiante.institucion_estudiante" class="form-control w-100" [disabled]="!estudiante.editando">
                   <option value="" disabled selected>Sede</option>
-                  <option value="Cordoba">Cordoba</option>
-                  <option value="Manuela Beltran">Manuela Beltran</option>
+                  <option value="José María Córdoba">José María Córdoba</option>
+                  <option value="Manuela Beltrán">Manuela Beltrán</option>
                 </select>
               </td>
               <td>

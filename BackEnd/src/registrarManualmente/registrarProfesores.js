@@ -17,10 +17,10 @@ router.use(fileUpload());
 
 router.post('/registrar-profesor', async (req, res) => {
     try {
-      const { documento, nombre, apellido, sede } = req.body;
+      const { documento, nombre } = req.body;
   
       // Verificar si algún campo está vacío
-      if (!documento || !nombre || !apellido || !sede) {
+      if (!documento || !nombre) {
           return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
       }
   
@@ -32,8 +32,8 @@ router.post('/registrar-profesor', async (req, res) => {
       }
   
       // Insertar los datos del profesor en la base de datos
-      const insertarQuery = 'INSERT INTO docentes (documento_docente, nombre_docente, apellido_docente, institucion_docente) VALUES ($1, $2, $3, $4)';
-      const insertarValues = [documento, nombre, apellido, sede];
+      const insertarQuery = 'INSERT INTO docentes (documento_docente, nombre_docente) VALUES ($1, $2)';
+      const insertarValues = [documento, nombre];
       await pool.query(insertarQuery, insertarValues);
   
       res.status(200).json({ message: 'Profesor guardado correctamente en la base de datos.' });

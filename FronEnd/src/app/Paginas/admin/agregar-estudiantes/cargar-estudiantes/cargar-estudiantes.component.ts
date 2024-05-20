@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { ExcelService } from '../excelEstudiantes.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-cargar-estudiantes',
   templateUrl: './cargar-estudiantes.component.html',
-  styleUrl: './cargar-estudiantes.component.scss'
+  styleUrls: ['./cargar-estudiantes.component.scss']
 })
 export class CargarEstudiantesComponent {
   selectedFile: File | null = null;
@@ -25,17 +26,17 @@ export class CargarEstudiantesComponent {
           if (fileInput) {
             fileInput.value = '';
           }
-          alert('Archivo subido exitosamente')
+          alert('Archivo subido exitosamente');
         },
-        error => {
-          if(error.status(400)){
+        (error: HttpErrorResponse) => {
+          if (error.status === 400) {
             alert('El archivo Excel no tiene datos para procesar.');
-          }else if(error.status(401)){
-            alert('La estructura del archivo Excel no es válida.')
-          }else if(error.status(200)){
-            alert('Los datos del archivo Excel han sido procesados y guardados en la base de datos.')
-          }else if(error.status(500)){
-            alert('Error al procesar el archivo Excel..')
+          } else if (error.status === 401) {
+            alert('La estructura del archivo Excel no es válida.');
+          } else if (error.status === 500) {
+            alert('Error al procesar el archivo Excel.');
+          } else {
+            alert(`Error inesperado: ${error.message}`);
           }
         }
       );
