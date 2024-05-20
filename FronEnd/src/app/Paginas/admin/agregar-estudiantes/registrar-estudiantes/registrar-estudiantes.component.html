@@ -11,18 +11,28 @@
       <label for="nombre">Nombre:</label>
       <input type="text" id="nombre" name="nombre" required [(ngModel)]="nombre" class="form-control"><br>
 
-      <label for="apellido">Apellido:</label>
-      <input type="text" id="apellido" name="apellido" required [(ngModel)]="apellido" class="form-control"><br>
-
       <label for="grado">Grado:</label>
-      <input type="text" id="grado" name="grado" required [(ngModel)]="grado" class="form-control">
-      <span style="color: grey;">(Formato: X-X, por ejemplo, 7-1)</span><br>
+      <select id="grado" name="grado" required [(ngModel)]="grado" class="form-control">
+        <option value="" disabled selected>grados</option>
+        <option value="0">Transición</option>
+        <option value="1">Primero</option>
+        <option value="2">Segundo</option>
+        <option value="3">Tercero</option>
+        <option value="4">Cuarto</option>
+        <option value="5">Quinto</option>
+        <option value="6">Sexto</option>
+        <option value="7">Septimo</option>
+        <option value="8">Octavo</option>
+        <option value="9">Noveno</option>
+        <option value="10">Décimo</option>
+        <option value="11">Once</option>
+      </select>
 
       <label for="sede">Sede:</label>
       <select id="sede" name="sede" required [(ngModel)]="sede" class="form-control">
         <option value="" disabled selected>Sede</option>
-        <option value="Cordoba">Cordoba</option>
-        <option value="Manuela Beltran">Manuela Beltran</option>
+        <option value="José María Córdoba">José María Córdoba</option>
+        <option value="Manuela Beltrán">Manuela Beltrán</option>
       </select><br>
 
       <button type="submit" (click)="guardarEstudiante()" class="btn btn-primary boton">Guardar Estudiante</button>

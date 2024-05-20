@@ -17,10 +17,10 @@ router.use(fileUpload());
 
 router.post('/registrar-estudiante', async (req, res) => {
     try {
-      const { documento, nombre, apellido, grado, sede } = req.body;
+      const { documento, nombre, grado, sede } = req.body;
   
       // Verificar si algún campo está vacío
-      if (!documento || !nombre || !apellido || !grado || !sede) {
+      if (!documento || !nombre || !grado || !sede) {
           return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
       }
   
@@ -32,8 +32,8 @@ router.post('/registrar-estudiante', async (req, res) => {
       }
   
       // Insertar los datos del estudiante en la base de datos
-      const insertQuery = 'INSERT INTO estudiantes (documento_estudiante, nombre_estudiante, apellido_estudiante, grado_estudiante, institucion_estudiante) VALUES ($1, $2, $3, $4, $5)';
-      const insertValues = [documento, nombre, apellido, grado, sede];
+      const insertQuery = 'INSERT INTO estudiantes (documento_estudiante, nombre_estudiante, grado_estudiante, institucion_estudiante) VALUES ($1, $2, $3, $4)';
+      const insertValues = [documento, nombre, grado, sede];
       await pool.query(insertQuery, insertValues);
   
       res.status(200).json({ message: 'Estudiante guardado correctamente en la base de datos.' });

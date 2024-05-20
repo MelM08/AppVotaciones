@@ -9,8 +9,6 @@ import { HttpClient } from '@angular/common/http';
 export class RegistrarProfesoresComponent {
   documento: string = '';
   nombre: string = '';
-  apellido: string = '';
-  grado: string = '';
   sede: string = '';
 
   constructor(private http: HttpClient) { }
@@ -19,11 +17,9 @@ export class RegistrarProfesoresComponent {
     const profesor = {
       documento: this.documento,
       nombre: this.nombre,
-      apellido: this.apellido,
-      sede: this.sede
     };
 
-    if (!this.documento || !this.nombre || !this.apellido || !this.sede) {
+    if (!this.documento || !this.nombre) {
       alert('Por favor, complete todos los campos.');
       return; // Detener la ejecución del método
     }
@@ -36,8 +32,6 @@ export class RegistrarProfesoresComponent {
           //limpiar campos
           this.documento = '';
           this.nombre = '';
-          this.apellido = '';
-          this.sede = '';
         },
         error => {
           if(error.status === 400){

@@ -11,7 +11,7 @@ const auth = require('./src/auth/auth');
 
 const crearEleccion = require('./src/crearEleccion/crearEleccion')
 
-const subirEstudiantesRoutes = require('./src/subirExcel/subirExcelEstudiantes');
+const subirExcelEstudiantes = require('./src/subirExcel/subirExcelEstudiantes');
 const subirExcelPadres = require('./src/subirExcel/subirExcelPadres');
 const subirExcelProfesores = require ('./src/subirExcel/SubirExcelProfesores');
 
@@ -44,7 +44,7 @@ app.use('/auth', auth);
 
 app.use('/crearEleccion', crearEleccion);
 
-app.use('/subirExcelEstudiantes', subirEstudiantesRoutes);
+app.use('/subirExcelEstudiantes', subirExcelEstudiantes);
 app.use('/subirExcelPadres', subirExcelPadres);
 app.use('/subirExcelProfesores', subirExcelProfesores);
 

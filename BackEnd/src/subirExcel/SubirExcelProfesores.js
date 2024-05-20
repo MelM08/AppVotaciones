@@ -35,8 +35,10 @@ router.post('/subir-excel-profesores', async (req, res) => {
       }
     
       // Verificar la estructura del archivo
-      const [documento, nombre, apellido, sede] = excelData[0];
-      if (documento !== 'Documento' || nombre !== 'Nombre' || apellido !== 'Apellido' || sede !== 'Sede') {
+      const [tipoDocumento, documento, fechaDeNacimiento, apellido1, apellido2, nombre1, nombre2, cargo] = excelData[0];
+      if (tipoDocumento !== 'TIPO_DOCUMENTO' || documento !== 'NRO_DOCUMENTO' || fechaDeNacimiento !== 'FECHA_NACIMIENTO' ||
+      apellido1 !== 'APELLIDO1' || apellido2 !== 'APELLIDO2' || nombre1 !== 'NOMBRE1' ||
+      nombre2 !== 'NOMBRE2' || cargo !== 'CARGO') {
         return res.status(401).json({ message: 'La estructura del archivo Excel no es válida.' });
       }
     
@@ -49,18 +51,22 @@ router.post('/subir-excel-profesores', async (req, res) => {
     
       // Procesar los datos del archivo Excel a partir de la segunda fila
       for (let i = 1; i < excelData.length; i++) {
-        let [documentoProfesor, nombreProfesor, apellidoProfesor, institucionProfesor] = excelData[i];
+        let [tipoDocumento, documentoProfesor, fechaDeNacimiento, apellido1, apellido2, nombre1, nombre2, cargo] = excelData[i];
     
         // Verificar si documentoProfesor no es una cadena y convertirlo a cadena si es necesario
         if (typeof documentoProfesor !== 'string') {
             documentoProfesor = String(documentoProfesor);
         }
+
+        // Concatenar los nombres y apellidos
+        const nombreDocente = [nombre1, nombre2, apellido1, apellido2].filter(Boolean).join(' ');
   
         // Verificar si algún campo está vacío
-        if (!documentoProfesor || !nombreProfesor || !apellidoProfesor || !institucionProfesor) {
+        if (!documentoProfesor || !nombreDocente) {
           console.log(`La fila ${i + 1} contiene un campo vacío. Se ignorará.`);
           continue; // Saltar al siguiente ciclo sin insertar datos en la base de datos
         }
+
     
         // Guardar el documento del profesor en la lista
         excelDocuments.add(documentoProfesor);
@@ -76,8 +82,8 @@ router.post('/subir-excel-profesores', async (req, res) => {
         }
     
         // Insertar los datos en la base de datos
-        const insertQuery = 'INSERT INTO docentes (documento_docente, nombre_docente, apellido_docente, institucion_docente) VALUES ($1, $2, $3, $4)';
-        const insertValues = [documentoProfesor, nombreProfesor, apellidoProfesor, institucionProfesor];
+        const insertQuery = 'INSERT INTO docentes (documento_docente, nombre_docente) VALUES ($1, $2)';
+        const insertValues = [documentoProfesor, nombreDocente];
         await pool.query(insertQuery, insertValues);
         console.log(`Profesor con documento ${documentoProfesor} agregado a la base de datos.`)
       }

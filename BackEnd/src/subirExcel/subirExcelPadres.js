@@ -17,7 +17,7 @@ router.use(fileUpload());
 
 router.post('/subir-excel-padres', async (req, res) => {
     try {
-      //verificamos si se seleccionó un archivo 
+      // Verificar si se seleccionó un archivo 
       if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).json({ message: 'No se ha seleccionado ningún archivo.' });
       }
@@ -30,19 +30,16 @@ router.post('/subir-excel-padres', async (req, res) => {
       const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
   
       // Verificar si el archivo tiene al menos una fila de datos
-      if (excelData.length < 2) {
-        return res.status(401).json({ message: 'El archivo Excel no tiene datos para procesar.' });
-      }
-  
-      // Verificar la estructura del archivo
-      const [documento, nombre, apellido, grado, sede, documentoPadre, nombrePadre, apellidoPadre, documentoMadre, nombreMadre, apellidoMadre] = excelData[0];
-      if (documento !== 'Documento' || nombre !== 'Nombre' || apellido !== 'Apellido' || grado !== 'Grado' || sede !== 'Sede' || documentoPadre !== 'Documento Padre' || nombrePadre !== 'Nombre Padre' || apellidoPadre !== 'Apellido Padre' || documentoMadre !== 'Documento Madre' || nombreMadre !== 'Nombre Madre' || apellidoMadre !== 'Apellido Madre') {
-        return res.status(402).json({ message: 'La estructura del archivo Excel no es válida.' });
+      if (excelData.length < 3) {
+        return res.status(401).json({ message: 'El archivo Excel no tiene suficientes datos para procesar.' });
       }
   
       // Procesar los datos del archivo Excel
-      for (let i = 1; i < excelData.length; i++) {
-        let [documentoEstudiante, nombreEstudiante, apellidoEstudiante, gradoEstudiante, sedeEstudiante, documentoPadre, nombrePadre, apellidoPadre, documentoMadre, nombreMadre, apellidoMadre] = excelData[i];
+      for (let i = 2; i < excelData.length; i++) {
+        let [sede, jornada, gradoEstudiante, grupo, nombreCompleto, FechaDeNacimiento, edad, documentoEstudiante,
+          telefonoCelularEstudiante, telefonoFijoEstudiante, nombreMadre, documentoMadre, telefonoCelularMadre,
+          nombrePadre, documentoPadre, telefonoCelularPadre, nombreAcudiente, documentoAcudiente, telefonoCelularAcudiente
+        ] = excelData[i];
   
         // Verificar si documentoEstudiante no es una cadena y convertirlo a cadena si es necesario
         if (typeof documentoEstudiante !== 'string') {
@@ -50,42 +47,35 @@ router.post('/subir-excel-padres', async (req, res) => {
         }
   
         // Verificar si alguno de los padres tiene todos los campos vacíos
-        if ((!documentoPadre || !nombrePadre || !apellidoPadre) && (!documentoMadre || !nombreMadre || !apellidoMadre)) {
+        if ((!documentoPadre || !nombrePadre ) && (!documentoMadre || !nombreMadre)) {
           console.log(`La fila ${i + 1} no contiene suficientes datos para padres. Se ignorará.`);
           continue; // Saltar al siguiente ciclo sin insertar datos en la base de datos
         }
   
-        // Verificar si el hijo está presente en la base de datos
-        const existingStudentQuery = 'SELECT documento_estudiante FROM estudiantes WHERE documento_estudiante = $1';
+        // Verificar si el estudiante está presente en la base de datos
+        const existingStudentQuery = 'SELECT id FROM estudiantes WHERE documento_estudiante = $1';
         const existingStudent = await pool.query(existingStudentQuery, [documentoEstudiante]);
   
         if (existingStudent.rows.length === 0) {
           console.log(`La fila ${i + 1} contiene datos de un estudiante que no está en la base de datos. Se omitirá.`);
           continue; // Saltar al siguiente ciclo
         }
+
+        const estudianteId = existingStudent.rows[0].id;
   
-        // Verificar si los padres ya existen en la base de datos
-        const existingPadreQuery = 'SELECT documento_padre FROM padres WHERE documento_padre = $1';
-        const existingPadre = await pool.query(existingPadreQuery, [documentoPadre]);
-        const existingMadreQuery = 'SELECT documento_padre FROM padres WHERE documento_padre = $1';
-        const existingMadre = await pool.query(existingMadreQuery, [documentoMadre]);
-  
-        if (existingPadre.rows.length > 0 || existingMadre.rows.length > 0) {
-          console.log(`La fila ${i + 1} contiene datos de padres que ya existen en la base de datos. Se omitirá.`);
-          continue; // Saltar al siguiente ciclo
+        // Si el estudiante está presente, insertar los datos de los padres en la base de datos
+        console.log(`La fila ${i + 1} contiene datos válidos. Se insertarán los datos de los padres.`);
+        
+        // Insertar los datos del padre en la base de datos si los datos de documentoPadre y nombrePadre son válidos
+        if (documentoPadre && nombrePadre) {
+          await pool.query('INSERT INTO padres (hijo_id, documento_padre, nombre_padre) VALUES ($1, $2, $3)', [estudianteId, documentoPadre, nombrePadre]);
+          console.log(`Se agregó el padre de ${nombreCompleto}.`);
         }
-  
-        // Si ambos padres tienen todos los campos completos y no existen en la base de datos, insertar ambos en la base de datos
-        console.log(`La fila ${i + 1} contiene datos de ambos padres. Se insertarán los datos de ambos padres.`);
-        // Insertar los datos del padre en la base de datos si los datos de documentoPadre y nombrePadre y apellidoPadre son válidos
-        if (documentoPadre && nombrePadre && apellidoPadre) {
-          await pool.query('INSERT INTO padres (hijo_id, documento_padre, nombre_padre, apellido_padre) VALUES ($1, $2, $3, $4)', [documentoEstudiante, documentoPadre, nombrePadre, apellidoPadre]);
-          console.log(`La fila ${i + 1} Sólo contiene datos del padre, se agregará solo el padre.`);
-        }
-        // Insertar los datos de la madre en la base de datos si los datos de documentoMadre y nombreMadre y apellidoMadre son válidos
-        if (documentoMadre && nombreMadre && apellidoMadre) {
-          await pool.query('INSERT INTO padres (hijo_id, documento_padre, nombre_padre, apellido_padre) VALUES ($1, $2, $3, $4)', [documentoEstudiante, documentoMadre, nombreMadre, apellidoMadre]);
-          console.log(`La fila ${i + 1} Sólo contiene datos de la madre, se agregará solo la madre.`);
+
+        // Insertar los datos de la madre en la base de datos si los datos de documentoMadre y nombreMadre son válidos
+        if (documentoMadre && nombreMadre) {
+          await pool.query('INSERT INTO padres (hijo_id, documento_padre, nombre_padre) VALUES ($1, $2, $3)', [estudianteId, documentoMadre, nombreMadre]);
+          console.log(`Se agregó la madre de ${nombreCompleto}.`);
         }
       }
   

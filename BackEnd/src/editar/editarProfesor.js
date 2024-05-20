@@ -25,8 +25,8 @@ router.put('/editar-profesor', async (req, res) => {
   
     try {
       await pool.query(
-        `UPDATE docentes SET documento_docente = $1, nombre_docente = $2, apellido_docente = $3, institucion_docente = $4 WHERE id = $5`,
-        [profesor.documento_docente, profesor.nombre_docente, profesor.apellido_docente, profesor.institucion_docente, profesor.id]
+        `UPDATE docentes SET documento_docente = $1, nombre_docente = $2 WHERE id = $3`,
+        [profesor.documento_docente, profesor.nombre_docente, profesor.id]
       );
   
       res.json({ message: 'Profesor actualizado' });

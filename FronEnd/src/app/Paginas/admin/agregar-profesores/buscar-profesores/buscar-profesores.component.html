@@ -38,28 +38,16 @@
             <tr>
               <th>Identificación</th>
               <th>Nombre</th>
-              <th>Apellido</th>
-              <th>Sede</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let profesor of profesores; let i = index">
               <td>
-                <input type="text" [(ngModel)]="profesor.documento_docente" [disabled]="!profesor.editando">
+                <input type="text" [(ngModel)]="profesor.documento_docente" [disabled]="!profesor.editando" class="form-control w-100" >
               </td>
               <td>
-                <input type="text" [(ngModel)]="profesor.nombre_docente" [disabled]="!profesor.editando">
-              </td>
-              <td>
-                <input type="text" [(ngModel)]="profesor.apellido_docente" [disabled]="!profesor.editando">
-              </td>
-              <td>
-                <select id="sede" name="sede" required [(ngModel)]="profesor.institucion_docente" class="form-control" [disabled]="!profesor.editando">
-                  <option value="" disabled selected>Sede</option>
-                  <option value="Cordoba">Cordoba</option>
-                  <option value="Manuela Beltran">Manuela Beltran</option>
-                </select>
+                <input type="text" [(ngModel)]="profesor.nombre_docente" [disabled]="!profesor.editando" class="form-control w-100" >
               </td>
               <td>
                 <ng-container *ngIf="!profesor.editando">

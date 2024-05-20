@@ -18,7 +18,7 @@ router.use(fileUpload());
 router.get('/listar-elecciones', async (req, res) => {
     try {
       // Realiza la consulta SQL para obtener las elecciones
-      const query = 'SELECT * FROM elecciones';
+      const query = 'SELECT * FROM elecciones LIMIT 10';
       const result = await pool.query(query);
   
       // Envía los resultados como respuesta

@@ -39,23 +39,19 @@
               <th>Identificación Hijo</th>
               <th>Identificación Padre</th>
               <th>Nombre</th>
-              <th>Apellido</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let padre of padres; let i = index">
               <td>
-                <input type="text" [(ngModel)]="padre.hijo_id" [disabled]="!padre.editando">
+                <input type="text" [(ngModel)]="padre.documento_estudiante" [disabled]="!padre.editando || padre.editando" class="form-control w-100">
               </td>
               <td>
-                <input type="text" [(ngModel)]="padre.documento_padre" [disabled]="!padre.editando">
+                <input type="text" [(ngModel)]="padre.documento_padre" [disabled]="!padre.editando" class="form-control w-100">
               </td>
               <td>
-                <input type="text" [(ngModel)]="padre.nombre_padre" [disabled]="!padre.editando">
-              </td>
-              <td>
-                <input type="text" [(ngModel)]="padre.apellido_padre" [disabled]="!padre.editando">
+                <input type="text" [(ngModel)]="padre.nombre_padre" [disabled]="!padre.editando" class="form-control w-100">
               </td>
               <td>
                 <ng-container *ngIf="!padre.editando">
