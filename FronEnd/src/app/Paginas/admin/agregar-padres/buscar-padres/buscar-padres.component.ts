@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -6,10 +6,11 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './buscar-padres.component.html',
   styleUrls: ['./buscar-padres.component.scss']
 })
-export class BuscarPadresComponent {
+export class BuscarPadresComponent implements OnInit{
   terminoBusqueda: string = '';
   padres: any[] = [];
   padreSeleccionado: any = null;
+  page:  number = 1;
   padreOriginal: any = null;
 
   constructor(private http: HttpClient) { }
@@ -18,8 +19,8 @@ export class BuscarPadresComponent {
     this.listarPadres();
   }
 
-  listarPadres() {
-    this.http.get<any[]>('http://localhost:3000/listarPadres/listar-padres').subscribe(
+  listarPadres(page: number = 1, limit: number = 10) {
+    this.http.get<any[]>(`http://localhost:3000/listarPadres/listar-padres?page=${page}&limit=${limit}`).subscribe(
       padres => {
         this.padres = padres;
       },
@@ -30,8 +31,8 @@ export class BuscarPadresComponent {
     );
   }
 
-  buscarPadres() {
-    this.http.post<any[]>('http://localhost:3000/buscarPadres/buscar-padres', {
+  buscarPadres(page: number = 1, limit: number = 10) {
+    this.http.post<any[]>(`http://localhost:3000/buscarPadres/buscar-padres?page=${page}&limit=${limit}`, {
         termino: this.terminoBusqueda
     }).subscribe(
         padres => {
@@ -48,12 +49,15 @@ export class BuscarPadresComponent {
     );
   }
 
+  cambiarPagina(page: number){
+    this.page = page;
+    this.listarPadres(page);
+  }
 
   editarPadre(index: number) {
     this.padreOriginal = { ...this.padres[index], documento_padre_original: this.padres[index].documento_padre };
     this.padres[index].editando = true;
   }
-
 
 
   cancelarEdicion(index: number) {

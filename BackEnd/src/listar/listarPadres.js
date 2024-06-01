@@ -5,11 +5,11 @@ const XLSX = require('xlsx');
 const router = express.Router();
 
 const config = {
-  user: 'postgres',
-  host: 'localhost',
-  password: 'root',
-  database: 'usuarios'
-};
+    user: 'postgres',
+    host: 'localhost',
+    password: '1234',
+    database: 'usuarios_'
+  };
 
 const pool = new Pool(config);
 
@@ -22,7 +22,7 @@ router.get('/listar-padres', async (req, res) => {
             SELECT padres.*, estudiantes.documento_estudiante
             FROM padres
             JOIN estudiantes ON padres.hijo_id = estudiantes.id
-            LIMIT 10
+            -- LIMIT 10
         `;
         const result = await pool.query(query);
 

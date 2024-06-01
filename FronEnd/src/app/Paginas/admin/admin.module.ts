@@ -22,6 +22,8 @@ import { EleccionesComponent } from './elecciones/elecciones.component';
 import { EstamentosComponent } from './estamentos/estamentos.component';
 import { CrearEstamentoComponent } from './estamentos/crear-estamento/crear-estamento.component';
 import { ListarEstamentosComponent } from './estamentos/listar-estamentos/listar-estamentos.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 
 
@@ -51,7 +53,8 @@ import { ListarEstamentosComponent } from './estamentos/listar-estamentos/listar
     CommonModule,
     AdminRoutingModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    NgxPaginationModule
   ]
 })
 export class AdminModule { }
