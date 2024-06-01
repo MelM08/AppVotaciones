@@ -5,11 +5,11 @@ const XLSX = require('xlsx');
 const router = express.Router();
 
 const config = {
-  user: 'postgres',
-  host: 'localhost',
-  password: 'root',
-  database: 'usuarios'
-};
+    user: 'postgres',
+    host: 'localhost',
+    password: '1234',
+    database: 'usuarios_'
+  };
 
 const pool = new Pool(config);
 

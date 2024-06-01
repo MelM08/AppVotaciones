@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -6,10 +6,11 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './buscar-profesores.component.html',
   styleUrl: './buscar-profesores.component.scss'
 })
-export class BuscarProfesoresComponent {
+export class BuscarProfesoresComponent implements OnInit{
   terminoBusqueda: string = '';
   profesores: any[] = [];
   profesorSeleccionado: any = null;
+  page: number = 1;
   profesorOriginal: any = null;
 
   constructor(private http: HttpClient) { }
@@ -18,8 +19,8 @@ export class BuscarProfesoresComponent {
     this.listarDocentes();
   }
 
-  listarDocentes() {
-    this.http.get<any[]>('http://localhost:3000/listarProfesores/listar-docentes').subscribe(
+  listarDocentes(page: number = 1, limit: number = 10) {
+    this.http.get<any[]>(`http://localhost:3000/listarProfesores/listar-docentes?page=${page}&limit=${limit}`).subscribe(
       profesores => {
         this.profesores = profesores;
       },
@@ -30,8 +31,8 @@ export class BuscarProfesoresComponent {
     );
   }
 
-  buscarProfesores() {
-    this.http.post<any[]>('http://localhost:3000/buscarProfesores/buscar-profesores', {
+  buscarProfesores(page: number = 1, limit: number = 10) {
+    this.http.post<any[]>(`http://localhost:3000/buscarProfesores/buscar-profesores?page=${page}&limit=${limit}`, {
       termino: this.terminoBusqueda
     }).subscribe(
       profesores => {

@@ -7,10 +7,9 @@ const router = express.Router();
 const config = {
   user: 'postgres',
   host: 'localhost',
-  password: 'root',
-  database: 'usuarios'
+  password: '1234',
+  database: 'usuarios_'
 };
-
 const pool = new Pool(config);
 
 router.use(fileUpload());

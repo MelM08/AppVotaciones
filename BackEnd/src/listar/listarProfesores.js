@@ -7,10 +7,9 @@ const router = express.Router();
 const config = {
   user: 'postgres',
   host: 'localhost',
-  password: 'root',
-  database: 'usuarios'
+  password: '1234',
+  database: 'usuarios_'
 };
-
 const pool = new Pool(config);
 
 router.use(fileUpload());
@@ -18,7 +17,7 @@ router.use(fileUpload());
 router.get('/listar-docentes', async (req, res) => {
     try {
       // Realiza la consulta SQL para obtener las elecciones
-      const query = 'SELECT * FROM docentes LIMIT 10';
+      const query = 'SELECT * FROM docentes';
       const result = await pool.query(query);
   
       // Envía los resultados como respuesta

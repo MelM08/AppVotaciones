@@ -1,4 +1,4 @@
-  import { Component } from '@angular/core';
+  import { Component, OnInit } from '@angular/core';
   import { HttpClient } from '@angular/common/http';
 
   @Component({
@@ -6,10 +6,11 @@
     templateUrl: './buscar-estudiantes.component.html',
     styleUrls: ['./buscar-estudiantes.component.scss']
   })
-  export class BuscarEstudiantesComponent {
+  export class BuscarEstudiantesComponent implements OnInit{
     terminoBusqueda: string = '';
     estudiantes: any[] = [];
     estudianteSeleccionado: any = null;
+    page:  number = 1;
     estudianteOriginal: any = null;
 
     constructor(private http: HttpClient) { }
@@ -18,8 +19,9 @@
       this.listarEstudiantes();
     }
 
-    listarEstudiantes() {
-      this.http.get<any[]>('http://localhost:3000/listarEstudiantes/listar-estudiantes').subscribe(
+    listarEstudiantes(page: number = 1, limit: number = 10) {
+      const url = `http://localhost:3000/listarEstudiantes/listar-estudiantes?page=${page}&limit=${limit}`;
+      this.http.get<any[]>(url).subscribe(
         estudiantes => {
           this.estudiantes = estudiantes;
         },
@@ -30,10 +32,9 @@
       );
     }
 
-    buscarEstudiante() {
-      this.http.post<any[]>('http://localhost:3000/buscarEstudiantes/buscar-estudiantes', {
-        termino: this.terminoBusqueda
-      }).subscribe(
+    buscarEstudiante(page: number = 1, limit: number = 10) {
+      const url = `http://localhost:3000/buscarEstudiantes/buscar-estudiantes?page=${page}&limit=${limit}`;
+      this.http.post<any[]>(url, { termino: this.terminoBusqueda }).subscribe(
         estudiantes => {
           this.estudiantes = estudiantes.map(estudiante => ({ ...estudiante, editando: false }));
           this.terminoBusqueda = '';
@@ -49,6 +50,10 @@
       );
     }
 
+    cambiarPagina(page: number){
+      this.page = page;
+      this.listarEstudiantes(page);
+    }
 
 
     editarEstudiante(index: number) {

@@ -22,7 +22,7 @@
 
 .h11{
   margin-bottom: 100px;
-  font-size: 3em;
+  font-size: 2em;
 }
 
 .boton{
@@ -32,20 +32,21 @@
 .div2 {
   position: absolute;
   top: 4%; /* Posiciona el .div2 en el centro verticalmente */
-  left: 20px; /* Ajusta la distancia desde el borde izquierdo del header */
+  /*left: 20px; /* Ajusta la distancia desde el borde izquierdo del header */
   transform: translateY(-50%); /* Centra verticalmente el .div2 */
   width: 100px; /* Ajusta el ancho según tus necesidades */
   height: 100px; /* Ajusta la altura según tus necesidades */
   z-index: 1;
-  background-image: url(../../Fotos/logo.png);
+  /*background-image: url(../../Fotos/logo.png);*/
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  align-items: center;
   background-attachment: fixed;
 }
 
 .h2{
-  margin-left: 12vh;
+  /*margin-left: 12vh;*/
   font-size: 2em;
 }
 

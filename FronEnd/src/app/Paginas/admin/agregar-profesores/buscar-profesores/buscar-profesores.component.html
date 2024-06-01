@@ -24,7 +24,7 @@
     <div class="card-header py-3 d-flex justify-content-between align-items-center"> <!-- Utilizamos d-flex y justify-content-between para alinear elementos -->
       <div class="d-flex align-items-center"> <!-- Contenedor para el input y el botón -->
         <input type="text" [(ngModel)]="terminoBusqueda" class="form-control me-2" placeholder="Buscar"> <!-- Añadimos la clase me-2 para darle un pequeño margen a la derecha -->
-        <a class="btn btn-primary btn-circle me-2" (click)="buscarProfesores()">
+        <a class="btn btn-primary btn-circle me-2" (click)="buscarProfesores()" title="Buscar">
           <i class="fa fa-search"></i>
         </a>
       </div>
@@ -42,7 +42,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let profesor of profesores; let i = index">
+            <tr *ngFor="let profesor of profesores | paginate: { itemsPerPage: 10, currentPage: page }; let i = index">
               <td>
                 <input type="text" [(ngModel)]="profesor.documento_docente" [disabled]="!profesor.editando" class="form-control w-100" >
               </td>
@@ -51,18 +51,18 @@
               </td>
               <td>
                 <ng-container *ngIf="!profesor.editando">
-                  <a class="btn btn-primary" (click)="editarProfesor(i)">
+                  <a class="btn btn-primary" (click)="editarProfesor(i)" title="Editar">
                     <i class="fa fa-user-edit"></i>
                   </a>
-                  <a class="btn btn-danger" (click)="eliminarProfesor(i)">
+                  <a class="btn btn-danger" (click)="eliminarProfesor(i)" title="Eliminar">
                     <i class="fa fa-trash"></i>
                   </a>
                 </ng-container>
                 <ng-container *ngIf="profesor.editando">
-                  <a class="btn btn-success" (click)="guardarProfesor(i)">
+                  <a class="btn btn-success" (click)="guardarProfesor(i)" title="Guardar">
                     <i class="fa fa-save"></i>
                   </a>
-                  <a class="btn btn-secondary" (click)="cancelarEdicion(i)">
+                  <a class="btn btn-secondary" (click)="cancelarEdicion(i)" title="Cancelar">
                     <i class="fa fa-times-circle"></i>
                   </a>
                 </ng-container>
@@ -73,6 +73,7 @@
             </tr>
           </tbody>
         </table>
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
       </div>
     </div>
   </div>
