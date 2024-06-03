@@ -3,13 +3,8 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const XLSX = require('xlsx');
 const router = express.Router();
+const config = require('../../configDB');
 
-const config = {
-  user: 'postgres',
-  host: 'localhost',
-  password: '1234',
-  database: 'usuarios_'
-};
 const pool = new Pool(config);
 
 router.use(fileUpload());

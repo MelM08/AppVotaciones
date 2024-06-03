@@ -16,22 +16,12 @@
 
 <div class="container-fluid">
   <!-- Tabla de elecciones -->
-  <div class="card card-2 shadow">
-    <!-- Header de la tabla donde se encuentra la busqueda y el botón para buscar -->
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center">
-        <input type="text" [(ngModel)]="terminoBusqueda" class="form-control me-2" placeholder="Buscar">
-        <a class="btn btn-primary btn-circle me-2" (click)="buscarEleccion()">
-          <i class="fa fa-search"></i>
-        </a>
-      </div>
-    </div>
-
+  <div class="card shadow mb-4">
     <!-- Tabla -->
     <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-          <thead>
+        <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+          <thead class="thead-light">
             <tr>
               <th>ID</th>
               <th>Nombre</th>
@@ -44,35 +34,42 @@
           <tbody>
             <tr *ngFor="let eleccion of elecciones; let i = index">
               <td>
-                <input type="text" [(ngModel)]="eleccion.id" [disabled]="!eleccion.editando">
+                <input type="text" [(ngModel)]="eleccion.id" class="form-control" disabled>
               </td>
               <td>
-                <input type="text" [(ngModel)]="eleccion.nombre" [disabled]="!eleccion.editando">
+                <input type="text" [(ngModel)]="eleccion.nombre" class="form-control" [disabled]="!eleccion.editando">
               </td>
               <td>
-                <input type="text" [(ngModel)]="eleccion.ano" [disabled]="!eleccion.editando">
+                <input type="text" [(ngModel)]="eleccion.ano" class="form-control" [disabled]="!eleccion.editando">
               </td>
               <td>
-                <input type="text" [(ngModel)]="eleccion.estado" [disabled]="!eleccion.editando">
+                <ng-container *ngIf="eleccion.editando">
+                  <select [(ngModel)]="eleccion.estado" class="form-control">
+                    <option value="ACTIVO">ACTIVO</option>
+                    <option value="INACTIVO">INACTIVO</option>
+                  </select>
+                </ng-container>
+                <ng-container *ngIf="!eleccion.editando">
+                  <input type="text" [(ngModel)]="eleccion.estado" class="form-control" disabled>
+                </ng-container>
               </td>
               <td>
-                <!-- Cambiado a un enlace que te lleva al componente Estamentos -->
-                <a [routerLink]="['/admin/estamentos', eleccion.id]" routerLinkActive="active" >Ver Estamentos</a>
+                <a [routerLink]="['/admin/estamentos', eleccion.id, 'listar-estamentos']">Ver Estamentos</a>
               </td>
               <td>
                 <ng-container *ngIf="!eleccion.editando">
-                  <a class="btn btn-primary" (click)="editarEleccion(i)">
+                  <a class="btn btn-primary btn-sm" (click)="editarEleccion(i)">
                     <i class="fa fa-user-edit"></i>
                   </a>
-                  <a class="btn btn-danger" (click)="eliminarEleccion(i)">
+                  <a class="btn btn-danger btn-sm" (click)="eliminarEleccion(i)">
                     <i class="fa fa-trash"></i>
                   </a>
                 </ng-container>
                 <ng-container *ngIf="eleccion.editando">
-                  <a class="btn btn-success" (click)="guardarEleccion(i)">
+                  <a class="btn btn-success btn-sm" (click)="guardarEleccion(i)">
                     <i class="fa fa-save"></i>
                   </a>
-                  <a class="btn btn-secondary" (click)="cancelarEdicion(i)">
+                  <a class="btn btn-secondary btn-sm" (click)="cancelarEdicion(i)">
                     <i class="fa fa-times-circle"></i>
                   </a>
                 </ng-container>
@@ -87,5 +84,3 @@
     </div>
   </div>
 </div>
-
-

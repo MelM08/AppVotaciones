@@ -20,37 +20,79 @@ import { ListarEleccionesComponent } from './elecciones/listar-elecciones/listar
 import { EstamentosComponent } from './estamentos/estamentos.component';
 import { CrearEstamentoComponent } from './estamentos/crear-estamento/crear-estamento.component';
 import { ListarEstamentosComponent } from './estamentos/listar-estamentos/listar-estamentos.component';
+import { CandidatosComponent } from './candidatos/candidatos.component';
+import { CrearCandidatoComponent } from './candidatos/crear-candidato/crear-candidato.component';
+import { ListarCandidatosComponent } from './candidatos/listar-candidatos/listar-candidatos.component';
 
 const routes: Routes = [
-  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], children: [
-    { path: 'agregar-estudiantes', component: AgregarEstudiantesComponent, canActivate: [AuthGuard], children: [
-      { path: 'cargar-estudiantes', component: CargarEstudiantesComponent, canActivate: [AuthGuard] },
-      { path: 'registrar-estudiante', component: RegistrarEstudiantesComponent, canActivate: [AuthGuard] },
-      { path: 'buscar-estudiante', component: BuscarEstudiantesComponent, canActivate: [AuthGuard] }
-    ]},
-    { path: 'agregar-padres', component: AgregarPadresComponent, canActivate: [AuthGuard], children: [
-      {path: 'cargar-padres', component: CargarPadresComponent, canActivate: [AuthGuard]},
-      {path: 'registrar-padre', component: RegistrarPadresComponent, canActivate: [AuthGuard]},
-      {path: 'buscar-padre', component: BuscarPadresComponent, canActivate: [AuthGuard]}
-    ]},
-    { path: 'agregar-profesores', component: AgregarProfesoresComponent, canActivate: [AuthGuard], children: [
-      {path: 'cargar-profesores', component: CargarProfesoresComponent, canActivate: [AuthGuard]},
-      {path: 'registrar-profesor', component: RegistrarProfesoresComponent, canActivate: [AuthGuard]},
-      {path: 'buscar-profesor', component:  BuscarProfesoresComponent, canActivate: [AuthGuard]}
-    ]},
-    { path: 'elecciones', component: EleccionesComponent, canActivate: [AuthGuard], children:  [
-      {path: 'crear-eleccion', component: CrearEleccionComponent, canActivate: [AuthGuard]},
-      {path: 'listar-elecciones', component: ListarEleccionesComponent, canActivate: [AuthGuard]}
-    ]},
-    { path: 'estamentos/:id', component: EstamentosComponent, canActivate: [AuthGuard], children:  [
-      {path: 'crear-estamento', component: CrearEstamentoComponent, canActivate: [AuthGuard]},
-      {path: 'listar-estamentos', component: ListarEstamentosComponent, canActivate: [AuthGuard]}
-    ]}
-  ]}
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'agregar-estudiantes',
+        component: AgregarEstudiantesComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: 'cargar-estudiantes', component: CargarEstudiantesComponent, canActivate: [AuthGuard] },
+          { path: 'registrar-estudiante', component: RegistrarEstudiantesComponent, canActivate: [AuthGuard] },
+          { path: 'buscar-estudiante', component: BuscarEstudiantesComponent, canActivate: [AuthGuard] }
+        ]
+      },
+      {
+        path: 'agregar-padres',
+        component: AgregarPadresComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: 'cargar-padres', component: CargarPadresComponent, canActivate: [AuthGuard] },
+          { path: 'registrar-padre', component: RegistrarPadresComponent, canActivate: [AuthGuard] },
+          { path: 'buscar-padre', component: BuscarPadresComponent, canActivate: [AuthGuard] }
+        ]
+      },
+      {
+        path: 'agregar-profesores',
+        component: AgregarProfesoresComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: 'cargar-profesores', component: CargarProfesoresComponent, canActivate: [AuthGuard] },
+          { path: 'registrar-profesor', component: RegistrarProfesoresComponent, canActivate: [AuthGuard] },
+          { path: 'buscar-profesor', component: BuscarProfesoresComponent, canActivate: [AuthGuard] }
+        ]
+      },
+      {
+        path: 'elecciones',
+        component: EleccionesComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: 'listar-elecciones', component: ListarEleccionesComponent, canActivate: [AuthGuard] },
+          { path: 'crear-eleccion', component: CrearEleccionComponent, canActivate: [AuthGuard] }
+        ]
+      },
+      {
+        path: 'estamentos/:id',
+        component: EstamentosComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: 'crear-estamento', component: CrearEstamentoComponent, canActivate: [AuthGuard] },
+          { path: 'listar-estamentos', component: ListarEstamentosComponent, canActivate: [AuthGuard] }
+        ]
+      },
+      {
+        path: 'candidatos/:id',
+        component: CandidatosComponent,
+        canActivate: [AuthGuard],
+        children: [
+          { path: 'crear-candidato', component: CrearCandidatoComponent, canActivate: [AuthGuard] },
+          { path: 'listar-candidatos', component: ListarCandidatosComponent, canActivate: [AuthGuard] }
+        ]
+      }
+    ]
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)], // Asegúrate de importar RouterModule desde '@angular/router'
-  exports: [RouterModule] // Asegúrate de exportar RouterModule aquí
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
-export class AdminRoutingModule { }
+export class AdminRoutingModule {}

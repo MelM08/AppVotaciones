@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-crear-eleccion',
   templateUrl: './crear-eleccion.component.html',
-  styleUrl: './crear-eleccion.component.scss'
+  styleUrls: ['./crear-eleccion.component.scss']
 })
 export class CrearEleccionComponent {
   nombre: string = '';
   ano: string = '';
   estado: string = 'ACTIVO';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   crearEleccion(): void {
     // Verificar si algún campo está vacío o contiene solo espacios en blanco
@@ -43,6 +44,7 @@ export class CrearEleccionComponent {
           // Limpiar campos después de la creación exitosa
           this.nombre = '';
           this.ano = ''; // Limpiamos el campo del año también
+          this.router.navigate(['/admin/elecciones/listar-elecciones']);
         },
         error => {
           if (error.status === 200) {

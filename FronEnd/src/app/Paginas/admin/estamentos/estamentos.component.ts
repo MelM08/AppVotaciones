@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -6,15 +6,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './estamentos.component.html',
   styleUrl: './estamentos.component.scss'
 })
-export class EstamentosComponent {
+export class EstamentosComponent implements OnInit{
   eleccionId: number = 0;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // Obtener el ID del estamento de los parámetros de la URL
     this.route.params.subscribe(params => {
       this.eleccionId = +params['id'];
     });
+    
   }
 }
