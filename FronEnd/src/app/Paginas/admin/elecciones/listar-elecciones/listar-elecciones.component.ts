@@ -30,20 +30,26 @@ export class ListarEleccionesComponent implements OnInit {
     );
   }
 
-  buscarEleccion() {
-    this.http.post<any[]>('http://localhost:3000/buscarElecciones/buscar-eleccion', {
-      termino: this.terminoBusqueda
+  buscarEleccion(page: number = 1, limit: number = 10) {
+    this.http.post<any[]>(`http://localhost:3000/buscarElecciones/buscar-eleccion?page=${page}&limit=${limit}`, {
+        termino: this.terminoBusqueda
     }).subscribe(
-      elecciones => {
-        this.elecciones = elecciones;
-        this.terminoBusqueda = '';
-      },
-      error => {
-        console.error('Error al buscar la elección:', error);
-        alert('Error al buscar la elección. Por favor, intenta de nuevo.');
-      }
+        elecciones => {
+            this.elecciones = elecciones.map(eleccion => ({ ...eleccion, editando: false }));
+            this.terminoBusqueda = '';
+        },
+        error => {
+            if (error.status === 400) {
+                alert('Debes proporcionar un término de búsqueda válido');
+            } else if (error.status === 500) {
+                alert('Error interno del servidor');
+            } else {
+                console.error('Error al buscar la elección:', error);
+                alert('Error al buscar la elección. Por favor, intenta de nuevo.');
+            }
+        }
     );
-  }
+}
 
   editarEleccion(index: number) {
     this.eleccionOriginal = { ...this.elecciones[index] };
@@ -62,8 +68,8 @@ export class ListarEleccionesComponent implements OnInit {
     }
 
     try {
-      const response = await this.http.put<any>('http://localhost:3000/editarPadre/editar-eleccion', { eleccion }).toPromise();
-      if (response && response.message === 'Eleccion actualizada') {
+      const response = await this.http.put<any>('http://localhost:3000/editarEleccion/editar-eleccion', { eleccion }).toPromise();
+      if (response && response.message === 'Elección actualizada') {
         this.elecciones[index] = eleccion; // Actualizar la elección en la lista
         this.elecciones[index].editando = false;
       }
@@ -73,7 +79,7 @@ export class ListarEleccionesComponent implements OnInit {
     }
   }
 
-  eliminarEleccion(index: number) {
+  async eliminarEleccion(index: number) {
     const eleccion = this.elecciones[index];
     const confirmacion = confirm('¿Estás seguro de eliminar esta elección?');
     if (!confirmacion) {
@@ -81,8 +87,10 @@ export class ListarEleccionesComponent implements OnInit {
     }
 
     try {
-      this.http.delete<any>(`http://localhost:3000/eliminarEleccion/eliminar-eleccion/${eleccion.id}`).toPromise();
-      this.elecciones.splice(index, 1); // Eliminar la elección del array
+      const response = await this.http.delete<any>(`http://localhost:3000/eliminarEleccion/eliminar-eleccion/${eleccion.id}`).toPromise();
+      if (response && response.message === 'Elección y sus dependencias eliminadas') {
+        this.elecciones.splice(index, 1); // Eliminar la elección del array
+      }
     } catch (error) {
       console.error('Error al eliminar la elección:', error);
       alert('Error al eliminar la elección. Por favor, intenta de nuevo.');

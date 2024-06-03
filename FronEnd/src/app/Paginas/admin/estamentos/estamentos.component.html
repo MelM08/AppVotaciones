@@ -47,7 +47,7 @@
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 Listar estamentos
                             </div>
-                            <a class="btn btn-success" [routerLink]="['./listar-estamentos']">Ver Estamentos</a>
+                            <a class="btn btn-success" [routerLink]="['listar-estamentos']">Ver Estamentos</a>
                         </div>
                         <div class="col-auto">
                             <!-- Icono alusivo a listado de estamentos (Font Awesome) -->
@@ -58,17 +58,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Mostrar el ID de la eleccion -->
-    <div class="row">
-        <div class="card mb-4 shadow">
-            <div class="card-body">
-                <h5 class="card-title">ID de la eleccion:</h5>
-                <p class="card-text">{{ eleccionId }}</p>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Router Outlet para redirigir a los componentes seleccionados -->
     <div class="row">
         <div class="card mb-4 shadow">

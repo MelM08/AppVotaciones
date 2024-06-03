@@ -23,6 +23,9 @@ import { EstamentosComponent } from './estamentos/estamentos.component';
 import { CrearEstamentoComponent } from './estamentos/crear-estamento/crear-estamento.component';
 import { ListarEstamentosComponent } from './estamentos/listar-estamentos/listar-estamentos.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { CandidatosComponent } from './candidatos/candidatos.component';
+import { ListarCandidatosComponent } from './candidatos/listar-candidatos/listar-candidatos.component';
+import { CrearCandidatoComponent } from './candidatos/crear-candidato/crear-candidato.component';
 
 
 
@@ -47,7 +50,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
     EleccionesComponent,
     EstamentosComponent,
     CrearEstamentoComponent,
-    ListarEstamentosComponent
+    ListarEstamentosComponent,
+    CandidatosComponent,
+    ListarCandidatosComponent,
+    CrearCandidatoComponent
   ],
   imports: [
     CommonModule,

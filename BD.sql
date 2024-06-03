@@ -32,7 +32,7 @@ create table padres(
 create table docentes(
 	id SERIAL PRIMARY KEY,	
 	documento_docente varchar(50) NOT null,
-	nombre_docente varchar(50) NOT null,
+	nombre_docente varchar(50) NOT null
 );
 
 create table elecciones (
@@ -53,9 +53,10 @@ create table estamentos (
 
 create table candidatos (
     id SERIAL PRIMARY KEY,
+	id_estamento INTEGER REFERENCES estamentos(id),
     nombre VARCHAR(255),
     descripcion VARCHAR(255),
     id_foto VARCHAR(255),
     numero VARCHAR(255),
-    id_estamento INTEGER REFERENCES estamentos(id)
+	estado VARCHAR(255)
 );

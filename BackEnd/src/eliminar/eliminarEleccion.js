@@ -1,32 +1,32 @@
-const { Pool } = require('pg');
 const express = require('express');
-const fileUpload = require('express-fileupload');
-const XLSX = require('xlsx');
 const router = express.Router();
-
-const config = {
-  user: 'postgres',
-  host: 'localhost',
-  password: '1234',
-  database: 'usuarios_'
-};
+const { Pool } = require('pg');
+const config = require('../../configDB');
 
 const pool = new Pool(config);
 
-router.use(fileUpload());
-
 router.delete('/eliminar-eleccion/:id', async (req, res) => {
-    const id = req.params.id;
-  
+    const eleccionId = req.params.id;
+
     try {
-      // Eliminar la elección
-      await pool.query('DELETE FROM elecciones WHERE id = $1', [id]);
-  
-      res.json({ message: 'Eleccion eliminada' });
+        await pool.query('BEGIN');
+
+        // Eliminar candidatos asociados a la elección
+        await pool.query('DELETE FROM candidatos WHERE id_estamento IN (SELECT id FROM estamentos WHERE id_eleccion = $1)', [eleccionId]);
+
+        // Eliminar estamentos asociados a la elección
+        await pool.query('DELETE FROM estamentos WHERE id_eleccion = $1', [eleccionId]);
+
+        // Eliminar la elección
+        await pool.query('DELETE FROM elecciones WHERE id = $1', [eleccionId]);
+
+        await pool.query('COMMIT');
+        res.json({ message: 'Elección y sus dependencias eliminadas' });
     } catch (error) {
-      console.error('Error al eliminar elección:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
+        await pool.query('ROLLBACK');
+        console.error('Error al eliminar la elección:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-  });
+});
 
 module.exports = router;

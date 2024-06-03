@@ -6,13 +6,6 @@ import { Router } from '@angular/router';
   templateUrl: './elecciones.component.html',
   styleUrls: ['./elecciones.component.scss']
 })
-export class EleccionesComponent implements OnInit {
-
-  constructor(private router: Router) { }
-
-  ngOnInit(): void {
-    // Navegar automáticamente a la ruta de "Ver Elecciones" al cargar el componente
-    this.router.navigate(['./listar-elecciones']);
-  }
+export class EleccionesComponent {
 
 }

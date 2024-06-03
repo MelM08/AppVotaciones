@@ -1,1 +1,67 @@
-<p>crear-estamento works!</p>
+<div class="container-fluid">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Crear Nuevo Estamento</h6>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="crearEstamento()" #estamentoForm="ngForm">
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre del Estamento</label>
+          <input 
+            type="text" 
+            id="nombre" 
+            [(ngModel)]="nombre" 
+            name="nombre" 
+            class="form-control" 
+            required
+            #nombreField="ngModel"
+          >
+          <div *ngIf="nombreField.invalid && (nombreField.dirty || nombreField.touched)">
+            <small class="text-danger" *ngIf="nombreField.errors?.['required']">El nombre es obligatorio.</small>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="gradosHabilitados" class="form-label">Grados Habilitados</label>
+          <select 
+            id="gradosHabilitados" 
+            [(ngModel)]="gradosHabilitados" 
+            name="gradosHabilitados" 
+            class="form-select" 
+            required
+            #gradosField="ngModel"
+          >
+            <option *ngFor="let grado of grados" [value]="grado">{{ grado }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="rolHabilitadoParaVotar" class="form-label">Rol Habilitado para Votar</label>
+          <select 
+            id="rolHabilitadoParaVotar" 
+            [(ngModel)]="rolHabilitadoParaVotar" 
+            name="rolHabilitadoParaVotar" 
+            class="form-select" 
+            required
+            #rolField="ngModel"
+          >
+            <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="estado" class="form-label">Estado</label>
+          <select 
+            id="estado" 
+            [(ngModel)]="estado" 
+            name="estado" 
+            class="form-select" 
+            required
+            #estadoField="ngModel"
+          >
+            <option value="ACTIVO">ACTIVO</option>
+            <option value="INACTIVO">INACTIVO</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="estamentoForm.invalid">Crear Estamento</button>
+      </form>
+    </div>
+  </div>
+</div>
