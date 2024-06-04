@@ -60,3 +60,11 @@ create table candidatos (
     numero VARCHAR(255),
 	estado VARCHAR(255)
 );
+
+CREATE TABLE votos (
+    id SERIAL PRIMARY KEY,
+    id_candidato INT REFERENCES candidatos(id),
+    id_votante INT NOT NULL,
+    id_estamento INT REFERENCES estamentos(id),
+    id_sede INT NOT NULL
+);
