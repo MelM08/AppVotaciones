@@ -10,7 +10,8 @@ export class BuscarPadresComponent implements OnInit{
   terminoBusqueda: string = '';
   padres: any[] = [];
   padreSeleccionado: any = null;
-  page:  number = 1;
+  page: number = 1;
+  limit: number = 10; // Número de elementos por página
   padreOriginal: any = null;
 
   constructor(private http: HttpClient) { }
@@ -33,40 +34,41 @@ export class BuscarPadresComponent implements OnInit{
 
   buscarPadres(page: number = 1, limit: number = 10) {
     this.http.post<any[]>(`http://localhost:3000/buscarPadres/buscar-padres?page=${page}&limit=${limit}`, {
-        termino: this.terminoBusqueda
+      termino: this.terminoBusqueda
     }).subscribe(
-        padres => {
-            this.padres = padres.map(padres =>({...padres, editando: false}));
-            this.terminoBusqueda = '';
-        },
-        error => {
-          if(error.status === 400){
-            alert('Debes proporcionar un término de búsqueda válido');
-          }else if(error.status === 500){
-            alert('Error interno del servidor');
-          }
+      padres => {
+        this.padres = padres.map(padre => ({ ...padre, editando: false }));
+        this.terminoBusqueda = '';
+      },
+      error => {
+        if (error.status === 400) {
+          alert('Debes proporcionar un término de búsqueda válido');
+        } else if (error.status === 500) {
+          alert('Error interno del servidor');
         }
+      }
     );
   }
 
-  cambiarPagina(page: number){
+  cambiarPagina(page: number) {
     this.page = page;
-    this.listarPadres(page);
+    this.listarPadres(page, this.limit);
   }
 
   editarPadre(index: number) {
-    this.padreOriginal = { ...this.padres[index], documento_padre_original: this.padres[index].documento_padre };
-    this.padres[index].editando = true;
+    const globalIndex = (this.page - 1) * this.limit + index;
+    this.padreOriginal = { ...this.padres[globalIndex], documento_padre_original: this.padres[globalIndex].documento_padre };
+    this.padres[globalIndex].editando = true;
   }
-
 
   cancelarEdicion(index: number) {
-    this.padres[index] = { ...this.padreOriginal, editando: false };
+    const globalIndex = (this.page - 1) * this.limit + index;
+    this.padres[globalIndex] = { ...this.padreOriginal, editando: false };
   }
 
-
   async guardarPadre(index: number) {
-    const padre = this.padres[index];
+    const globalIndex = (this.page - 1) * this.limit + index;
+    const padre = this.padres[globalIndex];
     const confirmacion = confirm('¿Estás seguro de guardar los cambios?');
     if (!confirmacion) {
       return;
@@ -79,7 +81,7 @@ export class BuscarPadresComponent implements OnInit{
       }).toPromise();
 
       if (response && response.message === 'Padre actualizado') {
-        this.padres[index].editando = false;
+        this.padres[globalIndex].editando = false;
         this.padres = [...this.padres];
       }
     } catch (error) {
@@ -88,9 +90,9 @@ export class BuscarPadresComponent implements OnInit{
     }
   }
 
-
   eliminarPadre(index: number) {
-    const padre = this.padres[index];
+    const globalIndex = (this.page - 1) * this.limit + index;
+    const padre = this.padres[globalIndex];
     const confirmacion = confirm('¿Estás seguro de eliminar este padre?');
     if (!confirmacion) {
       return;
@@ -98,15 +100,11 @@ export class BuscarPadresComponent implements OnInit{
 
     try {
       this.http.delete<any>(`http://localhost:3000/eliminarPadres/eliminar-padre/${padre.documento_padre}`).toPromise();
-      this.padres.splice(index, 1); // Eliminar el padre del array
+      this.padres.splice(globalIndex, 1); // Eliminar el padre del array
       this.padres = [...this.padres]; // Actualizar la lista
     } catch (error) {
       console.error('Error al eliminar padre:', error);
       alert('Error al eliminar padre. Por favor, intenta de nuevo.');
     }
   }
-
-
-
-
 }

@@ -7,12 +7,12 @@
       <form (ngSubmit)="crearEstamento()" #estamentoForm="ngForm">
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre del Estamento</label>
-          <input 
-            type="text" 
-            id="nombre" 
-            [(ngModel)]="nombre" 
-            name="nombre" 
-            class="form-control" 
+          <input
+            type="text"
+            id="nombre"
+            [(ngModel)]="nombre"
+            name="nombre"
+            class="form-control"
             required
             #nombreField="ngModel"
           >
@@ -22,11 +22,11 @@
         </div>
         <div class="mb-3">
           <label for="gradosHabilitados" class="form-label">Grados Habilitados</label>
-          <select 
-            id="gradosHabilitados" 
-            [(ngModel)]="gradosHabilitados" 
-            name="gradosHabilitados" 
-            class="form-control" 
+          <select
+            id="gradosHabilitados"
+            [(ngModel)]="gradosHabilitados"
+            name="gradosHabilitados"
+            class="form-control"
             required
           >
             <option value="" disabled selected>grados</option>
@@ -43,28 +43,43 @@
             <option value="9">Noveno</option>
             <option value="10">Décimo</option>
             <option value="11">Once</option>
+            <option value="Todos">todos</option>
           </select>
         </div>
         <div class="mb-3">
           <label for="rolHabilitadoParaVotar" class="form-label">Rol Habilitado para Votar</label>
-          <select 
-            id="rolHabilitadoParaVotar" 
-            [(ngModel)]="rolHabilitadoParaVotar" 
-            name="rolHabilitadoParaVotar" 
-            class="form-select" 
+          <select
+            id="rolHabilitadoParaVotar"
+            [(ngModel)]="rolHabilitadoParaVotar"
+            name="rolHabilitadoParaVotar"
+            class="form-control"
             required
             #rolField="ngModel"
           >
-            <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option>
+            <option value="" disabled selected>grados</option>
+            <option value="Ninguno">Ninguno</option>
+            <option value="0">Transición</option>
+            <option value="1">Primero</option>
+            <option value="2">Segundo</option>
+            <option value="3">Tercero</option>
+            <option value="4">Cuarto</option>
+            <option value="5">Quinto</option>
+            <option value="6">Sexto</option>
+            <option value="7">Septimo</option>
+            <option value="8">Octavo</option>
+            <option value="9">Noveno</option>
+            <option value="10">Décimo</option>
+            <option value="11">Once</option>
+            <option value="Todos">todos</option>
           </select>
         </div>
         <div class="mb-3">
           <label for="estado" class="form-label">Estado</label>
-          <select 
-            id="estado" 
-            [(ngModel)]="estado" 
-            name="estado" 
-            class="form-select" 
+          <select
+            id="estado"
+            [(ngModel)]="estado"
+            name="estado"
+            class="form-select"
             required
             #estadoField="ngModel"
           >

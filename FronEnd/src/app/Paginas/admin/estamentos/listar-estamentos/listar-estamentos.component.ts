@@ -14,10 +14,6 @@ export class ListarEstamentosComponent implements OnInit {
   estamentoSeleccionado: any = null;
   estamentoOriginal: any = null;
 
-  grados = [
-    'Ninguno', 'Preescolar', 'Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto',
-    'Sexto', 'Séptimo', 'Octavo', 'Noveno', 'Décimo', 'Once'
-  ];
 
   roles = ['Todos', 'Estudiantes', 'Docentes', 'Padres'];
 

@@ -1,8 +1,8 @@
 const config = {
     user: 'postgres',
     host: 'localhost',
-    password: '1234',
-    database: 'usuarios_'
+    password: 'root',
+    database: 'usuarios'
   };
   
   module.exports = config;

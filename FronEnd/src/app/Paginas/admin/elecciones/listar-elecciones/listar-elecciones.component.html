@@ -58,18 +58,18 @@
               </td>
               <td>
                 <ng-container *ngIf="!eleccion.editando">
-                  <a class="btn btn-primary btn-sm" (click)="editarEleccion(i)">
+                  <a class="btn btn-primary btn-sm" (click)="editarEleccion(i)" title="Editar">
                     <i class="fa fa-user-edit"></i>
                   </a>
-                  <a class="btn btn-danger btn-sm" (click)="eliminarEleccion(i)">
+                  <a class="btn btn-danger btn-sm" (click)="eliminarEleccion(i)" title="Eliminar">
                     <i class="fa fa-trash"></i>
                   </a>
                 </ng-container>
                 <ng-container *ngIf="eleccion.editando">
-                  <a class="btn btn-success btn-sm" (click)="guardarEleccion(i)">
+                  <a class="btn btn-success btn-sm" (click)="guardarEleccion(i)" title="Guardar">
                     <i class="fa fa-save"></i>
                   </a>
-                  <a class="btn btn-secondary btn-sm" (click)="cancelarEdicion(i)">
+                  <a class="btn btn-secondary btn-sm" (click)="cancelarEdicion(i)" title="Cancelar">
                     <i class="fa fa-times-circle"></i>
                   </a>
                 </ng-container>
