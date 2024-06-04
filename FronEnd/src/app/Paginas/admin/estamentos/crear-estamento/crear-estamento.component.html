@@ -56,21 +56,7 @@
             required
             #rolField="ngModel"
           >
-            <option value="" disabled selected>grados</option>
-            <option value="Ninguno">Ninguno</option>
-            <option value="0">Transición</option>
-            <option value="1">Primero</option>
-            <option value="2">Segundo</option>
-            <option value="3">Tercero</option>
-            <option value="4">Cuarto</option>
-            <option value="5">Quinto</option>
-            <option value="6">Sexto</option>
-            <option value="7">Septimo</option>
-            <option value="8">Octavo</option>
-            <option value="9">Noveno</option>
-            <option value="10">Décimo</option>
-            <option value="11">Once</option>
-            <option value="Todos">todos</option>
+            <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option> //cambiado de nuevo
           </select>
         </div>
         <div class="mb-3">
