@@ -15,8 +15,8 @@ export class CrearEstamentoComponent implements OnInit {
   estado: string = 'ACTIVO';
 
   grados = [
-    'Ninguno', 'Preescolar', 'Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 
-    'Sexto', 'Séptimo', 'Octavo', 'Noveno', 'Décimo', 'Once'
+    'Null', '0', '1', '2', '3', '4', '5', 
+    '6', '7', '8', '9', '10', '11'
   ];
 
   roles = ['Todos', 'Estudiantes', 'Docentes', 'Padres'];

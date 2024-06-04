@@ -23,9 +23,13 @@ const verificarRol = async (req, res, next) => {
         const docenteResult = await pool.query('SELECT documento_docente FROM docentes WHERE documento_docente = $1', [id]);
   
         //Con este if validamos si está en las tablas y le damos el rol de usuario, si no está, va al else
-        if (estudianteResult.rows.length > 0 || padreResult.rows.length > 0 || docenteResult.rows.length > 0) {
-            rol = 'usuario';
-        } else {
+        if (estudianteResult.rows.length > 0) {
+            rol = 'estudiante';
+        }else if(padreResult.rows.length > 0){
+            rol = 'padre';
+        }else if(docenteResult.rows.length > 0){
+          rol = 'docente';
+        }else {
             res.status(404).json({ error: '' });
             return;
         }

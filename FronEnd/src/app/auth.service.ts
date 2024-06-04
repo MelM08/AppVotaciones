@@ -64,6 +64,7 @@ export class AuthService {
     } else {
       this.router.navigate(['/usuario']);
     }
+    console.log('Rol', rol);
   }
 
 }
