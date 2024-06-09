@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NotificationService, Notification } from '../../notification.service';
 
 @Component({
   selector: 'app-listar-elecciones',
@@ -12,7 +13,7 @@ export class ListarEleccionesComponent implements OnInit {
   eleccionSeleccionada: any = null;
   eleccionOriginal: any = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.listarElecciones();
@@ -25,7 +26,7 @@ export class ListarEleccionesComponent implements OnInit {
       },
       error => {
         console.error('Error al obtener las elecciones:', error);
-        alert('Error al obtener las elecciones. Por favor, intenta de nuevo.');
+        this.notificationService.showNotification('Error al obtener las elecciones. Por favor, intenta de nuevo.', 'danger');
       }
     );
   }
@@ -40,12 +41,12 @@ export class ListarEleccionesComponent implements OnInit {
         },
         error => {
             if (error.status === 400) {
-                alert('Debes proporcionar un término de búsqueda válido');
+                this.notificationService.showNotification('Debes proporcionar un término de búsqueda válido.', 'danger');
             } else if (error.status === 500) {
-                alert('Error interno del servidor');
+                this.notificationService.showNotification('Error interno del servidor', 'danger');
             } else {
                 console.error('Error al buscar la elección:', error);
-                alert('Error al buscar la elección. Por favor, intenta de nuevo.');
+                this.notificationService.showNotification('Error al buscar la elección. Por favor, intenta de nuevo.', 'danger');
             }
         }
     );
@@ -72,10 +73,11 @@ export class ListarEleccionesComponent implements OnInit {
       if (response && response.message === 'Elección actualizada') {
         this.elecciones[index] = eleccion; // Actualizar la elección en la lista
         this.elecciones[index].editando = false;
+        this.notificationService.showNotification('Eleccion editada correctamente.', 'success');
       }
     } catch (error) {
       console.error('Error al editar la elección:', error);
-      alert('Error al editar la elección. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al editar la elección. Por favor, intenta de nuevo.', 'danger');
     }
   }
 
@@ -89,11 +91,12 @@ export class ListarEleccionesComponent implements OnInit {
     try {
       const response = await this.http.delete<any>(`http://localhost:3000/eliminarEleccion/eliminar-eleccion/${eleccion.id}`).toPromise();
       if (response && response.message === 'Elección y sus dependencias eliminadas') {
+        this.notificationService.showNotification('Eleccion eliminada correctamente.', 'success');
         this.elecciones.splice(index, 1); // Eliminar la elección del array
       }
     } catch (error) {
       console.error('Error al eliminar la elección:', error);
-      alert('Error al eliminar la elección. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al eliminar la elección. Por favor, intenta de nuevo.', 'danger');
     }
   }
 }

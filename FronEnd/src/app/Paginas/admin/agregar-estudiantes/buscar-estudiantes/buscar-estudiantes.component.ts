@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NotificationService, Notification } from '../../notification.service';
 
 @Component({
   selector: 'app-buscar-estudiantes',
@@ -14,7 +15,7 @@ export class BuscarEstudiantesComponent implements OnInit{
   limit: number = 10; // Número de elementos por página
   estudianteOriginal: any = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.listarEstudiantes();
@@ -28,7 +29,7 @@ export class BuscarEstudiantesComponent implements OnInit{
       },
       error => {
         console.error('Error al obtener los estudiantes:', error);
-        alert('Error al obtener los estudiantes. Por favor, intenta de nuevo.');
+        this.notificationService.showNotification('Error al obtener los estudiantes. Por favor, intenta de nuevo.', 'danger');
       }
     );
   }
@@ -39,13 +40,14 @@ export class BuscarEstudiantesComponent implements OnInit{
       estudiantes => {
         this.estudiantes = estudiantes.map(estudiante => ({ ...estudiante, editando: false }));
         this.terminoBusqueda = '';
+        this.notificationService.showNotification('Estudiante encontrado con exito.', 'success');
       },
       error => {
         console.error('Error al buscar estudiantes:', error);
         if (error.error && error.error.error) {
           alert(error.error.error);
         } else {
-          alert('Error interno del servidor');
+          this.notificationService.showNotification('Error interno del servidor.', 'danger');
         }
       }
     );
@@ -83,10 +85,11 @@ export class BuscarEstudiantesComponent implements OnInit{
       if (response && response.message === 'Estudiante actualizado') {
         this.estudiantes[globalIndex].editando = false;
         this.estudiantes = [...this.estudiantes];
+        this.notificationService.showNotification('Estudiante actualizado correctamente.', 'success');
       }
     } catch (error) {
       console.error('Error al editar estudiante:', error);
-      alert('Error al editar estudiante. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al editar estudiante. Por favor, intenta de nuevo.', 'danger');
     }
   }
 
@@ -101,9 +104,10 @@ export class BuscarEstudiantesComponent implements OnInit{
     try {
       this.http.delete<any>(`http://localhost:3000/eliminarEstudiante/eliminar-estudiante/${estudiante.documento_estudiante}`).toPromise();
       this.estudiantes.splice(globalIndex, 1); // Eliminar el estudiante del array
+      this.notificationService.showNotification('Estudiante eliminado correctamente.', 'success');
     } catch (error) {
       console.error('Error al eliminar estudiante:', error);
-      alert('Error al eliminar estudiante. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al eliminar estudiante. Por favor, intenta de nuevo.', 'success');
     }
   }
 }

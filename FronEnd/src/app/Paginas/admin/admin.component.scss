@@ -53,3 +53,14 @@
   top: 50%; /* Centra verticalmente el formulario */
   transform: translateY(-50%); /* Ajusta la posición vertical */
 }
+
+#notification-container {
+  width: 300px; /* Establece un ancho fijo para el contenedor de notificaciones */
+  display: flex;
+  flex-direction: column; /* Agrega esta propiedad para que las notificaciones se muestren una debajo de la otra */
+  align-items: flex-start; /* Alinea las notificaciones al inicio del contenedor */
+  margin-left: 0; /* Ajusta el contenedor al borde izquierdo */
+  transform: translateY(12%); /* Ajusta la posición vertical */
+  white-space: nowrap; /* Agrega esta propiedad para que el texto no se divida en varias líneas */
+  text-overflow: ellipsis; /* Agrega un indicador de truncamiento al final de la línea */
+}

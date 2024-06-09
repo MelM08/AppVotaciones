@@ -81,31 +81,39 @@
   <div id="content-wrapper" class="d-flex flex-column flex-grow-1">
     <div id="content">
       <!-- Topbar -->
-      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100">
-        <!-- Topbar Navbar -->
-        <ul class="navbar-nav ml-auto">
-          <!-- Botón para ocultar Sidebar (Topbar) -->
-          <form class="form-inline form-toggle-sidebar">
-            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" (click)="toggleSidebar()">
-              <i class="fa fa-bars"></i>
-            </button>
-          </form>
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100">
+  <!-- Botón para ocultar Sidebar (Topbar) -->
+  <form class="form-inline form-toggle-sidebar">
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" (click)="toggleSidebar()">
+      <i class="fa fa-bars"></i>
+    </button>
+  </form>
 
-          <!-- Item de navegación User Information -->
-          <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              <span class="mr-2 text-gray-600 small">Admin</span>
-              <img class="img-profile rounded-circle div2">
-            </a>
-          </li>
-          <li>
-            <a class="nav-link margin-top-logout" id="logout" role="button" href="#">
-              <i class="fa fa-power-off" aria-hidden="true"></i>
-            </a>
-          </li>
-        </ul>
-      </nav>
+  <!-- Contenedor de Notificaciones -->
+<div id="notification-container" class="mr-auto notification-container">
+  <div *ngFor="let notification of notifications" class="alert alert-{{notification.type}} alert-dismissible fade show" role="alert">
+    {{ notification.message }}
+    <button type="button" class="btn-close" aria-label="Close" (click)="removeNotification(notification)"></button>
+  </div>
+</div>
+
+  <!-- Topbar Navbar -->
+  <ul class="navbar-nav ml-auto">
+    <!-- Item de navegación User Information -->
+    <li class="nav-item dropdown no-arrow">
+      <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <span class="mr-2 text-gray-600 small">Admin</span>
+        <img class="img-profile rounded-circle div2">
+      </a>
+    </li>
+    <li>
+      <a class="nav-link margin-top-logout" id="logout" role="button" href="#">
+        <i class="fa fa-power-off" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</nav>
       <!-- Fin del Topbar -->
       <!-- Router Outlet para redireccionar al componente elegido -->
       <div class="container-fluid">

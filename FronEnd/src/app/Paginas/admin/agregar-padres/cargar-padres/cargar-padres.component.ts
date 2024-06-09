@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ExcelService } from '../excelPadres.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService, Notification } from '../../notification.service';
 
 @Component({
   selector: 'app-cargar-padres',
@@ -10,7 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class CargarPadresComponent {
   selectedFile: File | null = null;
 
-  constructor(private excelService: ExcelService) {}
+  constructor(private excelService: ExcelService, private notificationService: NotificationService) {}
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
@@ -26,21 +27,21 @@ export class CargarPadresComponent {
           if (fileInput) {
             fileInput.value = '';
           }
-          alert('Archivo subido exitosamente')
+          this.notificationService.showNotification('Archivo subido exitosamente.', 'success');
         },
         (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            alert('No se ha seleccionado ningún archivo.')
+            this.notificationService.showNotification('No se ha seleccionado ningún archivo.', 'danger');
           }else if(error.status === 401){
-            alert('El archivo Excel no tiene datos para procesar.')
+            this.notificationService.showNotification('El archivo Excel no tiene datos para procesar.', 'danger');
           }else if(error.status === 402){
-            alert('La estructura del archivo Excel no es válida.')
+            this.notificationService.showNotification('La estructura del archivo Excel no es válida.', 'danger');
           }else if(error.status === 404){
-            alert('Todo lo que pudo fallar, falló.')
+            this.notificationService.showNotification('Todo lo que pudo fallar, falló.', 'danger');
           }else if(error.status === 200){
-            alert('Los datos de los padres del archivo Excel han sido procesados y guardados en la base de datos.')
+            this.notificationService.showNotification('Los datos de los padres del archivo Excel han sido procesados y guardados en la base de datos.', 'danger');
           }else if(error.status === 500){
-            alert('Error al procesar el archivo Excel.')
+            this.notificationService.showNotification('Error al procesar el archivo Excel.', 'danger');
           }
         }
       );

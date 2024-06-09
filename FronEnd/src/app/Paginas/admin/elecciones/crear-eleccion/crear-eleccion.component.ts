@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { NotificationService, Notification } from '../../notification.service';
 
 @Component({
   selector: 'app-crear-eleccion',
@@ -12,7 +13,7 @@ export class CrearEleccionComponent {
   ano: string = '';
   estado: string = 'ACTIVO';
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private notificationService: NotificationService) { }
 
   crearEleccion(): void {
     // Verificar si algún campo está vacío o contiene solo espacios en blanco
@@ -40,7 +41,7 @@ export class CrearEleccionComponent {
       .subscribe(
         response => {
           console.log(response.message);
-          alert('Elección creada con éxito');
+          this.notificationService.showNotification('Elección creada con éxito.', 'success');
           // Limpiar campos después de la creación exitosa
           this.nombre = '';
           this.ano = ''; // Limpiamos el campo del año también
@@ -48,9 +49,9 @@ export class CrearEleccionComponent {
         },
         error => {
           if (error.status === 200) {
-            alert('Elección creada con éxito en la base de datos.');
+            this.notificationService.showNotification('Error al crear la Eleccion. Por favor, intenta de nuevo.', 'danger');
           } else if (error.status === 500) {
-            alert('Error al crear la elección en la base de datos.');
+            this.notificationService.showNotification('Error al crear la elección en la base de datos.', 'danger');
           }
         }
       );

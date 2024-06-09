@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NotificationService, Notification } from '../../notification.service';
 
 @Component({
   selector: 'app-registrar-estudiantes',
@@ -13,7 +14,7 @@ export class RegistrarEstudiantesComponent {
   grado: string = '';
   sede: string = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
   guardarEstudiante(): void {
     const estudiante = {
@@ -25,7 +26,7 @@ export class RegistrarEstudiantesComponent {
 
     // Validar si algún campo está vacío
     if (!this.documento || !this.nombre || !this.grado || !this.sede) {
-      alert('Por favor, complete todos los campos.');
+      this.notificationService.showNotification('Por favor, complete todos los campos.', 'warning');
       return;
     }
 
@@ -35,7 +36,7 @@ export class RegistrarEstudiantesComponent {
       .subscribe(
         response => {
           console.error(response.message);
-          alert('Estudiante guardado con éxito')
+          this.notificationService.showNotification('Estudiante guardado con éxito.', 'success');
           // Limpiar campos
           this.documento = '';
           this.nombre = '';
@@ -44,13 +45,13 @@ export class RegistrarEstudiantesComponent {
         },
         error => {
           if (error.status === 400) {
-            alert('Ya existe un estudiante con ese documento')
+            this.notificationService.showNotification('Ya existe un estudiante con ese documento.', 'success');
           } else if (error.status === 401) {
-            alert('El estudiante ya existe en la base de datos.')
+            this.notificationService.showNotification('El estudiante ya existe en la base de datos.', 'success');
           } else if (error.status === 200) {
-            alert('Estudiante guardado correctamente en la base de datos.')
+            this.notificationService.showNotification('Estudiante guardado correctamente en la base de datos.', 'success');
           } else if (error.status === 500) {
-            alert('Error al guardar el estudiante en la base de datos.')
+            this.notificationService.showNotification('Error al guardar el estudiante en la base de datos.', 'success');
           }
         }
       );

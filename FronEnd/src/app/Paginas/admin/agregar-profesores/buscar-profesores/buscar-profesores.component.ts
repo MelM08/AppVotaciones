@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NotificationService, Notification } from '../../notification.service';
 
 @Component({
   selector: 'app-buscar-profesores',
@@ -14,7 +15,7 @@ export class BuscarProfesoresComponent implements OnInit{
   limit: number = 10; // Número de elementos por página
   profesorOriginal: any = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.listarDocentes();
@@ -27,7 +28,7 @@ export class BuscarProfesoresComponent implements OnInit{
       },
       error => {
         console.error('Error al obtener los docentes:', error);
-        alert('Error al obtener los docentes. Por favor, intenta de nuevo.');
+        this.notificationService.showNotification('Error al obtener los docentes. Por favor, intenta de nuevo.', 'danger');
       }
     );
   }

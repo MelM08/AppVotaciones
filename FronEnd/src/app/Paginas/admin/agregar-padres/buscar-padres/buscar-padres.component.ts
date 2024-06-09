@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NotificationService, Notification } from '../../notification.service';
 
 @Component({
   selector: 'app-buscar-padres',
@@ -14,7 +15,7 @@ export class BuscarPadresComponent implements OnInit{
   limit: number = 10; // Número de elementos por página
   padreOriginal: any = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.listarPadres();
@@ -27,7 +28,7 @@ export class BuscarPadresComponent implements OnInit{
       },
       error => {
         console.error('Error al obtener los padres:', error);
-        alert('Error al obtener los padres. Por favor, intenta de nuevo.');
+        this.notificationService.showNotification('Error al obtener los padres. Por favor, intenta de nuevo.', 'danger');
       }
     );
   }
@@ -39,12 +40,13 @@ export class BuscarPadresComponent implements OnInit{
       padres => {
         this.padres = padres.map(padre => ({ ...padre, editando: false }));
         this.terminoBusqueda = '';
+        this.notificationService.showNotification('Padre encontrado con exito.', 'success');
       },
       error => {
         if (error.status === 400) {
-          alert('Debes proporcionar un término de búsqueda válido');
+          this.notificationService.showNotification('Debes proporcionar un término de búsqueda válido.', 'danger');
         } else if (error.status === 500) {
-          alert('Error interno del servidor');
+          this.notificationService.showNotification('Error interno del servidoro.', 'danger');
         }
       }
     );
@@ -83,10 +85,11 @@ export class BuscarPadresComponent implements OnInit{
       if (response && response.message === 'Padre actualizado') {
         this.padres[globalIndex].editando = false;
         this.padres = [...this.padres];
+        this.notificationService.showNotification('Padre actualizado correctamente.', 'success');
       }
     } catch (error) {
       console.error('Error al editar padre:', error);
-      alert('Error al editar padre. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al editar padre. Por favor, intenta de nuevo.', 'danger');
     }
   }
 

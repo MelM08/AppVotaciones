@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NotificationService, Notification } from '../../notification.service';
 
 @Component({
   selector: 'app-registrar-padres',
@@ -11,7 +12,7 @@ export class RegistrarPadresComponent {
   documentoPadre: string = '';
   nombrePadre: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private notificationService: NotificationService) {}
 
   registrarPadre() {
     const data = {
@@ -21,7 +22,7 @@ export class RegistrarPadresComponent {
     };
 
     if (!this.documentoEstudiante || !this.documentoPadre || !this.nombrePadre) {
-      alert('Por favor, complete todos los campos.');
+      this.notificationService.showNotification('Por favor, complete todos los campo.', 'danger');
       return; // Detener la ejecución del método
     }
 
