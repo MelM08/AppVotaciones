@@ -34,6 +34,7 @@ export class BuscarProfesoresComponent implements OnInit{
   }
 
   buscarProfesores(page: number = 1, limit: number = 10) {
+    this.page = 1;
     this.http.post<any[]>(`http://localhost:3000/buscarProfesores/buscar-profesores?page=${page}&limit=${limit}`, {
       termino: this.terminoBusqueda
     }).subscribe(

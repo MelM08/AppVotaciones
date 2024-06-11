@@ -35,6 +35,7 @@ export class BuscarEstudiantesComponent implements OnInit{
   }
 
   buscarEstudiante(page: number = 1, limit: number = 10) {
+    this.page = 1;
     const url = `http://localhost:3000/buscarEstudiantes/buscar-estudiantes?page=${page}&limit=${limit}`;
     this.http.post<any[]>(url, { termino: this.terminoBusqueda }).subscribe(
       estudiantes => {
