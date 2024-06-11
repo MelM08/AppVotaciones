@@ -14,6 +14,7 @@ export class BuscarEstudiantesComponent implements OnInit{
   page: number = 1;
   limit: number = 10; // Número de elementos por página
   estudianteOriginal: any = null;
+  busquedaActiva: boolean = false; // Nuevo estado para la búsqueda activa
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
@@ -34,28 +35,54 @@ export class BuscarEstudiantesComponent implements OnInit{
     );
   }
 
-  buscarEstudiante(page: number = 1, limit: number = 10) {
-    this.page = 1;
-    const url = `http://localhost:3000/buscarEstudiantes/buscar-estudiantes?page=${page}&limit=${limit}`;
+  buscarEstudiante() {
+    // Revisar si hay un término de búsqueda
+    if (this.terminoBusqueda.trim()) {
+      this.page = 1; // Resetear la página a 1
+      this.buscarEstudiantePorTermino();
+    } else {
+      // Si no hay término de búsqueda, mostrar todos los estudiantes
+      this.mostrarTodosLosEstudiantes();
+    }
+  }
+
+  buscarEstudiantePorTermino() {
+    const url = `http://localhost:3000/buscarEstudiantes/buscar-estudiantes?page=${this.page}&limit=${this.limit}`;
     this.http.post<any[]>(url, { termino: this.terminoBusqueda }).subscribe(
       estudiantes => {
         this.estudiantes = estudiantes.map(estudiante => ({ ...estudiante, editando: false }));
+        this.busquedaActiva = true; // Activar el estado de búsqueda
         this.terminoBusqueda = '';
-        this.notificationService.showNotification('Estudiante encontrado con exito.', 'success');
+        if (this.estudiantes.length === 0) {
+          // Si no hay resultados, mostrar una notificación
+          this.notificationService.showNotification('No se encontraron estudiantes que coincidan con el término de búsqueda.', 'warning');
+        } else {
+          this.notificationService.showNotification('Estudiantes encontrados.', 'success');
+        }
       },
-      // error => {
-      //   console.error('Error al buscar estudiantes:', error);
-      //   if (error.error && error.error.error) {
-      //     alert(error.error.error);
-      //   }
-      // }
-      //Comentando y no eliminado por motivos de posible uso futuro
+      error => {
+        console.error('Error al buscar estudiantes:', error);
+        this.notificationService.showNotification('Error al buscar estudiantes. Por favor, intenta de nuevo.', 'danger');
+      }
     );
   }
 
-  cambiarPagina(page: number){
+  mostrarTodosLosEstudiantes() {
+    this.terminoBusqueda = ''; // Limpiar el término de búsqueda
+    this.listarEstudiantes(1, this.limit); // Listar todos los estudiantes desde la página 1
+    this.notificationService.showNotification('Mostrando todos los estudiantes.', 'success');
+    this.busquedaActiva = false; // Desactivar el estado de búsqueda
+  }
+
+  cambiarPagina(page: number) {
     this.page = page;
-    this.listarEstudiantes(page, this.limit);
+    if (this.busquedaActiva) {
+      // Realizar búsqueda en la nueva página
+      this.buscarEstudiantePorTermino();
+    } else {
+      // Listar estudiantes normales en la nueva página
+      this.listarEstudiantes(page, this.limit);
+    }
   }
 
   editarEstudiante(index: number) {

@@ -14,6 +14,7 @@ export class BuscarProfesoresComponent implements OnInit{
   page: number = 1;
   limit: number = 10; // Número de elementos por página
   profesorOriginal: any = null;
+  busquedaActiva: boolean = false; // Nuevo estado para la búsqueda activa
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
@@ -33,29 +34,55 @@ export class BuscarProfesoresComponent implements OnInit{
     );
   }
 
-  buscarProfesores(page: number = 1, limit: number = 10) {
-    this.page = 1;
-    this.http.post<any[]>(`http://localhost:3000/buscarProfesores/buscar-profesores?page=${page}&limit=${limit}`, {
-      termino: this.terminoBusqueda
-    }).subscribe(
+  buscarProfesores() {
+    // Revisar si hay un término de búsqueda
+    if (this.terminoBusqueda.trim()) {
+      this.page = 1; // Resetear la página a 1
+      this.buscarProfesoresPorTermino();
+    } else {
+      // Si no hay término de búsqueda, mostrar todos los profesores
+      this.mostrarTodosLosEstudiantes();
+    }
+  }
+
+  buscarProfesoresPorTermino(){
+    const url = `http://localhost:3000/buscarProfesores/buscar-profesores?page=${this.page}&limit=${this.limit}`;
+    this.http.post<any[]>(url, {termino: this.terminoBusqueda}).subscribe(
       profesores => {
         this.profesores = profesores.map(profesor => ({ ...profesor, editando: false }));
         this.terminoBusqueda = '';
-        this.notificationService.showNotification('Profesor encontrado exitosamente.', 'success');
+        if (this.profesores.length === 0) {
+          // Si no hay resultados, mostrar una notificación
+          this.notificationService.showNotification('No se encontraron profesores que coincidan con el término de búsqueda.', 'warning');
+        } else {
+          this.notificationService.showNotification('Profesores encontrados.', 'success');
+        }
       },
-      // error => {
-      //   console.error('Error al buscar profesor:', error);
-      //   if (error.error && error.error.error) {
-      //     alert(error.error.error);
-      //   }
-      // }
-      //Comentando y no eliminado por motivos de posible uso futuro
+      error => {
+        console.error('Error al buscar profesor:', error);
+        this.notificationService.showNotification('Error al buscar profesores. Por favor, intenta de nuevo.', 'danger');
+      }
+
     );
   }
 
+  mostrarTodosLosEstudiantes(){
+    this.terminoBusqueda = '';
+    this.listarDocentes(1, this.limit);
+    this.notificationService.showNotification('Mostrando todos los profesores.', 'success');
+    this.busquedaActiva = false;
+  }
+
+
   cambiarPagina(page: number) {
     this.page = page;
-    this.listarDocentes(page, this.limit);
+    if(this.busquedaActiva){
+      // Realizar búsqueda en la nueva página
+      this.buscarProfesoresPorTermino();
+    }else{
+      //Listar profesores normales en la nueva página
+      this.mostrarTodosLosEstudiantes();
+    }
   }
 
   editarProfesor(index: number) {

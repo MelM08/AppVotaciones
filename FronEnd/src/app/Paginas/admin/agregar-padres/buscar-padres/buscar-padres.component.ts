@@ -14,6 +14,7 @@ export class BuscarPadresComponent implements OnInit{
   page: number = 1;
   limit: number = 10; // Número de elementos por página
   padreOriginal: any = null;
+  busquedaActiva: boolean = false; // Nuevo estado para la búsqueda activa
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
@@ -33,29 +34,53 @@ export class BuscarPadresComponent implements OnInit{
     );
   }
 
-  buscarPadres(page: number = 1, limit: number = 10) {
-    this.page = 1;
-    this.http.post<any[]>(`http://localhost:3000/buscarPadres/buscar-padres?page=${page}&limit=${limit}`, {
-      termino: this.terminoBusqueda
-    }).subscribe(
+  buscarPadres(){
+        // Revisar si hay un término de búsqueda
+    if (this.terminoBusqueda.trim()) {
+      this.page = 1; // Resetear la página a 1
+      this.buscarPadresPorTermino();
+    } else {
+      // Si no hay término de búsqueda, mostrar todos los padres
+      this.mostrarTodosLosPadres();
+    }
+  }
+
+  buscarPadresPorTermino() {
+    const url = `http://localhost:3000/buscarPadres/buscar-padres?page=${this.page}&limit=${this.limit}`;
+    this.http.post<any[]>(url , {termino: this.terminoBusqueda}).subscribe(
       padres => {
         this.padres = padres.map(padre => ({ ...padre, editando: false }));
         this.terminoBusqueda = '';
-        this.notificationService.showNotification('Padre encontrado con exito.', 'success');
+        if (this.padres.length === 0) {
+          // Si no hay resultados, mostrar una notificación
+          this.notificationService.showNotification('No se encontraron padres que coincidan con el término de búsqueda.', 'warning');
+        } else {
+          this.notificationService.showNotification('Padres encontrados.', 'success');
+        }
       },
-      // error => {
-      //   console.error('Error al buscar padre:', error);
-      //   if (error.error && error.error.error) {
-      //     alert(error.error.error);
-      //   }
-      // }
-      //Comentando y no eliminado por motivos de posible uso futuro
+      error => {
+        console.error('Error al buscar padre:', error);
+        this.notificationService.showNotification('Error al buscar padres. Por favor, intenta de nuevo.', 'danger');
+      }
     );
+  }
+
+  mostrarTodosLosPadres(){
+    this.terminoBusqueda = ''; // Limpiar el término de búsqueda
+    this.listarPadres(1, this.limit); // Listar todos los estudiantes desde la página 1
+    this.notificationService.showNotification('Mostrando todos los padres.', 'success');
+    this.busquedaActiva = false; // Desactivar el estado de búsqueda
   }
 
   cambiarPagina(page: number) {
     this.page = page;
-    this.listarPadres(page, this.limit);
+    if (this.busquedaActiva) {
+      // Realizar búsqueda en la nueva página
+      this.buscarPadresPorTermino();
+    } else {
+      // Listar estudiantes normales en la nueva página
+      this.listarPadres(page, this.limit);
+    }
   }
 
   editarPadre(index: number) {

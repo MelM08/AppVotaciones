@@ -19,12 +19,11 @@ router.post('/buscar-padres', async (req, res) => {
             JOIN estudiantes ON padres.hijo_id = estudiantes.id 
             WHERE
         `;
-  
-      //validamos primero si el termino contiene un '-', entonces es un grado, si es un número y empieza con N, es un documento, 
-      //si es un número, es un documento, si no, es un nombre o apellido
-      if (termino) {
-        if ((termino.startsWith('N') || termino.startsWith('n')) && !isNaN(Number(termino.substr(1)))) {
-            query += ` padres.documento_padre ILIKE '%${termino}%'`;
+        //Validamos primero si tiene una N en la identificación, luego valida si es un número y por último valida el termino en letras
+        //esto para validar cada item de búsqueda.
+        if (termino) {
+            if ((termino.startsWith('N') || termino.startsWith('n')) && !isNaN(Number(termino.substr(1)))) {
+                query += ` padres.documento_padre ILIKE '%${termino}%'`;
         } else if (!isNaN(Number(termino))) {
             query += ` padres.documento_padre ILIKE '%${termino}%'`;
         } else {
@@ -35,18 +34,17 @@ router.post('/buscar-padres', async (req, res) => {
                 query += ` (${palabras.map(palabra => `padres.nombre_padre ILIKE '%${palabra}%'`).join(' AND ')})`;
             }
         }
-    } //else {
-    //     return res.status(400).json({ error: 'Debes proporcionar un término de búsqueda' });
-    // }
-    //Comentando y no eliminado por motivos de posible uso futuro
+        } else {
+            return res.status(400).json({ error: 'Debes proporcionar un término de búsqueda' });
+        }
+
 
     const result = await pool.query(query);
     res.json(result.rows);
-} catch (error) {
-    // console.error('Error al buscar padres:', error);
-    // res.status(500).json({ error: 'Error interno del servidor' });
-    //Comentando y no eliminado por motivos de posible uso futuro
-}
-});
+    } catch (error) {
+        console.error('Error al buscar padres:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    });
 
 module.exports = router;
