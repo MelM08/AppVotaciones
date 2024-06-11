@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationService, Notification } from '../../notification.service';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-buscar-estudiantes',
@@ -74,6 +74,32 @@ export class BuscarEstudiantesComponent implements OnInit{
     const estudiante = this.estudiantes[globalIndex];
     const confirmacion = confirm('¿Estás seguro de guardar los cambios?');
     if (!confirmacion) {
+      return;
+    }
+
+    // Validar que el nombre no esté vacío
+    if (!estudiante.nombre_estudiante.trim()) {
+      this.notificationService.showNotification('El nombre del estudiante es obligatorio.', 'danger');
+      return;
+    }
+    
+    // Validar que la identificación no esté vacía
+    if (!estudiante.documento_estudiante.trim()) {
+      this.notificationService.showNotification('La identificación del estudiante es obligatoria.', 'danger');
+      return;
+    }
+  
+    // Validar que la identificación contenga solo números
+    const identificacionNumerica = /^[0-9]+$/.test(estudiante.documento_estudiante.trim());
+    if (!identificacionNumerica) {
+      this.notificationService.showNotification('La identificación del estudiante debe contener solo números.', 'danger');
+      return;
+    }
+    
+    // Verificar si la identificación está ocupada por otro estudiante
+    const identificacionOcupada = this.estudiantes.some((p, i) => i !== globalIndex && p.documento_estudiante === estudiante.documento_estudiante.trim());
+    if (identificacionOcupada) {
+      this.notificationService.showNotification('La identificación ingresada ya está siendo utilizada por otro estudiante.', 'danger');
       return;
     }
 

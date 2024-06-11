@@ -1,3 +1,44 @@
-.boton{
-  margin-left: 35%;
+.container {
+  max-width: 1200px; /* Ajuste el valor según sea necesario */
+  margin-top: 2rem;  /* Espaciado superior */
+  margin-bottom: 2rem; /* Espaciado inferior */
+}
+.text-center {
+  text-align: center;
+}
+.form-control-user {
+  padding: 0.75rem;
+  border-radius: 10px;
+}
+.btn-primary {
+  background-color: #4e73df;
+  border-color: #4e73df;
+}
+/* Estilo personalizado para los select */
+.custom-select-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem; /* Espaciado inferior */
+}
+.custom-select {
+  appearance: none;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background-color: #fff; /* Fondo blanco */
+  color: #495057;
+  width: 100%; /* Hace que el select ocupe todo el ancho disponible */
+  cursor: pointer;
+}
+.custom-select:focus {
+  outline: none;
+}
+.custom-select::placeholder {
+  color: #6c757d;
+}
+.custom-arrow {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }

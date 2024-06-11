@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { NotificationService, Notification } from '../../notification.service';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-crear-eleccion',
@@ -18,14 +18,14 @@ export class CrearEleccionComponent {
   crearEleccion(): void {
     // Verificar si algún campo está vacío o contiene solo espacios en blanco
     if (!this.nombre.trim() || !this.ano.trim()) {
-      alert('Por favor, complete todos los campos.');
+      this.notificationService.showNotification('Por favor, complete todos los campos.', 'danger');
       return;
     }
 
     // Verificar si el año es un número de 4 dígitos
     const anoRegex = /^\d{4}$/;
     if (!anoRegex.test(this.ano.trim())) {
-      alert('El año debe ser un número de 4 dígitos.');
+      this.notificationService.showNotification('El año debe ser un número de 4 dígitos.', 'danger');
       return;
     }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-listar-candidatos',
@@ -15,9 +16,7 @@ export class ListarCandidatosComponent implements OnInit {
   candidatoOriginal: any = null;
 
   constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient
-  ) { }
+    private route: ActivatedRoute, private http: HttpClient, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     // Obtener el ID de la elección del padre (EleccionesComponent)
@@ -34,7 +33,7 @@ export class ListarCandidatosComponent implements OnInit {
       },
       error => {
         console.error('Error al obtener los candidatos:', error);
-        alert('Error al obtener los candidatos. Por favor, intenta de nuevo.');
+        this.notificationService.showNotification('Error al obtener los candidatos. Por favor, intenta de nuevo.', 'danger');
       }
     );
   }
@@ -49,12 +48,11 @@ export class ListarCandidatosComponent implements OnInit {
         },
         error => {
             if (error.status === 400) {
-                alert('Debes proporcionar un término de búsqueda válido');
+                this.notificationService.showNotification('Debes proporcionar un término de búsqueda válido.', 'danger');
             } else if (error.status === 500) {
-                alert('Error interno del servidor');
+                this.notificationService.showNotification('Error interno del servidor.', 'danger');
             } else {
-                console.error('Error al buscar el candidato:', error);
-                alert('Error al buscar el candidato. Por favor, intenta de nuevo.');
+                this.notificationService.showNotification('Error al buscar el candidato. Por favor, intenta de nuevo.', 'danger');
             }
         }
     );
@@ -76,15 +74,41 @@ export class ListarCandidatosComponent implements OnInit {
       return;
     }
 
+    // Validar que el nombre no esté vacío
+    if (!candidato.nombre.trim()) {
+      this.notificationService.showNotification('El nombre del candidato es obligatorio.', 'danger');
+      return;
+    }
+
+    // Validar que el numero del candidato no esté vacío
+    if (!candidato.numero.trim()) {
+      this.notificationService.showNotification('El numero del candidato es obligatorio.', 'danger');
+      return;
+    }
+
+    // Validar que el número de candidato sea un número
+    if (isNaN(candidato.numero.trim())) {
+      this.notificationService.showNotification('El número de candidato debe ser un número válido.', 'danger');
+      return;
+    }
+
+    // Validar que el número de candidato no esté ocupado
+    const numeroOcupado = this.candidatos.some((c, i) => i !== index && c.numero === candidato.numero.trim());
+    if (numeroOcupado) {
+      this.notificationService.showNotification('El número de candidato ya está ocupado por otro candidato.', 'danger');
+      return;
+    }
+
     try {
       const response = await this.http.put<any>('http://localhost:3000/editarCandidato/editar-candidato', { candidato }).toPromise();
       if (response && response.message === 'Candidato actualizado') {
         this.candidatos[index] = candidato; // Actualizar el candidato en la lista
         this.candidatos[index].editando = false;
+        this.notificationService.showNotification('Candidato actualizado exitosamente.', 'success');
       }
     } catch (error) {
       console.error('Error al editar el candidato:', error);
-      alert('Error al editar el candidato. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al editar el candidato. Por favor, intenta de nuevo.', 'danger');
     }
   }
 
@@ -99,10 +123,11 @@ export class ListarCandidatosComponent implements OnInit {
       const response = await this.http.delete<any>(`http://localhost:3000/eliminarCandidato/eliminar-candidato/${candidato.id}`).toPromise();
       if (response && response.message === 'Candidato eliminado') {
         this.candidatos.splice(index, 1); // Eliminar el candidato del array
+        this.notificationService.showNotification('Candidato eliminado exitosamente.', 'success');
       }
     } catch (error) {
       console.error('Error al eliminar el candidato:', error);
-      alert('Error al eliminar el candidato. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al eliminar el candidato. Por favor, intenta de nuevo.', 'danger');
     }
   }
 }

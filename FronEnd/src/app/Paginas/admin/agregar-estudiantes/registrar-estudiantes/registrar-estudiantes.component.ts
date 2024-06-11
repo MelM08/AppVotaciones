@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationService, Notification } from '../../notification.service';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-registrar-estudiantes',

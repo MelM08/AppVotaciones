@@ -80,7 +80,7 @@ app.use('/eliminarEstudiante', eliminarEstudiante);
 app.use('/eliminarPadres', eliminarPadre);
 app.use('/eliminarProfesor', eliminarProfesor);
 app.use('/eliminarEleccion', eliminarEleccion);
-app.use('/eliminarEsramento', eliminarEstamento);
+app.use('/eliminarEstamento', eliminarEstamento);
 app.use('/eliminarCandidato', eliminarCandidato);
 
 app.use('/editarEstudiante', editarEstudiante);

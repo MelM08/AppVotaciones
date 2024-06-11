@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationService, Notification } from '../../notification.service';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-buscar-profesores',
@@ -40,12 +40,13 @@ export class BuscarProfesoresComponent implements OnInit{
       profesores => {
         this.profesores = profesores.map(profesor => ({ ...profesor, editando: false }));
         this.terminoBusqueda = '';
+        this.notificationService.showNotification('Profesor encontrado exitosamente.', 'success');
       },
       error => {
         if (error.status === 400) {
-          alert('Debes proporcionar nombre y apellido o documento');
+          this.notificationService.showNotification('Debes proporcionar nombre y apellido o documento.', 'danger');
         } else if (error.status === 500) {
-          alert('Error interno del servidor');
+          this.notificationService.showNotification('Error interno del servidor.', 'danger');
         }
       }
     );
@@ -74,19 +75,46 @@ export class BuscarProfesoresComponent implements OnInit{
     if (!confirmacion) {
       return;
     }
+  
+    // Validar que el nombre no esté vacío
+    if (!profesor.nombre_docente.trim()) {
+      this.notificationService.showNotification('El nombre del profesor es obligatorio.', 'danger');
+      return;
+    }
+  
+    // Validar que la identificación no esté vacía
+    if (!profesor.documento_docente.trim()) {
+      this.notificationService.showNotification('La identificación del profesor es obligatoria.', 'danger');
+      return;
+    }
 
+    // Validar que la identificación contenga solo números
+    const identificacionNumerica = /^[0-9]+$/.test(profesor.documento_docente.trim());
+    if (!identificacionNumerica) {
+      this.notificationService.showNotification('La identificación del profesor debe contener solo números.', 'danger');
+      return;
+    }
+  
+    // Verificar si la identificación está ocupada por otro profesor
+    const identificacionOcupada = this.profesores.some((p, i) => i !== globalIndex && p.documento_docente === profesor.documento_docente.trim());
+    if (identificacionOcupada) {
+      this.notificationService.showNotification('La identificación ingresada ya está siendo utilizada por otro profesor.', 'danger');
+      return;
+    }
+  
     try {
       const response = await this.http.put<any>('http://localhost:3000/editarProfesor/editar-profesor', {
         profesor
       }).toPromise();
-
+  
       if (response && response.message === 'Profesor actualizado') {
         this.profesores[globalIndex].editando = false;
         this.profesores = [...this.profesores];
+        this.notificationService.showNotification('Profesor actualizado correctamente.', 'success');
       }
     } catch (error) {
       console.error('Error al editar profesor:', error);
-      alert('Error al editar profesor. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al editar profesor. Por favor, intenta de nuevo.', 'danger');
     }
   }
 
@@ -102,9 +130,10 @@ export class BuscarProfesoresComponent implements OnInit{
       this.http.delete<any>(`http://localhost:3000/eliminarProfesor/eliminar-profesor/${profesor.documento_docente}`).toPromise();
       this.profesores.splice(globalIndex, 1); // Eliminar el profesor del array
       this.profesores = [...this.profesores]; // Actualizar la lista
+      this.notificationService.showNotification('Profesor eliminado exitosamente.', 'success');
     } catch (error) {
       console.error('Error al eliminar profesor:', error);
-      alert('Error al eliminar profesor. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al eliminar profesor. Por favor, intenta de nuevo.', 'danger');
     }
   }
 }

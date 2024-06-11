@@ -1,59 +1,49 @@
 <!-- Bootstrap 5 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-  rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-  crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-<!-- Recursos de fuentes -->
-<link href="../../../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<!-- FontAwesome para iconos -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-<link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet">
-
-<!-- .css's con estilos necesarios para algunas clases -->
-<link href="../../../../css/sb-admin-2.css" rel="stylesheet">
-<link href="../../../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
-
-
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
 <div class="container-fluid">
   <!-- Tabla de estudiantes -->
-  <div class="card card-2 shadow">
-    <!-- Header de la tabla donde se encuentra la busqueda y el botón para buscar -->
-    <div class="card-header py-3 d-flex justify-content-between align-items-center"> <!-- Utilizamos d-flex y justify-content-between para alinear elementos -->
-      <div class="d-flex align-items-center"> <!-- Contenedor para el input y el botón -->
-        <input type="text" [(ngModel)]="terminoBusqueda" class="form-control me-2" placeholder="Buscar"> <!-- Añadimos la clase me-2 para darle un pequeño margen a la derecha -->
-        <a class="btn btn-primary btn-circle me-2" (click)="buscarEstudiante()" title="Buscar">
+  <div class="card shadow-sm">
+    <!-- Header de la tabla -->
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <input type="text" [(ngModel)]="terminoBusqueda" class="form-control me-2" placeholder="Buscar">
+        <button class="btn btn-success btn-circle" (click)="buscarEstudiante()" title="Buscar">
           <i class="fa fa-search"></i>
-        </a>
+        </button>
       </div>
     </div>
 
-    <!-- Tabla  -->
-    <div class="card-body">
+    <!-- Tabla -->
+    <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-hover table-bordered mb-0">
           <thead>
             <tr>
-              <th style="width: 15%;">Identificación</th>
-              <th style="width: 25%;">Nombre</th>
-              <th style="width: 15%;">Grado</th>
-              <th style="width: 35%;">Sede</th>
-              <th style="width: 15%;">Acciones</th>
+              <th class="text-center">Identificación</th>
+              <th class="text-center">Nombre</th>
+              <th class="text-center">Grado</th>
+              <th class="text-center">Sede</th>
+              <th class="text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let estudiante of estudiantes | paginate: { itemsPerPage: 10, currentPage: page }; let i = index">
-              <td>
-                <input type="text" [(ngModel)]="estudiante.documento_estudiante" [disabled]="!estudiante.editando" class="form-control w-100" >
+              <td data-label="Identificación" class="text-center">
+                <input type="text" [(ngModel)]="estudiante.documento_estudiante" [disabled]="!estudiante.editando" class="form-control text-center">
               </td>
-              <td>
-                <input type="text" [(ngModel)]="estudiante.nombre_estudiante" [disabled]="!estudiante.editando" class="form-control w-100">
+              <td data-label="Nombre" class="text-center">
+                <input type="text" [(ngModel)]="estudiante.nombre_estudiante" [disabled]="!estudiante.editando" class="form-control text-center">
               </td>
-              <td>
-                <select id="grado" name="grado" required [(ngModel)]="estudiante.grado_estudiante" [disabled]="!estudiante.editando" class="form-control w-100">
-                  <option value="" disabled selected>grados</option>
+              <td data-label="Grado" class="text-center">
+                <select [(ngModel)]="estudiante.grado_estudiante" [disabled]="!estudiante.editando" class="form-select text-center">
+                  <option value="" disabled selected>Grado</option>
                   <option value="0">Transición</option>
                   <option value="1">Primero</option>
                   <option value="2">Segundo</option>
@@ -61,46 +51,48 @@
                   <option value="4">Cuarto</option>
                   <option value="5">Quinto</option>
                   <option value="6">Sexto</option>
-                  <option value="7">Septimo</option>
+                  <option value="7">Séptimo</option>
                   <option value="8">Octavo</option>
                   <option value="9">Noveno</option>
                   <option value="10">Décimo</option>
                   <option value="11">Once</option>
                 </select>
               </td>
-              <td>
-                <select id="sede" name="sede" required [(ngModel)]="estudiante.institucion_estudiante" class="form-control w-100" [disabled]="!estudiante.editando">
+              <td data-label="Sede" class="text-center">
+                <select [(ngModel)]="estudiante.institucion_estudiante" class="form-select text-center" [disabled]="!estudiante.editando">
                   <option value="" disabled selected>Sede</option>
                   <option value="José María Córdoba">José María Córdoba</option>
                   <option value="Manuela Beltrán">Manuela Beltrán</option>
                   <option value="Pedro Antonio Sánchez Tello">Pedro Antonio Sánchez Tello</option>
                 </select>
               </td>
-              <td>
+              <td data-label="Acciones" class="text-center">
                 <ng-container *ngIf="!estudiante.editando">
-                  <a class="btn btn-primary" (click)="editarEstudiante(i)" title="Editar">
+                  <button class="btn btn-primary btn-sm me-1" (click)="editarEstudiante(i)" title="Editar">
                     <i class="fa fa-user-edit"></i>
-                  </a>
-                  <a class="btn btn-danger" (click)="eliminarEstudiante(i)" title="Eliminar">
+                  </button>
+                  <button class="btn btn-danger btn-sm" (click)="eliminarEstudiante(i)" title="Eliminar">
                     <i class="fa fa-trash"></i>
-                  </a>
+                  </button>
                 </ng-container>
                 <ng-container *ngIf="estudiante.editando">
-                  <a class="btn btn-success" (click)="guardarEstudiante(i)" title="Guardar">
-                        <i class="fa fa-save"></i>
-                  </a>
-                  <a class="btn btn-secondary" (click)="cancelarEdicion(i)" title="Cancelar">
-                        <i class="fa fa-times-circle"></i>
-                  </a>
+                  <button class="btn btn-success btn-sm me-1" (click)="guardarEstudiante(i)" title="Guardar">
+                    <i class="fa fa-save"></i>
+                  </button>
+                  <button class="btn btn-secondary btn-sm" (click)="cancelarEdicion(i)" title="Cancelar">
+                    <i class="fa fa-times-circle"></i>
+                  </button>
                 </ng-container>
               </td>
             </tr>
             <tr *ngIf="estudiantes && estudiantes.length === 0">
-              <td colspan="6">No se encontraron estudiantes</td>
+              <td colspan="5" class="text-center">No se encontraron estudiantes</td>
             </tr>
           </tbody>
         </table>
-        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+        <div class="pagination-controls mt-3">
+          <pagination-controls (pageChange)="page = $event"></pagination-controls>
+        </div>
       </div>
     </div>
   </div>

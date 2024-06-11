@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationService } from '../../notification.service';
 
 @Component({
   selector: 'app-crear-estamento',
@@ -10,22 +11,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CrearEstamentoComponent implements OnInit {
   eleccionId: number = 0;
   nombre: string = '';
-  gradosHabilitados: string = 'Ninguno';
-  rolHabilitadoParaVotar: string = 'Todos';
+  gradosHabilitados: string | null = null;
+  rolHabilitadoParaVotar: string | null = null;
   estado: string = 'ACTIVO';
 
   grados = [
-    'Null', '0', '1', '2', '3', '4', '5', 
-    '6', '7', '8', '9', '10', '11'
+    'Ninguno', "Todos", 'Transición', 'Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 
+    'Sexto', 'Septimo', 'Octavo', 'Noveno', 'Décimo', 'Once'
   ];
 
-  roles = ['Todos', 'Estudiantes', 'Docentes', 'Padres'];
+  roles = ['Todos', 'Estudiantes', 'Docentes', 'Padres de Familia'];
 
-  constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    private router: Router
-  ) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     this.route.parent?.params.subscribe(params => {
@@ -35,7 +32,7 @@ export class CrearEstamentoComponent implements OnInit {
 
   crearEstamento() {
     if (!this.nombre.trim()) {
-      alert('El nombre es obligatorio');
+      this.notificationService.showNotification('El nombre es obligatorio.', 'danger');
       return;
     }
 
@@ -49,12 +46,11 @@ export class CrearEstamentoComponent implements OnInit {
 
     this.http.post('http://localhost:3000/crearEstamento/crear-estamento', estamento).subscribe(
       response => {
-        alert('Estamento creado exitosamente');
+        this.notificationService.showNotification('Estamento creado exitosamente.', 'success');
         this.router.navigate(['/admin/estamentos', this.eleccionId, 'listar-estamentos']);
       },
       error => {
-        console.error('Error al crear el estamento:', error);
-        alert('Error al crear el estamento. Por favor, intenta de nuevo.');
+        this.notificationService.showNotification('Error al crear el estamento. Por favor, intenta de nuevo.', 'success');
       }
     );
   }

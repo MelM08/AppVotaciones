@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationService } from '../../notification.service';
 
 @Component({
   selector: 'app-crear-candidato',
@@ -11,13 +12,14 @@ export class CrearCandidatoComponent {
   fotoSeleccionada: boolean = false;
   nombre: string = '';
   descripcion: string = '';
-  numeroCandidato: number = 0;
+  numeroCandidato: number | null = null;
   foto: File | null = null;
   estado: string = 'ACTIVO';
   estamentoId: number = 0;
   numeroCandidatoExists: boolean = false;
+  imagenSeleccionadaURL: string | ArrayBuffer | null = null;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) { }
+  constructor(private http: HttpClient, private route: ActivatedRoute, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     // Obtener el ID del estamento del padre (ListarEstamentosComponent)
@@ -29,7 +31,7 @@ export class CrearCandidatoComponent {
   async crearCandidato(): Promise<void> {
     // Verificar si se ha seleccionado una foto
     if (this.foto === null) {
-      alert('Por favor, selecciona una foto.');
+      this.notificationService.showNotification('Por favor, selecciona una foto.', 'danger');
       return;
     }
 
@@ -37,36 +39,40 @@ export class CrearCandidatoComponent {
     const numeroCandidatoExistente = await this.verificarNumeroCandidatoExistente();
     if (numeroCandidatoExistente) {
       this.numeroCandidatoExists = true;
+      this.notificationService.showNotification('El número de candidato ya está en uso.', 'danger');
       return;
     } else {
       this.numeroCandidatoExists = false;
     }
-  
+
     // Crear el FormData para enviar al servidor
     const formData = new FormData();
     formData.append('nombre', this.nombre);
     formData.append('descripcion', this.descripcion);
-    formData.append('numeroCandidato', this.numeroCandidato.toString());
+    if (this.numeroCandidato !== null) {
+      formData.append('numeroCandidato', this.numeroCandidato.toString());
+    }
     formData.append('foto', this.foto);
     formData.append('estado', this.estado);
     formData.append('estamentoId', this.estamentoId.toString());
-  
+
     // Enviar la solicitud HTTP para crear el candidato
     this.http.post<any>('http://localhost:3000/crearCandidato/crear-candidato', formData)
       .subscribe(
         response => {
           console.log(response.message);
-          alert('Candidato creado con éxito');
+          this.notificationService.showNotification('Candidato creado con éxito.', 'success');
           // Limpiar campos después de la creación exitosa
           this.nombre = '';
           this.descripcion = '';
-          this.numeroCandidato = 0;
+          this.numeroCandidato = null; // Cambiar a null
           this.foto = null;
           this.estado = 'ACTIVO';
+          this.imagenSeleccionadaURL = null;
         },
         error => {
           console.error('Error al crear el candidato:', error);
-          alert('Error al crear el candidato. Por favor, intenta de nuevo.');
+          this.notificationService.showNotification('Error al crear el candidato. Por favor, intenta de nuevo.', 'danger');
         }
       );
   }
@@ -77,7 +83,7 @@ export class CrearCandidatoComponent {
       return response.exists;
     } catch (error) {
       console.error('Error al verificar el número de candidato:', error);
-      alert('Error al verificar el número de candidato. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al verificar el número de candidato. Por favor, intenta de nuevo.', 'danger');
       return false;
     }
   }
@@ -87,9 +93,19 @@ export class CrearCandidatoComponent {
     if (inputElement && inputElement.files && inputElement.files.length > 0) {
       this.foto = inputElement.files[0];
       this.fotoSeleccionada = true; // Indicar que se ha seleccionado una foto
+  
+      // Leer el archivo como una URL de datos y asignarla a imagenSeleccionadaURL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          this.imagenSeleccionadaURL = e.target.result;
+        }
+      };
+      reader.readAsDataURL(this.foto);
     } else {
       console.error("No se ha seleccionado ningún archivo.");
       this.fotoSeleccionada = false; // Indicar que no se ha seleccionado una foto
     }
   }
+
 }

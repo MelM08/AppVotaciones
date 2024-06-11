@@ -1,41 +1,110 @@
-/* Estilos generales */
-.card2 {
-  padding: 0; /* Eliminar el padding */
-  margin-top: 1%; /* Eliminar el margen */
-  margin-bottom: 1%;
-  height:97%;
+body {
+  background-color: #f9f9f9;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-/* Estilos para pantallas grandes (PC) */
-@media (min-width: 992px) {
-  .container-fluid {
-    height: calc(70vh - 56px); /* Resta el alto del topbar */
-  }
-
-  #content-wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-
-  #content {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .card {
-    margin-bottom: 1rem; /* Espaciado entre las cards */
-  }
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
-/* Estilos para pantallas pequeñas (Móviles) */
-@media (max-width: 991px) {
-  .container-fluid {
-    height: auto; /* Altura automática */
-  }
+.card {
+  border: none;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  text-align: center;
+  width: 100%;
+  max-width: 500px; /* Limita el ancho máximo de la tarjeta */
+}
 
-  .card {
-    margin-bottom: 1rem; /* Espaciado entre las cards */
-  }
+.card h2 {
+  margin-bottom: 1rem;
+  color: #333333;
+  font-size: 1.5rem;
+}
+
+.card span {
+  color: #666666;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.input-group input {
+  display: none;
+}
+
+.input-group label {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px dashed #cccccc;
+  border-radius: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  color: #666666;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.input-group label:hover {
+  border-color: #4e73df;
+  color: #4e73df;
+}
+
+.file-info {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666666;
+}
+
+.file-info span {
+  color: #333333;
+  font-weight: bold;
+}
+
+.boton {
+  background-color: #4e73df;
+  border: none;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.boton:hover {
+  background-color: #3c5ab7;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
 }

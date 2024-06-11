@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationService, Notification } from '../../notification.service';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-buscar-padres',
@@ -75,13 +75,39 @@ export class BuscarPadresComponent implements OnInit{
     if (!confirmacion) {
       return;
     }
-
+  
+    // Validar que el nombre no esté vacío
+    if (!padre.nombre_padre.trim()) {
+      this.notificationService.showNotification('El nombre del padre es obligatorio.', 'danger');
+      return;
+    }
+    
+    // Validar que la identificación no esté vacía
+    if (!padre.documento_padre.trim()) {
+      this.notificationService.showNotification('La identificación del padre es obligatoria.', 'danger');
+      return;
+    }
+  
+    // Validar que la identificación contenga solo números
+    const identificacionNumerica = /^[0-9]+$/.test(padre.documento_padre.trim());
+    if (!identificacionNumerica) {
+      this.notificationService.showNotification('La identificación del padre debe contener solo números.', 'danger');
+      return;
+    }
+    
+    // Verificar si la identificación está ocupada por otro padre
+    const identificacionOcupada = this.padres.some((p, i) => i !== globalIndex && p.documento_padre === padre.documento_padre.trim());
+    if (identificacionOcupada) {
+      this.notificationService.showNotification('La identificación ingresada ya está siendo utilizada por otro padre.', 'danger');
+      return;
+    }
+  
     try {
       const response = await this.http.put<any>('http://localhost:3000/editarPadre/editar-padre', {
         padre,
         documento_padre_original: this.padreOriginal.documento_padre_original
       }).toPromise();
-
+  
       if (response && response.message === 'Padre actualizado') {
         this.padres[globalIndex].editando = false;
         this.padres = [...this.padres];
@@ -105,9 +131,10 @@ export class BuscarPadresComponent implements OnInit{
       this.http.delete<any>(`http://localhost:3000/eliminarPadres/eliminar-padre/${padre.documento_padre}`).toPromise();
       this.padres.splice(globalIndex, 1); // Eliminar el padre del array
       this.padres = [...this.padres]; // Actualizar la lista
+      this.notificationService.showNotification('Padre eliminado exitosamente.', 'success');
     } catch (error) {
       console.error('Error al eliminar padre:', error);
-      alert('Error al eliminar padre. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al eliminar padre. Por favor, intenta de nuevo.', 'danger');
     }
   }
 }

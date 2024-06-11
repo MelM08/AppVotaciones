@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationService, Notification } from '../../notification.service';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-registrar-padres',
@@ -33,17 +33,17 @@ export class RegistrarPadresComponent {
           this.documentoEstudiante = '';
           this.documentoPadre = '';
           this.nombrePadre = '';
-          alert('Padre registrado con éxito')
+          this.notificationService.showNotification('Padre registrado con éxito.', 'success');
         },
         error => {
           if(error.status === 400){
-            alert('El estudiante no existe en la base de datos.')
+            this.notificationService.showNotification('El estudiante no existe en la base de datos.', 'danger');
           }else if(error.status === 401){
-            alert('El padre ya está registrado en la base de datos.')
+            this.notificationService.showNotification('El padre ya está registrado en la base de datos.', 'danger');
           }else if(error.status === 200){
-            alert('Padre registrado exitosamente.')
+            this.notificationService.showNotification('Padre registrado exitosamente.', 'success');
           }else if(error.status === 500){
-            alert('Error al registrar padre.')
+            this.notificationService.showNotification('Error al registrar padre.', 'danger');
           }
         }
       );

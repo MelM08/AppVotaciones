@@ -23,7 +23,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       }
     );
     if (this.primera){
-      this.notificationService.showNotification('Bienvenido al panel administrativo del sistema electotal.', 'info');
+      this.notificationService.showNotification('Bienvenido al panel administrativo del sistema electoral.', 'info');
       this.primera = false;
     }
   }

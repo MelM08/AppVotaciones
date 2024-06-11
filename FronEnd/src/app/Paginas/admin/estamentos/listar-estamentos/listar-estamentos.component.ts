@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-listar-estamentos',
@@ -14,13 +15,14 @@ export class ListarEstamentosComponent implements OnInit {
   estamentoSeleccionado: any = null;
   estamentoOriginal: any = null;
 
+  grados = [
+    'Ninguno', "Todos", 'Transición', 'Primero', 'Segundo', 'Tercero', 'Cuarto', 'Quinto', 
+    'Sexto', 'Septimo', 'Octavo', 'Noveno', 'Décimo', 'Once'
+  ];
 
-  roles = ['Todos', 'Estudiantes', 'Docentes', 'Padres'];
+  roles = ['Todos', 'Estudiantes', 'Docentes', 'Padres de Familia'];
 
-  constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient
-  ) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient, private notificationService: NotificationService) { }
 
   ngOnInit(): void {
     // Obtener el ID de la elección del padre (EstamentosComponent)
@@ -36,8 +38,7 @@ export class ListarEstamentosComponent implements OnInit {
         this.estamentos = estamentos;
       },
       error => {
-        console.error('Error al obtener los estamentos:', error);
-        alert('Error al obtener los estamentos. Por favor, intenta de nuevo.');
+        this.notificationService.showNotification('Error al obtener los estamentos. Por favor, intenta de nuevo.', 'danger');
       }
     );
   }
@@ -52,12 +53,12 @@ export class ListarEstamentosComponent implements OnInit {
       },
       error => {
         if (error.status === 400) {
-          alert('Debes proporcionar un término de búsqueda válido');
+          this.notificationService.showNotification('Debes proporcionar un término de búsqueda válido.', 'danger');
         } else if (error.status === 500) {
-          alert('Error interno del servidor');
+          this.notificationService.showNotification('Error interno del servidor.', 'danger');
         } else {
           console.error('Error al buscar el estamento:', error);
-          alert('Error al buscar el estamento. Por favor, intenta de nuevo.');
+          this.notificationService.showNotification('Error al buscar el estamento. Por favor, intenta de nuevo.', 'danger');
         }
       }
     );
@@ -79,14 +80,20 @@ export class ListarEstamentosComponent implements OnInit {
       return;
     }
 
+    // Validar que el nombre no esté vacío
+    if (!estamento.nombre.trim()) {
+      this.notificationService.showNotification('El nombre del estamento es obligatorio.', 'danger');
+      return;
+    }
+
     try {
       const response = await this.http.put<any>('http://localhost:3000/editarEstamento/editar-estamento', { estamento }).toPromise();
       if (response && response.message === 'Estamento actualizado') {
         this.estamentos[index].editando = false;
+        this.notificationService.showNotification('Estamento actualizado exitosamente.', 'success');
       }
     } catch (error) {
-      console.error('Error al editar el estamento:', error);
-      alert('Error al editar el estamento. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('EError al editar el estamento. Por favor, intenta de nuevo.', 'danger');
     }
   }
 
@@ -101,10 +108,10 @@ export class ListarEstamentosComponent implements OnInit {
       const response = await this.http.delete<any>(`http://localhost:3000/eliminarEstamento/eliminar-estamento/${estamento.id}`).toPromise();
       if (response && response.message === 'Estamento y sus dependencias eliminados') {
         this.estamentos.splice(index, 1); // Eliminar el estamento del array
+        this.notificationService.showNotification('Estamento eliminado exitosamente.', 'success');
       }
     } catch (error) {
-      console.error('Error al eliminar el estamento:', error);
-      alert('Error al eliminar el estamento. Por favor, intenta de nuevo.');
+      this.notificationService.showNotification('Error al eliminar el estamento. Por favor, intenta de nuevo.', 'danger');
     }
   }
 }

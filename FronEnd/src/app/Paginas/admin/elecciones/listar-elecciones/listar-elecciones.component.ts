@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NotificationService, Notification } from '../../notification.service';
+import { NotificationService} from '../../notification.service';
 
 @Component({
   selector: 'app-listar-elecciones',
@@ -25,7 +25,6 @@ export class ListarEleccionesComponent implements OnInit {
         this.elecciones = elecciones;
       },
       error => {
-        console.error('Error al obtener las elecciones:', error);
         this.notificationService.showNotification('Error al obtener las elecciones. Por favor, intenta de nuevo.', 'danger');
       }
     );
@@ -45,7 +44,6 @@ export class ListarEleccionesComponent implements OnInit {
             } else if (error.status === 500) {
                 this.notificationService.showNotification('Error interno del servidor', 'danger');
             } else {
-                console.error('Error al buscar la elección:', error);
                 this.notificationService.showNotification('Error al buscar la elección. Por favor, intenta de nuevo.', 'danger');
             }
         }
@@ -67,6 +65,25 @@ export class ListarEleccionesComponent implements OnInit {
     if (!confirmacion) {
       return;
     }
+  
+    // Validar que el nombre no esté vacío
+    if (!eleccion.nombre.trim()) {
+      this.notificationService.showNotification('El nombre de la elección es obligatorio.', 'danger');
+      return;
+    }
+
+    // Validar que el año no esté vacío
+    if (!eleccion.ano.trim()) {
+      this.notificationService.showNotification('El año de la elección es obligatorio.', 'danger');
+      return;
+    }
+    
+    // Validar que el año sea un número y tenga exactamente cuatro dígitos
+    const anoValido = /^\d{4}$/.test(eleccion.ano);
+    if (!anoValido) {
+      this.notificationService.showNotification('El año de la elección debe ser un número de cuatro dígitos.', 'danger');
+      return;
+    }
 
     try {
       const response = await this.http.put<any>('http://localhost:3000/editarEleccion/editar-eleccion', { eleccion }).toPromise();
@@ -76,7 +93,6 @@ export class ListarEleccionesComponent implements OnInit {
         this.notificationService.showNotification('Eleccion editada correctamente.', 'success');
       }
     } catch (error) {
-      console.error('Error al editar la elección:', error);
       this.notificationService.showNotification('Error al editar la elección. Por favor, intenta de nuevo.', 'danger');
     }
   }
@@ -93,9 +109,9 @@ export class ListarEleccionesComponent implements OnInit {
       if (response && response.message === 'Elección y sus dependencias eliminadas') {
         this.notificationService.showNotification('Eleccion eliminada correctamente.', 'success');
         this.elecciones.splice(index, 1); // Eliminar la elección del array
+        this.notificationService.showNotification('Eleccion eliminada exitosamente.', 'success');
       }
     } catch (error) {
-      console.error('Error al eliminar la elección:', error);
       this.notificationService.showNotification('Error al eliminar la elección. Por favor, intenta de nuevo.', 'danger');
     }
   }

@@ -1,80 +1,94 @@
-<div class="container-fluid">
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Crear Nuevo Estamento</h6>
-    </div>
-    <div class="card-body">
-      <form (ngSubmit)="crearEstamento()" #estamentoForm="ngForm">
-        <div class="mb-3">
-          <label for="nombre" class="form-label">Nombre del Estamento</label>
-          <input
-            type="text"
-            id="nombre"
-            [(ngModel)]="nombre"
-            name="nombre"
-            class="form-control"
-            required
-            #nombreField="ngModel"
-          >
-          <div *ngIf="nombreField.invalid && (nombreField.dirty || nombreField.touched)">
-            <small class="text-danger" *ngIf="nombreField.errors?.['required']">El nombre es obligatorio.</small>
-          </div>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card border-0">
+        <div class="card-body">
+          <h1 class="h4 text-center text-gray-900 mb-4">Crear Nuevo Estamento</h1>
+          <form (ngSubmit)="crearEstamento()" #estamentoForm="ngForm">
+            <div class="row mb-3">
+              <div class="col">
+                <input
+                  type="text"
+                  id="nombre"
+                  [(ngModel)]="nombre"
+                  name="nombre"
+                  class="form-control form-control-user text-center"
+                  placeholder="Nombre del Estamento"
+                  required
+                  #nombreField="ngModel"
+                >
+                <div *ngIf="nombreField.invalid && (nombreField.dirty || nombreField.touched)">
+                  <small class="text-danger">El nombre es obligatorio.</small>
+                </div>
+              </div>
+              <div class="col">
+                <select
+                  id="gradosHabilitados"
+                  [(ngModel)]="gradosHabilitados"
+                  name="gradosHabilitados"
+                  class="form-control form-control-user custom-select text-center"
+                  required
+                >
+                  <option [ngValue]="null" disabled selected>Grado habilitado para votar</option>
+                  <option value="Todos">Todos</option>
+                  <option value="Ninguno">Ninguno</option>
+                  <option value="Transición">Transición</option>
+                  <option value="Primero">Primero</option>
+                  <option value="Segundo">Segundo</option>
+                  <option value="Tercero">Tercero</option>
+                  <option value="Cuarto">Cuarto</option>
+                  <option value="Quinto">Quinto</option>
+                  <option value="Sexto">Sexto</option>
+                  <option value="Septimo">Septimo</option>
+                  <option value="Octavo">Octavo</option>
+                  <option value="Noveno">Noveno</option>
+                  <option value="Décimo">Décimo</option>
+                  <option value="Once">Once</option>
+                </select>
+                <div *ngIf="!gradosHabilitados" class="text-danger">Grado habilitado para votar es obligatorio.</div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <select
+                  id="rolHabilitadoParaVotar"
+                  [(ngModel)]="rolHabilitadoParaVotar"
+                  name="rolHabilitadoParaVotar"
+                  class="form-control form-control-user custom-select text-center"
+                  required
+                >
+                  <option [ngValue]="null" disabled selected>Rol habilitado para votar</option>
+                  <option value="Todos">Todos</option>
+                  <option value="Estudiantes">Estudiantes</option>
+                  <option value="Docentes">Docentes</option>
+                  <option value="Padres de Familia">Padres de Familia</option>
+                </select>
+                <div *ngIf="!rolHabilitadoParaVotar" class="text-danger">Rol habilitado para votar es obligatorio.</div>
+              </div>
+              <div class="col">
+                <select
+                  id="estado"
+                  [(ngModel)]="estado"
+                  name="estado"
+                  class="form-select form-control-user text-center"
+                  required
+                >
+                  <option value="ACTIVO">ACTIVO</option>
+                  <option value="INACTIVO">INACTIVO</option>
+                </select>
+                <div *ngIf="!estado" class="text-danger">El estado es obligatorio.</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary btn-user btn-block" [disabled]="estamentoForm.invalid">Crear Estamento</button>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="mb-3">
-          <label for="gradosHabilitados" class="form-label">Grados Habilitados</label>
-          <select
-            id="gradosHabilitados"
-            [(ngModel)]="gradosHabilitados"
-            name="gradosHabilitados"
-            class="form-control"
-            required
-          >
-            <option value="" disabled selected>grados</option>
-            <option value="Ninguno">Ninguno</option>
-            <option value="0">Transición</option>
-            <option value="1">Primero</option>
-            <option value="2">Segundo</option>
-            <option value="3">Tercero</option>
-            <option value="4">Cuarto</option>
-            <option value="5">Quinto</option>
-            <option value="6">Sexto</option>
-            <option value="7">Septimo</option>
-            <option value="8">Octavo</option>
-            <option value="9">Noveno</option>
-            <option value="10">Décimo</option>
-            <option value="11">Once</option>
-            <option value="Todos">todos</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="rolHabilitadoParaVotar" class="form-label">Rol Habilitado para Votar</label>
-          <select
-            id="rolHabilitadoParaVotar"
-            [(ngModel)]="rolHabilitadoParaVotar"
-            name="rolHabilitadoParaVotar"
-            class="form-control"
-            required
-            #rolField="ngModel"
-          >
-            <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option> //cambiado de nuevo
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="estado" class="form-label">Estado</label>
-          <select
-            id="estado"
-            [(ngModel)]="estado"
-            name="estado"
-            class="form-select"
-            required
-            #estadoField="ngModel"
-          >
-            <option value="ACTIVO">ACTIVO</option>
-            <option value="INACTIVO">INACTIVO</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary" [disabled]="estamentoForm.invalid">Crear Estamento</button>
-      </form>
+      </div>
     </div>
   </div>
 </div>
