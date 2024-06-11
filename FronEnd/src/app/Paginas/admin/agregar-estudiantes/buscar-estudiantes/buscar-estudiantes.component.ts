@@ -42,14 +42,13 @@ export class BuscarEstudiantesComponent implements OnInit{
         this.terminoBusqueda = '';
         this.notificationService.showNotification('Estudiante encontrado con exito.', 'success');
       },
-      error => {
-        console.error('Error al buscar estudiantes:', error);
-        if (error.error && error.error.error) {
-          alert(error.error.error);
-        } else {
-          this.notificationService.showNotification('Error interno del servidor.', 'danger');
-        }
-      }
+      // error => {
+      //   console.error('Error al buscar estudiantes:', error);
+      //   if (error.error && error.error.error) {
+      //     alert(error.error.error);
+      //   }
+      // }
+      //Comentando y no eliminado por motivos de posible uso futuro
     );
   }
 
@@ -82,20 +81,20 @@ export class BuscarEstudiantesComponent implements OnInit{
       this.notificationService.showNotification('El nombre del estudiante es obligatorio.', 'danger');
       return;
     }
-    
+
     // Validar que la identificación no esté vacía
     if (!estudiante.documento_estudiante.trim()) {
       this.notificationService.showNotification('La identificación del estudiante es obligatoria.', 'danger');
       return;
     }
-  
+
     // Validar que la identificación contenga solo números
     const identificacionNumerica = /^[0-9]+$/.test(estudiante.documento_estudiante.trim());
     if (!identificacionNumerica) {
       this.notificationService.showNotification('La identificación del estudiante debe contener solo números.', 'danger');
       return;
     }
-    
+
     // Verificar si la identificación está ocupada por otro estudiante
     const identificacionOcupada = this.estudiantes.some((p, i) => i !== globalIndex && p.documento_estudiante === estudiante.documento_estudiante.trim());
     if (identificacionOcupada) {

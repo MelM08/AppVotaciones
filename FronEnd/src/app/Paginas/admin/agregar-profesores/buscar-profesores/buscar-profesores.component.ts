@@ -42,13 +42,13 @@ export class BuscarProfesoresComponent implements OnInit{
         this.terminoBusqueda = '';
         this.notificationService.showNotification('Profesor encontrado exitosamente.', 'success');
       },
-      error => {
-        if (error.status === 400) {
-          this.notificationService.showNotification('Debes proporcionar nombre y apellido o documento.', 'danger');
-        } else if (error.status === 500) {
-          this.notificationService.showNotification('Error interno del servidor.', 'danger');
-        }
-      }
+      // error => {
+      //   console.error('Error al buscar profesor:', error);
+      //   if (error.error && error.error.error) {
+      //     alert(error.error.error);
+      //   }
+      // }
+      //Comentando y no eliminado por motivos de posible uso futuro
     );
   }
 
@@ -75,13 +75,13 @@ export class BuscarProfesoresComponent implements OnInit{
     if (!confirmacion) {
       return;
     }
-  
+
     // Validar que el nombre no esté vacío
     if (!profesor.nombre_docente.trim()) {
       this.notificationService.showNotification('El nombre del profesor es obligatorio.', 'danger');
       return;
     }
-  
+
     // Validar que la identificación no esté vacía
     if (!profesor.documento_docente.trim()) {
       this.notificationService.showNotification('La identificación del profesor es obligatoria.', 'danger');
@@ -94,19 +94,19 @@ export class BuscarProfesoresComponent implements OnInit{
       this.notificationService.showNotification('La identificación del profesor debe contener solo números.', 'danger');
       return;
     }
-  
+
     // Verificar si la identificación está ocupada por otro profesor
     const identificacionOcupada = this.profesores.some((p, i) => i !== globalIndex && p.documento_docente === profesor.documento_docente.trim());
     if (identificacionOcupada) {
       this.notificationService.showNotification('La identificación ingresada ya está siendo utilizada por otro profesor.', 'danger');
       return;
     }
-  
+
     try {
       const response = await this.http.put<any>('http://localhost:3000/editarProfesor/editar-profesor', {
         profesor
       }).toPromise();
-  
+
       if (response && response.message === 'Profesor actualizado') {
         this.profesores[globalIndex].editando = false;
         this.profesores = [...this.profesores];

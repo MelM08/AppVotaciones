@@ -42,13 +42,13 @@ export class BuscarPadresComponent implements OnInit{
         this.terminoBusqueda = '';
         this.notificationService.showNotification('Padre encontrado con exito.', 'success');
       },
-      error => {
-        if (error.status === 400) {
-          this.notificationService.showNotification('Debes proporcionar un término de búsqueda válido.', 'danger');
-        } else if (error.status === 500) {
-          this.notificationService.showNotification('Error interno del servidoro.', 'danger');
-        }
-      }
+      // error => {
+      //   console.error('Error al buscar padre:', error);
+      //   if (error.error && error.error.error) {
+      //     alert(error.error.error);
+      //   }
+      // }
+      //Comentando y no eliminado por motivos de posible uso futuro
     );
   }
 
@@ -75,39 +75,39 @@ export class BuscarPadresComponent implements OnInit{
     if (!confirmacion) {
       return;
     }
-  
+
     // Validar que el nombre no esté vacío
     if (!padre.nombre_padre.trim()) {
       this.notificationService.showNotification('El nombre del padre es obligatorio.', 'danger');
       return;
     }
-    
+
     // Validar que la identificación no esté vacía
     if (!padre.documento_padre.trim()) {
       this.notificationService.showNotification('La identificación del padre es obligatoria.', 'danger');
       return;
     }
-  
+
     // Validar que la identificación contenga solo números
     const identificacionNumerica = /^[0-9]+$/.test(padre.documento_padre.trim());
     if (!identificacionNumerica) {
       this.notificationService.showNotification('La identificación del padre debe contener solo números.', 'danger');
       return;
     }
-    
+
     // Verificar si la identificación está ocupada por otro padre
     const identificacionOcupada = this.padres.some((p, i) => i !== globalIndex && p.documento_padre === padre.documento_padre.trim());
     if (identificacionOcupada) {
       this.notificationService.showNotification('La identificación ingresada ya está siendo utilizada por otro padre.', 'danger');
       return;
     }
-  
+
     try {
       const response = await this.http.put<any>('http://localhost:3000/editarPadre/editar-padre', {
         padre,
         documento_padre_original: this.padreOriginal.documento_padre_original
       }).toPromise();
-  
+
       if (response && response.message === 'Padre actualizado') {
         this.padres[globalIndex].editando = false;
         this.padres = [...this.padres];

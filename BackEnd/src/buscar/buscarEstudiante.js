@@ -13,7 +13,7 @@ router.post('/buscar-estudiantes', async (req, res) => {
     const { termino } = req.body;
   
     try {
-      let query = 'SELECT id, documento_estudiante, nombre_estudiante, grado_estudiante, institucion_estudiante FROM estudiantes WHERE';
+      let query = 'SELECT * FROM estudiantes WHERE';
   
       //validamos primero si el termino contiene un '-', entonces es un grado, si es un número y empieza con N, es un documento, 
       //si es un número, es un documento, si no, es un nombre o apellido
@@ -31,15 +31,17 @@ router.post('/buscar-estudiantes', async (req, res) => {
             query += ` (${palabras.map(palabra => `nombre_estudiante ILIKE '%${palabra}%'`).join(' AND ')})`;
           }
         }
-      } else {
-        return res.status(400).json({ alert: 'Debes proporcionar un término de búsqueda' });
-      }
-      query += ' LIMIT 50';
+      } //else {
+      //   return res.status(400).json({ alert: 'Debes proporcionar un término de búsqueda' });
+      // }
+      //Comentando y no eliminado por motivos de posible uso futuro
+
       const result = await pool.query(query);
       res.json(result.rows);
     } catch (error) {
-      console.error('Error al buscar estudiantes:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
+      // console.error('Error al buscar estudiantes:', error);
+      // res.status(500).json({ error: 'Error interno del servidor' });
+      //Comentando y no eliminado por motivos de posible uso futuro
     }
   });
 

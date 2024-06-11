@@ -30,15 +30,17 @@ router.post('/buscar-profesores', async (req, res) => {
             query += ` (${palabras.map(palabra => `nombre_docente ILIKE '%${palabra}%'`).join(' AND ')})`;
           }
         }
-      } else {
-        return res.status(400).json({ error: 'Debes proporcionar un término de búsqueda' });
-      }
-      query += ' LIMIT 50';
+      } //else {
+      //   return res.status(400).json({ error: 'Debes proporcionar un término de búsqueda' });
+      // }
+      //Comentando y no eliminado por motivos de posible uso futuro
+
       const result = await pool.query(query);
       res.json(result.rows);
     } catch (error) {
-      console.error('Error al buscar profesores:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
+      // console.error('Error al buscar profesores:', error);
+      // res.status(500).json({ error: 'Error interno del servidor' });
+      //Comentando y no eliminado por motivos de posible uso futuro
     }
   });
 
