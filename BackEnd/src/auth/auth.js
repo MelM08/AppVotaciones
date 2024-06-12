@@ -9,71 +9,90 @@ const pool = new Pool(config);
 
 router.use(fileUpload());
 
-//VERIFICA EL USUARIO PARA EL LOGIN
-//TENEMOS DOS LOQUITAS PARA INGRESO, SI EL QUE VA A INGRESAR ES USUARIO, BUSCA EN LAS TABLAS DE USUARIOS
-//SINO, COMO CADA UNO TIENE UN LOGIN DISTINTO, VERIFICA EN LA TABLA DE ADMINISTRADORES
-
+// Middleware para verificar el rol del usuario
 const verificarRol = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      let rol = '';
+        const { id } = req.params;
+        let rol = '';
+        let userDetails = {};
+
         // Buscar en las tablas de usuarios
-        const estudianteResult = await pool.query('SELECT documento_estudiante FROM estudiantes WHERE documento_estudiante = $1', [id]);
-        const padreResult = await pool.query('SELECT documento_padre FROM padres WHERE documento_padre = $1', [id]);
-        const docenteResult = await pool.query('SELECT documento_docente FROM docentes WHERE documento_docente = $1', [id]);
-  
-        //Con este if validamos si está en las tablas y le damos el rol de usuario, si no está, va al else
+        const estudianteResult = await pool.query('SELECT documento_estudiante, nombre_estudiante, grado_estudiante, institucion_estudiante FROM estudiantes WHERE documento_estudiante = $1', [id]);
+        const padreResult = await pool.query('SELECT documento_padre, nombre_padre FROM padres WHERE documento_padre = $1', [id]);
+        const docenteResult = await pool.query('SELECT documento_docente, nombre_docente FROM docentes WHERE documento_docente = $1', [id]);
+
+        // Verificar en qué tabla se encuentra el usuario y asignar el rol y detalles correspondientes
         if (estudianteResult.rows.length > 0) {
             rol = 'estudiante';
-        }else if(padreResult.rows.length > 0){
+            userDetails = {
+                rol: 'estudiante',
+                documento: estudianteResult.rows[0].documento_estudiante,
+                nombre: estudianteResult.rows[0].nombre_estudiante,
+                grado: estudianteResult.rows[0].grado_estudiante,
+                institucion: estudianteResult.rows[0].institucion_estudiante
+            };
+        } else if (padreResult.rows.length > 0) {
             rol = 'padre';
-        }else if(docenteResult.rows.length > 0){
-          rol = 'docente';
-        }else {
-            res.status(404).json({ error: '' });
+            userDetails = {
+                rol: 'padre',
+                documento: padreResult.rows[0].documento_padre,
+                nombre: padreResult.rows[0].nombre_padre
+            };
+        } else if (docenteResult.rows.length > 0) {
+            rol = 'docente';
+            userDetails = {
+                rol: 'docente',
+                documento: docenteResult.rows[0].documento_docente,
+                nombre: docenteResult.rows[0].nombre_docente
+            };
+        } else {
+            res.status(404).json({ error: 'Usuario no encontrado' });
             return;
         }
-      req.userRole = rol;
-      console.log({id, rol});
-      next();
-  
-    } catch (e) {
-      console.error('Error al verificar el rol del usuario:', e);
-      res.status(500).json({ error: 'Error al verificar el rol del usuario' });
-    }
-  }
-  
-  //FUNCIÓN PARA VERIFICAR SI ESTÁ EN LAS TABLAS
-  router.get('/usuario/:id', verificarRol, (req, res) => {
-    res.json({ userRole: req.userRole });
-  });
-  
-  
-  
-  const verificarRolAdmin = async (req, res, next) => {
-    try {
-      const { id, password } = req.body; // Recibimos también la contraseña desde el frontend
-      const adminResult = await pool.query('SELECT id_administrador FROM administrador WHERE id_administrador = $1 AND contraseña = $2', [id, password]);
-  
-      //en este if validamos si está en la tabla de administradores los datos, sino, va al else
-      if (adminResult.rows.length > 0) {
-        req.userRole = 'admin';
-        console.log({ id, rol: 'admin' });
+
+        req.userRole = rol;
+        req.userDetails = userDetails;
+        console.log({ id, rol, userDetails });
+
         next();
-      } else {
-        res.status(404).json({ error: 'Credenciales de administrador incorrectas' });
-      }
-  
+
     } catch (e) {
-      console.error('Error al verificar el rol del administrador:', e);
-      res.status(500).json({ error: 'Error al verificar el rol del administrador' });
+        console.error('Error al verificar el rol del usuario:', e);
+        res.status(500).json({ error: 'Error al verificar el rol del usuario' });
     }
-  }
-  
-  //FUNCIÓN PARA VERIFICAR SI ESTÁ EN LA TABLA ADMIN
-  router.post('/admin', verificarRolAdmin, (req, res) => {
+}
+
+// Ruta para verificar el rol y devolver los detalles del usuario
+router.get('/usuario/:id', verificarRol, (req, res) => {
+    res.json({
+        userRole: req.userRole,
+        userDetails: req.userDetails
+    });
+});
+
+// Middleware para verificar el rol del administrador
+const verificarRolAdmin = async (req, res, next) => {
+    try {
+        const { id, password } = req.body; // Recibimos también la contraseña desde el frontend
+        const adminResult = await pool.query('SELECT id_administrador FROM administrador WHERE id_administrador = $1 AND contraseña = $2', [id, password]);
+
+        if (adminResult.rows.length > 0) {
+            req.userRole = 'admin';
+            console.log({ id, rol: 'admin' });
+            next();
+        } else {
+            res.status(404).json({ error: 'Credenciales de administrador incorrectas' });
+        }
+
+    } catch (e) {
+        console.error('Error al verificar el rol del administrador:', e);
+        res.status(500).json({ error: 'Error al verificar el rol del administrador' });
+    }
+}
+
+// Ruta para verificar si el usuario es un administrador
+router.post('/admin', verificarRolAdmin, (req, res) => {
     res.json({ userRole: req.userRole });
-  });
-  
+});
 
 module.exports = router;

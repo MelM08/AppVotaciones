@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NotificationService, Notification } from './notification.service';
+import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -12,8 +13,9 @@ export class AdminComponent implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   private notificationSubscription!: Subscription;
   primera: boolean = true;
+  currentRoute: string = '';
 
-  constructor(private notificationService: NotificationService) {}
+  constructor(private notificationService: NotificationService, private router: Router) {}
 
   ngOnInit() {
     this.notificationSubscription = this.notificationService.notifications$.subscribe(
@@ -22,6 +24,13 @@ export class AdminComponent implements OnInit, OnDestroy {
         setTimeout(() => this.removeNotification(notification), 9000);
       }
     );
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = event.url;
+      }
+    });
+
     if (this.primera){
       this.notificationService.showNotification('Bienvenido al panel administrativo del sistema electoral.', 'info');
       this.primera = false;

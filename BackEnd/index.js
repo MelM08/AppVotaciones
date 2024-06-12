@@ -9,6 +9,8 @@ app.use(cors());
 
 const auth = require('./src/auth/auth');
 
+const imagenCandidato = require('./src/mostrar/imagenCandidato');
+
 const crearEleccion = require('./src/crear/crearEleccion');
 const crearEstamento = require('./src/crear/crearEstamento');
 const crearCandidato = require('./src/crear/crearCandidato');
@@ -49,8 +51,14 @@ const editarCandidato = require('./src/editar/editarCandidato');
 
 const validarNumeroCandidato = require('./src/validar/validaNumeroCandidato');
 
+const candidatos = require('./src/votaciones/candidatos');
+const elecciones = require('./src/votaciones/elecciones');
+const estamentos = require('./src/votaciones/estamentos');
+const votar = require('./src/votaciones/votar');
 
 app.use('/auth', auth);
+
+app.use('/imagenCandidato', imagenCandidato);
 
 app.use('/crearEleccion', crearEleccion);
 app.use('/crearEstamento', crearEstamento);
@@ -92,6 +100,10 @@ app.use('/editarCandidato', editarCandidato);
 
 app.use('/validarNumeroCandidato', validarNumeroCandidato);
 
+app.use('/candidatos', candidatos);
+app.use('/elecciones', elecciones);
+app.use('/', estamentos);
+app.use('/votar', votar);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

@@ -1,68 +1,28 @@
-.div1{
-  background-image: url(../../Fotos/Fondo_2.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
+body {
+  background-color: #f8f9fa;
 }
 
-.custom-card{
-  background-color: rgba(230, 227, 227, 0.438);
-  border-radius: 20px;
-  padding: 120px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  font-size: 1.3em;
-
+.card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.custom-card input[type="text"],
-.custom-card button{
-  font-size: 1.2em;
+.logo {
+  font-size: 2rem;
+  color: #007bff;
 }
 
-.h11{
-  margin-bottom: 100px;
-  font-size: 2em;
+.form-control {
+  border-radius: 25px;
 }
 
-.boton{
-  margin-top: 30px;
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  border-radius: 25px;
 }
 
-.div2 {
-  position: absolute;
-  top: 4%; /* Posiciona el .div2 en el centro verticalmente */
-  /*left: 20px; /* Ajusta la distancia desde el borde izquierdo del header */
-  transform: translateY(-50%); /* Centra verticalmente el .div2 */
-  width: 100px; /* Ajusta el ancho según tus necesidades */
-  height: 100px; /* Ajusta la altura según tus necesidades */
-  z-index: 1;
-  /*background-image: url(../../Fotos/logo.png);*/
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  align-items: center;
-  background-attachment: fixed;
+.btn-primary:hover {
+  background-color: #0056b3;
 }
-
-.h2{
-  /*margin-left: 12vh;*/
-  font-size: 2em;
-}
-
-.header{
-  height: 100px;
-  width:100%;
-  padding: 25px;
-  background-color: rgb(53,92,204);
-}
-
-h3{
-  font-size: 1em;
-  color: white;
-}
-
-footer{
-  background-color: rgb(0, 0, 0);
-}
-

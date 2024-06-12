@@ -14,6 +14,7 @@ export class ListarCandidatosComponent implements OnInit {
   terminoBusqueda: string = '';
   candidatoSeleccionado: any = null;
   candidatoOriginal: any = null;
+  imagenSeleccionadaURL: string | null = null;
 
   constructor(
     private route: ActivatedRoute, private http: HttpClient, private notificationService: NotificationService) { }
@@ -129,5 +130,24 @@ export class ListarCandidatosComponent implements OnInit {
       console.error('Error al eliminar el candidato:', error);
       this.notificationService.showNotification('Error al eliminar el candidato. Por favor, intenta de nuevo.', 'danger');
     }
+  }
+
+  mostrarCandidato(index: number) {
+    this.candidatoSeleccionado = this.candidatos[index];
+    this.notificationService.showNotification('Vista previa del candidato.', 'success');
+    if (this.candidatoSeleccionado.id_foto) {
+      // Construir la URL correcta para la imagen del candidato usando el nuevo endpoint
+      this.imagenSeleccionadaURL = `http://localhost:3000/imagenCandidato/imagen-candidato/${this.candidatoSeleccionado.id_foto}`;
+    } else {
+      this.imagenSeleccionadaURL = null;
+      this.notificationService.showNotification('El candidato no tiene foto.', 'danger');
+    }
+  }
+
+  // Método para cerrar la vista previa
+  cerrarVistaPrevia() {
+    this.candidatoSeleccionado = null;
+    this.imagenSeleccionadaURL = null;
+    this.notificationService.showNotification('Ha cerrado la vista previa.', 'success');
   }
 }

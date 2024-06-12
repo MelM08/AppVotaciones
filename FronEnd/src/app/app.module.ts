@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminModule } from './Paginas/admin/admin.module';
 import { LoginAdminComponent } from './login/login-admin/login-admin.component';
+import { UsuarioModule } from './Paginas/usuario/usuario.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { LoginAdminComponent } from './login/login-admin/login-admin.component';
     FormsModule,
     RouterModule,
     CommonModule,
-    AdminModule
+    AdminModule,
+    UsuarioModule
   ],
   providers: [
     provideClientHydration()

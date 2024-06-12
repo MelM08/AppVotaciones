@@ -3,7 +3,6 @@
   rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
   crossorigin="anonymous">
 
-
 <!-- Recursos de fuentes -->
 <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
@@ -16,113 +15,104 @@
 <link href="../../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 
-<!-- Div principal que ennvuelve todo el contenido de la sidebar y la topbar -->
-<div class="d-flex div1">
+<!-- Div principal que envuelve todo el contenido de la sidebar y la topbar -->
+<div class="d-flex">
   <!-- Sidebar (ngClass sólo para celulares y ocultar la barra lateral) -->
   <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" [ngClass]="{'d-none': !sidebarVisible}">
+    <!-- Espaciado superior en el encabezado de la barra lateral -->
+    <div class="mt-5"></div>
 
-    <!-- logo y encabezado sidebar -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center margin-top-logo">
-      <div class="sidebar-brand-icon div3">
+    <!-- Logo y encabezado sidebar -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+      <div class="sidebar-brand-icon">
+        <i class="fas fa-chart-line"></i>
       </div>
-      <div class="sidebar-brand-text mx-3">Votaciones</div>
+      <div class="sidebar-brand-text mx-3">SISTEMA DE GESTION ELECTORAL CORDOBA</div>
     </a>
 
+     <!-- Espacio entre el encabezado y el menú -->
+     <div class="mt-5"></div>
+
+    <!-- Menu de navegación -->
+    <div class="sidebar-heading text-center mt-3">Menú</div>
+
     <!-- Item de navegación Gestión estudiantes -->
-    <li class="nav-item margin-top-content">
-      <a class="nav-link navbar-brand" [routerLink]="['../admin/agregar-estudiantes/buscar-estudiante']" routerLinkActive="active" >
-        <i class="fa fa-graduation-cap"></i>
+    <li class="nav-item" [ngClass]="{ 'active': currentRoute.includes('gestion-estudiantes') }">
+      <a class="nav-link" [routerLink]="['../admin/agregar-estudiantes/buscar-estudiante']" routerLinkActive="active" >
+        <i class="fas fa-graduation-cap"></i>
         <span>Gestión estudiantes</span>
       </a>
     </li>
 
-    <!-- Línea divisora -->
-    <hr class="sidebar-divider">
-
     <!-- Item de navegación Gestión Padres -->
-    <li class="nav-item">
-      <a class="nav-link navbar-brand" [routerLink]="['/admin/agregar-padres/buscar-padre']" routerLinkActive="active">
-        <i class="fa fa-fw fa-user"></i>
+    <li class="nav-item" [ngClass]="{ 'active': currentRoute.includes('gestion-padres') }">
+      <a class="nav-link" [routerLink]="['/admin/agregar-padres/buscar-padre']" routerLinkActive="active">
+        <i class="fas fa-user"></i>
         <span>Gestión Padres</span>
       </a>
     </li>
 
-    <!-- Línea divisora -->
-    <hr class="sidebar-divider">
-
     <!-- Item de navegación Gestión Docentes -->
-    <li class="nav-item">
-      <a class="nav-link navbar-brand" [routerLink]="['/admin/agregar-profesores/buscar-profesor']" routerLinkActive="active">
-        <i class="fa fa-fw fa-users"></i>
+    <li class="nav-item" [ngClass]="{ 'active': currentRoute.includes('gestion-docentes') }">
+      <a class="nav-link" [routerLink]="['/admin/agregar-profesores/buscar-profesor']" routerLinkActive="active">
+        <i class="fas fa-users"></i>
         <span>Gestión Docentes</span>
       </a>
     </li>
 
-    <!-- Línea divisora -->
-    <hr class="sidebar-divider">
-
     <!-- Item de navegación Gestión Elecciones -->
-    <li class="nav-item">
-      <a class="nav-link navbar-brand" [routerLink]="['/admin/elecciones/listar-elecciones']" routerLinkActive="active">
-        <i class="fa fa-check-square"></i>
+    <li class="nav-item" [ngClass]="{ 'active': currentRoute.includes('gestion-elecciones') }">
+      <a class="nav-link" [routerLink]="['/admin/elecciones/listar-elecciones']" routerLinkActive="active">
+        <i class="fas fa-check-square"></i>
         <span>Gestión Elecciones</span>
       </a>
     </li>
 
-    <!-- Línea divisora -->
-    <hr class="sidebar-divider d-none d-md-block">
-
-
   </ul>
   <!-- Fin del Sidebar -->
 
-
-
-  <div id="content-wrapper" class="d-flex flex-column flex-grow-1">
+  <!-- Contenido principal -->
+  <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
       <!-- Topbar -->
-<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100">
-  <!-- Botón para ocultar Sidebar (Topbar) -->
-  <form class="form-inline form-toggle-sidebar">
-    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" (click)="toggleSidebar()">
-      <i class="fa fa-bars"></i>
-    </button>
-  </form>
+      <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow w-100">
+        <!-- Botón para ocultar Sidebar (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" (click)="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
 
-  <!-- Contenedor de Notificaciones -->
-<div id="notification-container" class="mr-auto notification-container">
-  <div *ngFor="let notification of notifications" class="alert alert-{{notification.type}} alert-dismissible fade show" role="alert">
-    {{ notification.message }}
-    <button type="button" class="btn-close" aria-label="Close" (click)="removeNotification(notification)"></button>
-  </div>
-</div>
+        <!-- Contenedor de Notificaciones -->
+        <div id="notification-container" class="mr-auto">
+          <div *ngFor="let notification of notifications" class="alert alert-{{notification.type}} alert-dismissible fade show" role="alert">
+            {{ notification.message }}
+            <button type="button" class="btn-close" aria-label="Close" (click)="removeNotification(notification)"></button>
+          </div>
+        </div>
 
-  <!-- Topbar Navbar -->
-  <ul class="navbar-nav ml-auto">
-    <!-- Item de navegación User Information -->
-    <li class="nav-item dropdown no-arrow">
-      <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        <span class="mr-2 text-gray-600 small">Admin</span>
-        <img class="img-profile rounded-circle div2">
-      </a>
-    </li>
-    <li>
-      <a class="nav-link margin-top-logout" id="logout" role="button" href="#">
-        <i class="fa fa-power-off" aria-hidden="true"></i>
-      </a>
-    </li>
-  </ul>
-</nav>
+        <!-- Icono de perfil y nombre -->
+        <ul class="navbar-nav ml-auto">
+          <!-- Item de navegación User Information -->
+          <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <span class="mr-2 text-gray-600 small">Admin</span>
+              <img class="img-profile rounded-circle div2">
+            </a>
+          </li>
+          <!-- Item de logout -->
+          <li class="nav-item">
+            <a class="nav-link" id="logout" role="button" href="#">
+              <i class="fas fa-power-off"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
       <!-- Fin del Topbar -->
+
       <!-- Router Outlet para redireccionar al componente elegido -->
       <div class="container-fluid">
         <router-outlet></router-outlet>
       </div>
     </div>
   </div>
-
 </div>
-
-
-

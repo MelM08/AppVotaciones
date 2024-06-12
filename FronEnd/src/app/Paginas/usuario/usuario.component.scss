@@ -1,0 +1,68 @@
+
+.div1{
+    background-color: rgb(240, 240, 240);
+  }
+  
+  .div2 {
+    width: 15vh;
+    height: 15vh;
+    background-image: url(../../Fotos/6326055.png);
+    background-repeat: no-repeat;
+    background-position: center; /* Centra la imagen dentro del div */
+    background-size: contain;
+  }
+  
+  #content-wrapper {
+    height: 100vh;
+    overflow-y: auto; /* Permitir el desplazamiento vertical */
+    -webkit-overflow-scrolling: touch; /* Habilitar el desplazamiento táctil en iOS */
+    flex-grow: 1; /* Hacer que el contenido crezca para ocupar el espacio restante */
+  }
+  
+  .div3 {
+    width: 100px;
+    height: 100px;
+    background-image: url(../../Fotos/logo.png);
+    background-repeat: no-repeat;
+    background-position: center; /* Centra la imagen dentro del div */
+    background-size: contain;
+    z-index: 2;
+  }
+  
+  
+  .margin-top-logo{
+    margin-top: 30%;
+  }
+  
+  
+  .margin-top-content{
+    margin-top: 50%
+  }
+  
+  .margin-top-logout{
+    margin-top: 50%;
+  }
+  
+  .container-fluid {
+    height: 100%;
+  }
+  
+  .form-toggle-sidebar {
+    position: absolute; /* Establece la posición absoluta para que se pueda posicionar a la izquierda */
+    left: 10px; /* Ajusta la distancia desde el borde izquierdo */
+    top: 50%; /* Centra verticalmente el formulario */
+    transform: translateY(-50%); /* Ajusta la posición vertical */
+  }
+  
+  #notification-container {
+    width: 300px; /* Establece un ancho fijo para el contenedor de notificaciones */
+    display: flex;
+    flex-direction: column; /* Agrega esta propiedad para que las notificaciones se muestren una debajo de la otra */
+    align-items: flex-start; /* Alinea las notificaciones al inicio del contenedor */
+    margin-left: 0; /* Ajusta el contenedor al borde izquierdo */
+    transform: translateY(12%); /* Ajusta la posición vertical */
+    white-space: nowrap; /* Agrega esta propiedad para que el texto no se divida en varias líneas */
+    text-overflow: ellipsis; /* Agrega un indicador de truncamiento al final de la línea */
+  }
+  
+  

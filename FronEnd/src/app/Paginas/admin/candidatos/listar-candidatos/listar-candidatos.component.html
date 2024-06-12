@@ -4,10 +4,29 @@
 <!-- FontAwesome para iconos -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
 <div class="container-fluid">
+  <!-- Tarjeta de vista previa del candidato seleccionado -->
+  <div *ngIf="candidatoSeleccionado" class="card mt-4 mb-4 shadow">
+    <div class="card-header" style="background-color: #4e73df; color: #fff;">
+      <h3 class="text-center">Detalles del Candidato</h3>
+    </div>
+    <div class="card-body text-center">
+      <!-- Mostrar la imagen seleccionada -->
+      <img *ngIf="imagenSeleccionadaURL" [src]="imagenSeleccionadaURL" class="img-fluid rounded mb-4" alt="Imagen seleccionada" style="width: 280px; height: 280px;">
+      <div *ngIf="!imagenSeleccionadaURL" class="text-muted mb-4">Ninguna imagen disponible</div>
+      <!-- Mostrar el nombre -->
+      <h5 class="card-title">{{ candidatoSeleccionado.nombre }}</h5>
+      <!-- Mostrar la descripción -->
+      <p class="card-text">{{ candidatoSeleccionado.descripcion }}</p>
+      <!-- Mostrar el número de candidato -->
+      <p class="card-text"><strong>Número:</strong> {{ candidatoSeleccionado.numero }}</p>
+      <!-- Mostrar el estado -->
+      <p class="card-text"><strong>Estado:</strong> {{ candidatoSeleccionado.estado }}</p>
+      <!-- Botón de cerrar -->
+      <button class="btn-close position-absolute top-0 end-0 m-3" aria-label="Cerrar" (click)="cerrarVistaPrevia()" style="background-color: #fff;"></button>
+    </div>
+  </div>
+
   <!-- Tabla de candidatos -->
   <div class="card shadow-sm">
     <!-- Header de la tabla -->
@@ -15,7 +34,6 @@
       <div class="d-flex align-items-center">
       </div>
     </div>
-
     <!-- Tabla -->
     <div class="card-body p-0">
       <div class="table-responsive">
@@ -60,8 +78,11 @@
                   <button class="btn btn-primary btn-sm me-1" (click)="editarCandidato(i)" title="Editar">
                     <i class="fa fa-user-edit"></i>
                   </button>
-                  <button class="btn btn-danger btn-sm" (click)="eliminarCandidato(i)" title="Eliminar">
+                  <button class="btn btn-danger btn-sm me-1" (click)="eliminarCandidato(i)" title="Eliminar">
                     <i class="fa fa-trash"></i>
+                  </button>
+                  <button class="btn btn-info btn-sm" (click)="mostrarCandidato(i)" title="Mostrar detalles">
+                    <i class="fa fa-user"></i>
                   </button>
                 </ng-container>
                 <ng-container *ngIf="candidato.editando">
@@ -83,3 +104,4 @@
     </div>
   </div>
 </div>
+  
