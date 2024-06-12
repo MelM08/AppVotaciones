@@ -15,12 +15,12 @@ export class LoginComponent {
 
   iniciarSesion() {
     // Log para ver el ID de usuario que se está utilizando para la verificación
-    console.log('Intentando iniciar sesión con el ID de usuario:', this.userId);
+    //console.log('Intentando iniciar sesión con el ID de usuario:', this.userId);
 
     this.authService.verificarRol(this.userId).subscribe(
       response => {
         // Log para ver la respuesta completa del servidor
-        console.log('Respuesta recibida de verificarRol:', response);
+        //console.log('Respuesta recibida de verificarRol:', response);
 
         const rol = response.userRole;
 
@@ -28,7 +28,7 @@ export class LoginComponent {
         this.informacionUsuarioService.setUserInfo(response.userDetails);
 
         // Log para ver los detalles del usuario que se están guardando
-        console.log('Detalles del usuario guardados:', response.userDetails);
+        //console.log('Detalles del usuario guardados:', response.userDetails);
 
         // Redirigir según el rol del usuario
         this.authService.redireccionarSegunRol(rol);

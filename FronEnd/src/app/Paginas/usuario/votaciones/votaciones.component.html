@@ -1,28 +1,27 @@
 <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <h1 class="display-5">Votaciones</h1>
-        <div class="form-group">
-          <label for="eleccionesSelect">Seleccione una elección:</label>
-          <select class="form-control" id="eleccionesSelect" [(ngModel)]="selectedEleccionesId" (change)="onEleccionesChange()">
-            <option *ngFor="let eleccion of eleccionesActivas" [value]="eleccion.id">{{ eleccion.nombre }}</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="estamentosSelect">Seleccione un estamento:</label>
-          <select class="form-control" id="estamentosSelect" [(ngModel)]="selectedEstamentoId" (change)="onEstamentoChange()">
-            <option *ngFor="let estamento of estamentosDisponibles" [value]="estamento.id">{{ estamento.nombre }}</option>
-          </select>
-        </div>
-        <div *ngIf="candidatosPorEstamento && candidatosPorEstamento.length > 0">
-          <h3>Candidatos:</h3>
-          <ul class="list-group">
-            <li class="list-group-item" *ngFor="let candidato of candidatosPorEstamento">
-              {{ candidato.nombre }} <button class="btn btn-primary btn-sm" (click)="votarCandidato(candidato.id)">Votar</button>
-            </li>
-          </ul>
-        </div>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h1 class="display-5">Votaciones</h1>
+      <div class="form-group">
+        <label for="eleccionesSelect">Seleccione una elección:</label>
+        <select class="form-control" id="eleccionesSelect" [(ngModel)]="selectedEleccionesId" (change)="onEleccionesChange()">
+          <option *ngFor="let eleccion of eleccionesActivas" [value]="eleccion.id">{{ eleccion.nombre }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="estamentosSelect">Seleccione un estamento:</label>
+        <select class="form-control" id="estamentosSelect" [(ngModel)]="selectedEstamentoId" (change)="onEstamentoChange()">
+          <option *ngFor="let estamento of estamentosDisponibles" [value]="estamento.id">{{ estamento.nombre }}</option>
+        </select>
+      </div>
+      <div *ngIf="candidatosPorEstamento && candidatosPorEstamento.length > 0">
+        <h3>Candidatos:</h3>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let candidato of candidatosPorEstamento">
+            {{ candidato.nombre }} <button class="btn btn-primary btn-sm" (click)="votarCandidato(candidato.id)">Votar</button>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-  
+</div>
