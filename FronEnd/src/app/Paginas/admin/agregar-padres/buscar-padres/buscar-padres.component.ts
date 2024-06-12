@@ -114,10 +114,11 @@ export class BuscarPadresComponent implements OnInit{
       return;
     }
 
-    // Validar que la identificación contenga solo números
-    const identificacionNumerica = /^[0-9]+$/.test(padre.documento_padre.trim());
-    if (!identificacionNumerica) {
-      this.notificationService.showNotification('La identificación del padre debe contener solo números.', 'danger');
+    // Validar que la identificación contenga solo números o comience con una N seguida de números
+    const identificacionValida = /^[0-9]+$/.test(padre.documento_padre.trim());
+
+    if (!identificacionValida) {
+      this.notificationService.showNotification('La identificación del estudiante debe contener solo números o una N seguida de números.', 'danger');
       return;
     }
 

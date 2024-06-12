@@ -25,25 +25,27 @@ router.post('/subir-excel-estudiantes', async (req, res) => {
       return res.status(400).json({ message: 'El archivo Excel no tiene datos para procesar.' });
     }
 
+    // Asegurar que las cabeceras sean correctas
     const [Sede, Jornada, Grado, Grupo, NombreCompleto, FechaDeNacimiento, Edad, Documento] = excelData[1];
     if (Sede !== 'Sede' || Jornada !== 'Jornada' || Grado !== 'Grado' || Grupo !== 'Grupo' || NombreCompleto !== 'Nombre Completo'
       || FechaDeNacimiento !== 'Fecha de Nacimiento' || Edad !== 'Edad' || Documento !== 'Número de Documento') {
       return res.status(401).json({ message: 'La estructura del archivo Excel no es válida.' });
     }
 
-
-    const dbStudentsQuery = 'SELECT documento_estudiante, grado_estudiante FROM estudiantes';
+    // Recuperar todos los estudiantes actuales de la base de datos
+    const dbStudentsQuery = 'SELECT id, documento_estudiante, grado_estudiante FROM estudiantes';
     const dbStudents = await pool.query(dbStudentsQuery);
 
+    // Mantener un conjunto de documentos desde el Excel para fácil búsqueda
     const excelDocuments = new Set();
 
     for (let i = 2; i < excelData.length; i++) {
       let [sede, jornada, gradoEstudiante, grupo, nombreCompleto, FechaDeNacimiento, edad, documentoEstudiante] = excelData[i];
 
-      if (typeof documentoEstudiante !== 'string') {
-        documentoEstudiante = String(documentoEstudiante);
-      }
+      // Convertir el documento a cadena (esto maneja números y textos como "N22")
+      documentoEstudiante = documentoEstudiante ? String(documentoEstudiante).trim() : '';
 
+      // Validar que los campos requeridos no estén vacíos
       if (!documentoEstudiante || !nombreCompleto || !gradoEstudiante || !sede) {
         console.log(`La fila ${i + 1} contiene un campo vacío. Se ignorará.`);
         continue;
@@ -51,10 +53,12 @@ router.post('/subir-excel-estudiantes', async (req, res) => {
 
       excelDocuments.add(documentoEstudiante);
 
-      const existingStudentQuery = 'SELECT documento_estudiante FROM estudiantes WHERE documento_estudiante = $1';
+      // Comprobar si el estudiante ya existe en la base de datos
+      const existingStudentQuery = 'SELECT id, documento_estudiante FROM estudiantes WHERE documento_estudiante = $1';
       const existingStudent = await pool.query(existingStudentQuery, [documentoEstudiante]);
 
       if (existingStudent.rows.length > 0) {
+        // Verificar si el grado del estudiante ha cambiado
         const dbStudent = dbStudents.rows.find(student => student.documento_estudiante === documentoEstudiante);
         if (dbStudent && dbStudent.grado_estudiante !== gradoEstudiante) {
           console.log(`El estudiante con documento ${documentoEstudiante} ha cambiado de grado (${dbStudent.grado_estudiante} -> ${gradoEstudiante}). Actualizando en la base de datos.`);
@@ -65,18 +69,24 @@ router.post('/subir-excel-estudiantes', async (req, res) => {
         continue;
       }
 
+      // Insertar nuevo estudiante en la base de datos
       const insertQuery = 'INSERT INTO estudiantes (documento_estudiante, nombre_estudiante, grado_estudiante, institucion_estudiante) VALUES ($1, $2, $3, $4)';
       const insertValues = [documentoEstudiante, nombreCompleto, gradoEstudiante, sede];
       await pool.query(insertQuery, insertValues);
-      console.log(`Se añadió el estudiante ${documentoEstudiante} al archivo`);
+      console.log(`Se añadió el estudiante ${documentoEstudiante} a la base de datos.`);
     }
 
+    // Eliminar estudiantes que ya no están en el archivo Excel
     for (const student of dbStudents.rows) {
-      if (!excelDocuments.has(student.documento_estudiante)) {
-        console.log(`El estudiante con documento ${student.documento_estudiante} ya no está en el archivo Excel. Se eliminará de la base de datos.`);
+      const documento = String(student.documento_estudiante); // Convertir a cadena por consistencia
+      if (!excelDocuments.has(documento)) {
+        console.log(`El estudiante con documento ${documento} ya no está en el archivo Excel. Se eliminará de la base de datos.`);
 
-        await pool.query('DELETE FROM padres WHERE hijo_id = $1', [student.documento_estudiante]);
-        await pool.query('DELETE FROM estudiantes WHERE documento_estudiante = $1', [student.documento_estudiante]);
+        // Primero eliminar registros relacionados en la tabla `padres` usando la `id` de la tabla `estudiantes`
+        await pool.query('DELETE FROM padres WHERE hijo_id = $1', [student.id]);
+        
+        // Luego eliminar el estudiante de la tabla `estudiantes`
+        await pool.query('DELETE FROM estudiantes WHERE id = $1', [student.id]);
       }
     }
 

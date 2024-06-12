@@ -116,10 +116,11 @@ export class BuscarEstudiantesComponent implements OnInit{
       return;
     }
 
-    // Validar que la identificación contenga solo números
-    const identificacionNumerica = /^[0-9]+$/.test(estudiante.documento_estudiante.trim());
-    if (!identificacionNumerica) {
-      this.notificationService.showNotification('La identificación del estudiante debe contener solo números.', 'danger');
+    // Validar que la identificación contenga solo números o comience con una N seguida de números
+    const identificacionValida = /^(N?[0-9]+)$/.test(estudiante.documento_estudiante.trim());
+
+    if (!identificacionValida) {
+      this.notificationService.showNotification('La identificación del estudiante debe contener solo números o una N seguida de números.', 'danger');
       return;
     }
 
