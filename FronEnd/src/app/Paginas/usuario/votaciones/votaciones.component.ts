@@ -71,6 +71,7 @@ export class VotacionesComponent implements OnInit {
       this.votacionesService.obtenerCandidatosPorEstamento(this.selectedEstamentoId).subscribe(
         (data: any[]) => {
           this.candidatosPorEstamento = data; // Asegúrate de que data sea un array
+          console.log('Candidatos recibidos:', data);
         },
         error => {
           console.error('Error al cargar candidatos:', error);
