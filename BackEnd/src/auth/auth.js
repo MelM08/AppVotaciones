@@ -52,7 +52,7 @@ const verificarRol = async (req, res, next) => {
 
         req.userRole = rol;
         req.userDetails = userDetails;
-        console.log({ id, rol, userDetails });
+        //console.log({ id, rol, userDetails });
 
         next();
 

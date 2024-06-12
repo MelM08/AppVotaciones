@@ -7,10 +7,9 @@ const pool = new Pool(config);
 
 router.get('/elecciones/:id/estamentos', async (req, res) => {
     const { id } = req.params;
-    const { rol, grado } = req.query || {}; // Obtén los datos del usuario de los parámetros de consulta
+    const { rol, grado } = req.query || {};
+    console.log('Datos del usuario estamento:', { rol, grado });
     try {
-        console.log('Datos del usuario:', { rol, grado }); // Imprime los datos del usuario en la consola del servidor
-
         const query = `
             SELECT *
             FROM estamentos
@@ -18,14 +17,13 @@ router.get('/elecciones/:id/estamentos', async (req, res) => {
         `;
         const result = await pool.query(query, [id]);
 
-        // Filtrar estamentos según las validaciones
         const estamentosFiltrados = result.rows.filter(estamento => {
             return estamento.estado === 'ACTIVO' && estamento.rol_habilitado_para_votar === rol && estamento.grados_habilitados === grado;
         });
 
         // Verificar si hay estamentos filtrados
         if (estamentosFiltrados.length > 0) {
-            res.status(200).json({ user: req.user, estamentos: estamentosFiltrados });
+            res.status(200).json(estamentosFiltrados); // Enviar solo el array
         } else {
             res.status(404).json({ message: 'No se encontraron estamentos que cumplan con los criterios de filtrado.' });
         }

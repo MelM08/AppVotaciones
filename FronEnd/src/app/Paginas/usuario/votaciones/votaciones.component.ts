@@ -42,7 +42,7 @@ export class VotacionesComponent implements OnInit {
 
   loadEleccionesActivas(): void {
     this.eleccionesService.obtenerEleccionesActivas().subscribe(
-      data => {
+      (data: any[]) => {
         this.eleccionesActivas = data;
       },
       error => {
@@ -53,16 +53,11 @@ export class VotacionesComponent implements OnInit {
 
   loadEstamentos(): void {
     if (this.selectedEleccionesId && this.userDetails) {
-      // Enviar los datos del usuario como parte de la solicitud HTTP
       this.eleccionesService.obtenerEstamentosPorEleccion(this.selectedEleccionesId, this.userDetails).subscribe(
         (data: Estamento[]) => {
-          // Filtrar estamentos según las validaciones
-          this.estamentosDisponibles = data.filter((estamento: Estamento) => {
-            return estamento.grados_habilitados === this.userDetails.grado &&
-                   estamento.rol_habilitado_para_votar === this.userDetails.rol;
-          });
-          this.selectedEstamentoId = null; // Limpiar la selección de estamento al cargar nuevos estamentos
-          this.loadCandidatos(); // Cargar automáticamente los candidatos al cambiar de elección
+          this.estamentosDisponibles = data; // Asegúrate de que data sea un array
+          this.selectedEstamentoId = null;
+          this.loadCandidatos();
         },
         error => {
           console.error('Error al cargar estamentos:', error);
@@ -74,8 +69,8 @@ export class VotacionesComponent implements OnInit {
   loadCandidatos(): void {
     if (this.selectedEstamentoId) {
       this.votacionesService.obtenerCandidatosPorEstamento(this.selectedEstamentoId).subscribe(
-        data => {
-          this.candidatosPorEstamento = data;
+        (data: any[]) => {
+          this.candidatosPorEstamento = data; // Asegúrate de que data sea un array
         },
         error => {
           console.error('Error al cargar candidatos:', error);
@@ -96,7 +91,6 @@ export class VotacionesComponent implements OnInit {
     this.votacionesService.votarCandidato(candidatoId).subscribe(
       () => {
         console.log('Voto registrado exitosamente.');
-        // Actualizar la lista de candidatos después de votar
         this.loadCandidatos();
       },
       error => {
