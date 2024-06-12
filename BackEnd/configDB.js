@@ -1,8 +1,8 @@
 const config = {
-    user: 'biable01',
-    host: '192.24.33.192',
+    user: 'postgres',
+    host: 'localhost',
     password: 'root',
-    database: 'AppVotaciones'
+    database: 'AppElecciones'
   };
   
   module.exports = config;
