@@ -12,6 +12,7 @@ import { AdminModule } from './Paginas/admin/admin.module';
 import { LoginAdminComponent } from './login/login-admin/login-admin.component';
 import { UsuarioModule } from './Paginas/usuario/usuario.module';
 import { ResultadosComponent } from './Paginas/resultados/resultados.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 @NgModule({
@@ -30,9 +31,11 @@ import { ResultadosComponent } from './Paginas/resultados/resultados.component';
     CommonModule,
     AdminModule,
     UsuarioModule
+
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })

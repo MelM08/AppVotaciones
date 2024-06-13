@@ -1,0 +1,22 @@
+/* En resultados.component.scss */
+.card-img-small {
+  width: 150px; /* Ajusta el ancho según tus necesidades */
+  height: 150px; /* Ajusta el alto según tus necesidades */
+  object-fit: cover; /* Ajusta la forma en que la imagen se ajusta dentro del contenedor */
+  border-radius: 50%; /* Hace que la imagen sea circular */
+}
+.contenido-principal {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 8px;
+  background-color: #f8f9fa; /* Cambia el color de fondo según necesites */
+}
+
+.titulo-destacado {
+  background-color: #4e73df;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}

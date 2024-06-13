@@ -4,10 +4,13 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AuthGuard } from '../../auth.guard';
+import { ResultadosModalComponent } from './resultados-modal/resultados-modal.component';
 
 
 @NgModule({
   declarations: [
+  
+    ResultadosModalComponent
   ],
   imports: [
     CommonModule,

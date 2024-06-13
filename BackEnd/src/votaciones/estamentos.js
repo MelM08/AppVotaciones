@@ -32,7 +32,7 @@ router.get('/elecciones/:id_eleccion/estamentos', async (req, res) => {
     const { id_eleccion } = req.params;
     const { rol, grado, id} = req.query || {};
 
-    console.log('Datos del usuario estamento:', { rol, grado });
+    //console.log('Datos del usuario estamento:', { rol, grado });
 
     try {
         const query = `

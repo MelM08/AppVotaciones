@@ -40,7 +40,7 @@ export class VotacionesComponent implements OnInit {
   selectedEstamentoId: number | null = null;
   userDetails: any = null;
   eleccionesErrorMessage: string | null = null;
-  
+
 
   constructor(
     private votacionesService: VotacionesService,
@@ -120,11 +120,12 @@ export class VotacionesComponent implements OnInit {
 
   votarCandidato(candidatoId: number): void {
     const idVotante = this.userDetails.id;
-    const sede = this.userDetails.institucion;
+    const sede = this.userDetails.institucion || ''; // Si no hay sede, usar una cadena vacía
     const id_eleccion = this.eleccionesActivas[this.selectedEleccionIndex].id;
     const idEstamento = this.selectedEstamentoId;
 
-    if (idVotante && sede && id_eleccion && idEstamento) {
+    // Validar los datos requeridos, excluyendo sede
+    if (idVotante && id_eleccion && idEstamento) {
       this.votacionesService.votarCandidato(idVotante, sede, id_eleccion, idEstamento, candidatoId).subscribe(
         (data) => {
           this.avanzarEstamento();

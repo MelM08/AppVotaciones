@@ -2,7 +2,7 @@ const config = {
     user: 'postgres',
     host: 'localhost',
     password: 'root',
-    database: 'AppElectoral',
+    database: 'usuarios',
   };
   
   module.exports = config;
