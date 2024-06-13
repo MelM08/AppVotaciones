@@ -22,5 +22,9 @@ export class EleccionesService {
   obtenerCandidatosPorEstamento(estamentoId: number): Observable<any> {
     return this.http.get(`http://localhost:3000/candidatos/estamento/${estamentoId}`);
   }
+
+  obtenerResultadosPorEleccion(): Observable<any> {
+    return this.http.get('http://localhost:3000/resultados/resultados-candidatos');
+  }
 }
 

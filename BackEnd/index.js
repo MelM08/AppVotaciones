@@ -55,6 +55,7 @@ const candidatos = require('./src/votaciones/candidatos');
 const elecciones = require('./src/votaciones/elecciones');
 const estamentos = require('./src/votaciones/estamentos');
 const votar = require('./src/votaciones/votar');
+const mostrarResultados = require('./src/votaciones/mostrarResultados')
 
 app.use('/auth', auth);
 
@@ -104,6 +105,8 @@ app.use('/candidatos', candidatos);
 app.use('/elecciones', elecciones);
 app.use('/', estamentos);
 app.use('/votar', votar);
+
+app.use('/resultados', mostrarResultados);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`);

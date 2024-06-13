@@ -4,16 +4,18 @@ import { LoginComponent } from './login/login-usuario/login.component';
 import { AdminComponent } from './Paginas/admin/admin.component';
 import { AuthGuard } from './auth.guard';
 import { LoginAdminComponent } from './login/login-admin/login-admin.component';
+import { ResultadosComponent } from './Paginas/resultados/resultados.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: LoginAdminComponent }, // Ruta para el login de admin
   { path: 'adminuser', component: AdminComponent, canActivate: [AuthGuard] }, // Ruta para AdminComponent
-  { 
+  {
     path: 'usuario',
     loadChildren: () => import('./Paginas/usuario/usuario.module').then(m => m.UsuarioModule) // Lazy loading del módulo Usuario
-  }
+  },
+  {path: 'resultados',component: ResultadosComponent}
 ];
 
 @NgModule({

@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { AdminModule } from './Paginas/admin/admin.module';
 import { LoginAdminComponent } from './login/login-admin/login-admin.component';
 import { UsuarioModule } from './Paginas/usuario/usuario.module';
+import { ResultadosComponent } from './Paginas/resultados/resultados.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { UsuarioModule } from './Paginas/usuario/usuario.module';
     AppComponent,
     LoginComponent,
     LoginAdminComponent,
+    ResultadosComponent
   ],
   imports: [
     BrowserModule,
