@@ -3,6 +3,7 @@ import { VotacionesService } from '../votaciones.service';
 import { EleccionesService } from '../elecciones.service';
 import { InformacionUsuarioService } from '../informacion-usuario.service';
 import { NotificationService} from '../notification.service';
+import { Router } from '@angular/router';
 
 interface Estamento {
   estado: string;
@@ -16,6 +17,7 @@ interface Estamento {
 interface Eleccion {
   id: number;
   nombre: string;
+  ano: number;
 }
 
 interface Candidato {
@@ -46,7 +48,8 @@ export class VotacionesComponent implements OnInit {
     private votacionesService: VotacionesService,
     private eleccionesService: EleccionesService,
     private userInfoService: InformacionUsuarioService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -83,24 +86,28 @@ export class VotacionesComponent implements OnInit {
   }
 
   loadEstamentosPorElecciones(): void {
-    if (this.eleccionesActivas.length > 0 && this.userDetails) {
-      this.eleccionesActivas.forEach(eleccion => {
-        this.eleccionesService.obtenerEstamentosPorEleccion(eleccion.id, this.userDetails).subscribe(
-          (data: Estamento[]) => {
-            this.estamentosPorEleccion[eleccion.id] = data;
-            // Establecer el primer estamento para la primera elección
-            if (this.selectedEstamentoId === null && data.length > 0 && this.eleccionesActivas[0].id === eleccion.id) {
-              this.selectedEstamentoId = data[0].id;
-              this.loadCandidatos();
-            }
-          },
-          error => {
-            console.error('Error al cargar estamentos por elección:', error);
+    if (this.selectedEleccionIndex !== null && this.userDetails) {
+      const selectedEleccion = this.eleccionesActivas[this.selectedEleccionIndex];
+      this.eleccionesService.obtenerEstamentosPorEleccion(selectedEleccion.id, this.userDetails).subscribe(
+        (data: Estamento[]) => {
+          this.estamentosPorEleccion[selectedEleccion.id] = data;
+          // Establecer el primer estamento para la nueva elección
+          if (data.length > 0) {
+            this.selectedEstamentoId = data[0].id;
+            this.loadCandidatos();
+          } else {
+            // Si no hay estamentos disponibles en la nueva elección, limpiar los candidatos
+            this.candidatosPorEstamento = [];
           }
-        );
-      });
+        },
+        error => {
+          console.error('Error al cargar estamentos por elección:', error);
+        }
+      );
     }
   }
+  
+  
 
   loadCandidatos(): void {
     if (this.selectedEstamentoId) {
@@ -142,25 +149,25 @@ export class VotacionesComponent implements OnInit {
   avanzarEstamento(): void {
     const currentEleccion = this.eleccionesActivas[this.selectedEleccionIndex];
     const estamentos = this.estamentosPorEleccion[currentEleccion.id];
-
+  
     const index = estamentos.findIndex(estamento => estamento.id === this.selectedEstamentoId);
     if (index !== -1 && index + 1 < estamentos.length) {
+      // Avanzar al siguiente estamento dentro de la misma elección
       this.selectedEstamentoId = estamentos[index + 1].id;
-      this.loadCandidatos(); // Cargar candidatos del nuevo estamento
+      this.loadCandidatos();
     } else {
-      // Si ya se votó por todos los estamentos disponibles, avanzar a la siguiente elección
+      // Si se votó por todos los estamentos disponibles en la elección actual
       if (this.selectedEleccionIndex + 1 < this.eleccionesActivas.length) {
+        // Avanzar a la siguiente elección
         this.selectedEleccionIndex++;
-        const nextEleccion = this.eleccionesActivas[this.selectedEleccionIndex];
-        const nextEstamentos = this.estamentosPorEleccion[nextEleccion.id];
-        if (nextEstamentos.length > 0) {
-          this.selectedEstamentoId = nextEstamentos[0].id;
-          this.loadCandidatos();
-        }
+        this.loadEstamentosPorElecciones(); // Cargar estamentos de la siguiente elección
       } else {
+        // Si no hay más elecciones disponibles, mostrar mensaje
         this.notificationService.showNotification('Ya se votó por todas las elecciones y estamentos disponibles.', 'success');
         this.selectedEstamentoId = null;
         this.candidatosPorEstamento = [];
+        // Redirigir al componente de resultados
+        this.router.navigate(['/resultados']);
       }
     }
   }
