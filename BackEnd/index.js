@@ -101,10 +101,10 @@ app.use('/editarCandidato', editarCandidato);
 
 app.use('/validarNumeroCandidato', validarNumeroCandidato);
 
-app.use('/candidatos', candidatos);
+app.use('/', candidatos);
 app.use('/elecciones', elecciones);
 app.use('/', estamentos);
-app.use('/votar', votar);
+app.use('/', votar);
 
 app.use('/resultados', mostrarResultados);
 

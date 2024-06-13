@@ -17,14 +17,15 @@ const verificarRol = async (req, res, next) => {
         let userDetails = {};
 
         // Buscar en las tablas de usuarios
-        const estudianteResult = await pool.query('SELECT documento_estudiante, nombre_estudiante, grado_estudiante, institucion_estudiante FROM estudiantes WHERE documento_estudiante = $1', [id]);
-        const padreResult = await pool.query('SELECT documento_padre, nombre_padre FROM padres WHERE documento_padre = $1', [id]);
-        const docenteResult = await pool.query('SELECT documento_docente, nombre_docente FROM docentes WHERE documento_docente = $1', [id]);
+        const estudianteResult = await pool.query('SELECT id, documento_estudiante, nombre_estudiante, grado_estudiante, institucion_estudiante FROM estudiantes WHERE documento_estudiante = $1', [id]);
+        const padreResult = await pool.query('SELECT id, documento_padre, nombre_padre FROM padres WHERE documento_padre = $1', [id]);
+        const docenteResult = await pool.query('SELECT id, documento_docente, nombre_docente FROM docentes WHERE documento_docente = $1', [id]);
 
         // Verificar en qué tabla se encuentra el usuario y asignar el rol y detalles correspondientes
         if (estudianteResult.rows.length > 0) {
             rol = 'estudiante';
             userDetails = {
+                id: estudianteResult.rows[0].id,
                 rol: 'estudiante',
                 documento: estudianteResult.rows[0].documento_estudiante,
                 nombre: estudianteResult.rows[0].nombre_estudiante,
@@ -34,6 +35,7 @@ const verificarRol = async (req, res, next) => {
         } else if (padreResult.rows.length > 0) {
             rol = 'padre';
             userDetails = {
+                id: padreResult.rows[0].id,
                 rol: 'padre',
                 documento: padreResult.rows[0].documento_padre,
                 nombre: padreResult.rows[0].nombre_padre
@@ -41,6 +43,7 @@ const verificarRol = async (req, res, next) => {
         } else if (docenteResult.rows.length > 0) {
             rol = 'docente';
             userDetails = {
+                id: docenteResult.rows[0].id,
                 rol: 'docente',
                 documento: docenteResult.rows[0].documento_docente,
                 nombre: docenteResult.rows[0].nombre_docente
@@ -52,8 +55,6 @@ const verificarRol = async (req, res, next) => {
 
         req.userRole = rol;
         req.userDetails = userDetails;
-        //console.log({ id, rol, userDetails });
-
         next();
 
     } catch (e) {

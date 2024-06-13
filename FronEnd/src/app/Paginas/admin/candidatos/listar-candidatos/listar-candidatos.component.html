@@ -60,7 +60,7 @@
                 <input type="text" [(ngModel)]="candidato.descripcion" class="form-control text-center" [disabled]="!candidato.editando">
               </td>
               <td data-label="Numero" class="text-center">
-                <input type="text" [(ngModel)]="candidato.numero" class="form-control text-center" [disabled]="!candidato.editando">
+                <input type="text" [(ngModel)]="candidato.numero" class="form-control text-center" disabled>
               </td>
               <td data-label="Estado" class="text-center">
                 <ng-container *ngIf="candidato.editando">

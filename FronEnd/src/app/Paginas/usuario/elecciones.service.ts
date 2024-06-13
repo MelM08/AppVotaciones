@@ -14,9 +14,9 @@ export class EleccionesService {
     return this.http.get('http://localhost:3000/elecciones/activas');
   }
 
-  obtenerEstamentosPorEleccion(id: number, userDetails: any): Observable<any> {
+  obtenerEstamentosPorEleccion(id_eleccion: number, userDetails: any): Observable<any> {
     // Envía los datos del usuario junto con la solicitud HTTP
-    return this.http.get(`http://localhost:3000/elecciones/${id}/estamentos`, { params: userDetails });
+    return this.http.get(`http://localhost:3000/elecciones/${id_eleccion}/estamentos`, { params: userDetails });
   }
 
   obtenerCandidatosPorEstamento(estamentoId: number): Observable<any> {

@@ -64,7 +64,7 @@ create table candidatos (
 CREATE TABLE votos (
     id SERIAL PRIMARY KEY,
 	id_votante INT NOT NULL,
-	id_sede INT NOT NULL,
+	sede VARCHAR(255) NOT NULL,
 	id_eleccion INT NOT NULL,
 	id_estamento INT REFERENCES estamentos(id),
     id_candidato INT REFERENCES candidatos(id)

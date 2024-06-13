@@ -29,12 +29,24 @@ export class CrearCandidatoComponent {
   }
 
   async crearCandidato(): Promise<void> {
+    // Verificar si el número de candidato es menor que 1 (para casos extremos)
+    if (this.numeroCandidato !== null && this.numeroCandidato < 1) {
+      this.notificationService.showNotification('El número de candidato debe ser mayor o igual a 1.', 'danger');
+      return;
+    }
+    
+    // Verificar si el número de candidato es 0
+    if (this.numeroCandidato === 0) {
+      this.notificationService.showNotification('El número de candidato 0 está reservado para el voto en blanco. Por favor, elige otro número.', 'danger');
+      return;
+    }
+  
     // Verificar si se ha seleccionado una foto
     if (this.foto === null) {
       this.notificationService.showNotification('Por favor, selecciona una foto.', 'danger');
       return;
     }
-
+  
     // Verificar si el número de candidato ya está en uso
     const numeroCandidatoExistente = await this.verificarNumeroCandidatoExistente();
     if (numeroCandidatoExistente) {
@@ -44,7 +56,7 @@ export class CrearCandidatoComponent {
     } else {
       this.numeroCandidatoExists = false;
     }
-
+  
     // Crear el FormData para enviar al servidor
     const formData = new FormData();
     formData.append('nombre', this.nombre);
@@ -55,7 +67,7 @@ export class CrearCandidatoComponent {
     formData.append('foto', this.foto);
     formData.append('estado', this.estado);
     formData.append('estamentoId', this.estamentoId.toString());
-
+  
     // Enviar la solicitud HTTP para crear el candidato
     this.http.post<any>('http://localhost:3000/crearCandidato/crear-candidato', formData)
       .subscribe(

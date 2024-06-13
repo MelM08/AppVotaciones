@@ -18,10 +18,13 @@
             <input type="text" class="form-control" id="descripcion" [(ngModel)]="descripcion" name="descripcion" placeholder="Descripción">
           </div>
           <div class="mb-3">
-            <input type="number" class="form-control" id="numeroCandidato" [(ngModel)]="numeroCandidato" name="numeroCandidato" required placeholder="Número de Candidato">
+            <input type="number" class="form-control" id="numeroCandidato" [(ngModel)]="numeroCandidato" name="numeroCandidato" required placeholder="Número de Candidato" min="1" pattern="[0-9]*">
             <div class="text-center">
               <small class="text-danger" *ngIf="formularioCandidato.controls['numeroCandidato'].errors?.['required']">Este campo es obligatorio.</small>
+              <small class="text-danger" *ngIf="formularioCandidato.controls['numeroCandidato'].errors?.['min']">El número de candidato debe ser mayor o igual a 1.</small>
+              <small class="text-danger" *ngIf="formularioCandidato.controls['numeroCandidato'].errors?.['pattern']">Ingresa solo números enteros positivos.</small>
             </div>
+            <small class="form-text text-danger" *ngIf="numeroCandidato === 0">El número de candidato 0 está reservado para el voto en blanco.</small>
             <small class="form-text text-danger" *ngIf="numeroCandidatoExists">El número de candidato ya está en uso.</small>
           </div>
           <div class="mb-3">

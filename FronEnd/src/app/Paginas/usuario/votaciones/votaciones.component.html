@@ -1,26 +1,51 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
-    <div class="col-lg-8">
-      <h1 class="display-5">Votaciones</h1>
-      <div class="form-group">
-        <label for="eleccionesSelect">Seleccione una elección:</label>
-        <select class="form-control" id="eleccionesSelect" [(ngModel)]="selectedEleccionesId" (change)="onEleccionesChange()">
-          <option *ngFor="let eleccion of eleccionesActivas" [value]="eleccion.id">{{ eleccion.nombre }}</option>
-        </select>
+    <div class="col-lg-10">
+      <h1 class="display-3 text-center mb-4 text-primary">VOTACIONES</h1>
+
+      <!-- Mostrar mensaje de error de elecciones -->
+      <div *ngIf="eleccionesErrorMessage" class="alert alert-danger text-center">
+        {{ eleccionesErrorMessage }}
       </div>
-      <div class="form-group">
-        <label for="estamentosSelect">Seleccione un estamento:</label>
-        <select class="form-control" id="estamentosSelect" [(ngModel)]="selectedEstamentoId" (change)="onEstamentoChange()">
-          <option *ngFor="let estamento of estamentosDisponibles" [value]="estamento.id">{{ estamento.nombre }}</option>
-        </select>
+
+      <!-- Mostrar la elección y el estamento actual -->
+      <div *ngIf="!eleccionesErrorMessage && eleccionesActivas.length > 0">
+        <div class="card mb-4 w-100 border-0 rounded shadow">
+          <div class="card-header text-center bg-primary text-white rounded-top">
+            {{ eleccionesActivas[selectedEleccionIndex]?.nombre | uppercase }} 
+          </div>
+          <div class="card-body">
+            <!-- Mostrar el estamento actual -->
+            <h3 class="mb-4 text-center display-4 estamento-title">{{ getEstamentoName() }}</h3>
+
+            <!-- Mostrar candidatos del estamento seleccionado -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+              <div class="col" *ngFor="let candidato of candidatosPorEstamento">
+                <div class="card h-100 shadow-sm d-flex align-items-stretch border-0 rounded">
+                  <img class="card-img-top fixed-size-img mx-auto d-block my-3 rounded-circle border" [src]="candidato.fotoUrl || 'assets/default-image.jpg'" alt="Foto de {{ candidato.nombre }}">
+                  <div class="card-body d-flex flex-column justify-content-between">
+                    <div>
+                      <h5 class="card-title text-center mb-3 candidato-name">{{ candidato.nombre }}</h5> 
+                      <p class="card-text text-center">{{ candidato.descripcion }}</p>
+                      <p class="card-text text-center numero-candidato"># <span class="display-6">{{ candidato.numero }}</span></p>
+                    </div>
+                    <button class="btn btn-primary btn-lg mx-auto mt-3" (click)="votarCandidato(candidato.id)">Votar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mostrar mensaje si no hay candidatos disponibles -->
+            <div *ngIf="!candidatosPorEstamento || candidatosPorEstamento.length === 0" class="text-center mt-4">
+              <p>No hay candidatos disponibles para este estamento.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div *ngIf="candidatosPorEstamento && candidatosPorEstamento.length > 0">
-        <h3>Candidatos:</h3>
-        <ul class="list-group">
-          <li class="list-group-item" *ngFor="let candidato of candidatosPorEstamento">
-            {{ candidato.nombre }} <button class="btn btn-primary btn-sm" (click)="votarCandidato(candidato.id)">Votar</button>
-          </li>
-        </ul>
+
+      <!-- Mostrar mensaje si no hay elecciones disponibles -->
+      <div *ngIf="!eleccionesActivas || eleccionesActivas.length === 0" class="text-center mt-4">
+        <p>No hay elecciones disponibles en este momento.</p>
       </div>
     </div>
   </div>

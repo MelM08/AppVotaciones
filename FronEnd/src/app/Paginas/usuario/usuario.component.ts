@@ -23,8 +23,6 @@ export class UsuarioComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Log para verificar el nombre del usuario en la inicialización del componente
-
     this.notificationSubscription = this.notificationService.notifications$.subscribe(
       notification => {
         this.notifications.push(notification);

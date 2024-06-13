@@ -17,7 +17,11 @@ router.get('/activas', async (req, res) => {
         // Filtrar solo las elecciones activas
         const eleccionesActivas = result.rows.filter(eleccion => eleccion.estado === 'ACTIVO');
 
-        res.status(200).json(eleccionesActivas);
+        if (eleccionesActivas.length === 0) {
+            res.status(404).json({ message: 'No se encontraron elecciones activas.' });
+        } else {
+            res.status(200).json(eleccionesActivas);
+        }
     } catch (error) {
         console.error('Error al obtener elecciones activas:', error);
         res.status(500).json({ message: 'Error al obtener elecciones activas.' });

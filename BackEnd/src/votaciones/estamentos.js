@@ -28,19 +28,24 @@ const gradoMapping = {
     'Once': 11
 };
 
-router.get('/elecciones/:id/estamentos', async (req, res) => {
-    const { id } = req.params;
-    const { rol, grado } = req.query || {};
+router.get('/elecciones/:id_eleccion/estamentos', async (req, res) => {
+    const { id_eleccion } = req.params;
+    const { rol, grado, id} = req.query || {};
 
     console.log('Datos del usuario estamento:', { rol, grado });
 
     try {
         const query = `
-            SELECT *
-            FROM estamentos
-            WHERE id_eleccion = $1;
+            SELECT e.*
+            FROM estamentos e
+            LEFT JOIN votos v ON e.id = v.id_estamento AND v.id_votante = $1
+            WHERE e.id_eleccion = $2
+            AND (v.id_votante IS NULL OR v.id_votante <> $1);  -- Filtrar estamentos no votados por el usuario
         `;
-        const result = await pool.query(query, [id]);
+        console.log('id del votante', id)
+        console.log('id de la eleccion', id_eleccion)
+        const result = await pool.query(query, [id, id_eleccion]);
+
 
         // Convertir el rol de entrada a la forma utilizada en la base de datos
         const rolDB = rolMapping[rol.toLowerCase()];
@@ -85,5 +90,6 @@ router.get('/elecciones/:id/estamentos', async (req, res) => {
         res.status(500).json({ message: 'Error al obtener estamentos por elección.' });
     }
 });
+
 
 module.exports = router;
