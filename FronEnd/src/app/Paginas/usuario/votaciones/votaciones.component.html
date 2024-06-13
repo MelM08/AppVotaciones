@@ -12,7 +12,7 @@
       <div *ngIf="!eleccionesErrorMessage && eleccionesActivas.length > 0">
         <div class="card mb-4 w-100 border-0 rounded shadow">
           <div class="card-header text-center bg-primary text-white rounded-top">
-            {{ eleccionesActivas[selectedEleccionIndex].nombre | uppercase }}
+            {{ eleccionesActivas[selectedEleccionIndex].nombre | uppercase }} - {{ eleccionesActivas[selectedEleccionIndex].ano }}
           </div>
           <div class="card-body">
             <!-- Mostrar el estamento actual -->
@@ -22,7 +22,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
               <div class="col" *ngFor="let candidato of candidatosPorEstamento">
                 <div class="card h-100 shadow-sm d-flex align-items-stretch border-0 rounded">
-                  <img class="card-img-top fixed-size-img mx-auto d-block my-3 rounded-circle border" [src]="candidato.fotoUrl || 'assets/default-image.jpg'" alt="Foto de {{ candidato.nombre }}">
+                  <img class="card-img-top fixed-size-img mx-auto d-block my-3 border" [src]="candidato.fotoUrl || 'assets/default-image.jpg'" alt="Foto de {{ candidato.nombre }}">
                   <div class="card-body d-flex flex-column justify-content-between">
                     <div>
                       <h5 class="card-title text-center mb-3 candidato-name">{{ candidato.nombre }}</h5>
@@ -38,6 +38,7 @@
             <!-- Mostrar mensaje si no hay candidatos disponibles -->
             <div *ngIf="!candidatosPorEstamento || candidatosPorEstamento.length === 0" class="text-center mt-4">
               <p>No hay candidatos disponibles para este estamento.</p>
+              <a class="btn btn-primary" [routerLink]="['../../resultados']">ver resultados</a>
             </div>
           </div>
         </div>
@@ -46,6 +47,7 @@
       <!-- Mostrar mensaje si no hay elecciones disponibles -->
       <div *ngIf="!eleccionesActivas || eleccionesActivas.length === 0" class="text-center mt-4">
         <p>No hay elecciones disponibles en este momento.</p>
+        <a class="btn btn-primary" [routerLink]="['../../resultados']">ver resultados</a>
       </div>
     </div>
   </div>

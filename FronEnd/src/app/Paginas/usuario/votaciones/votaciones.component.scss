@@ -1,44 +1,44 @@
 .fixed-size-img {
-    width: 100%;
-    max-width: 240px;
-    height: 240px;
-    object-fit: cover;
-    border-radius: 50%;
-    padding: 5px;
-  }
+  width: 100%;
+  max-width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 15px; /* Esquinas redondeadas */
+  padding: 5px;
+}
 
-  .card {
-    transition: transform 0.3s ease-in-out;
-  }
+.card {
+  transition: transform 0.3s ease-in-out;
+}
 
-  .card:hover {
-    transform: translateY(-5px);
-  }
+.card:hover {
+  transform: translateY(-5px);
+}
 
-  .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
 
-  .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-  }
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
 
-  .candidato-name {
-    font-weight: bold;
-    color: #007bff; /* Color del nombre del candidato en azul */
-    font-size: 2rem; /* Tamaño grande para el nombre del candidato */
-  }
+.candidato-name {
+  font-weight: bold;
+  color: #007bff; /* Color del nombre del candidato en azul */
+  font-size: 2rem; /* Tamaño grande para el nombre del candidato */
+}
 
-  .estamento-title {
-    color: #4e4e4e; /* Color del nombre del estamento en verde */
-    font-size: 3rem; /* Tamaño grande para el nombre del estamento */
-    font-weight: bold;
-  }
+.estamento-title {
+  color: #4e4e4e; /* Color del nombre del estamento en verde */
+  font-size: 3rem; /* Tamaño grande para el nombre del estamento */
+  font-weight: bold;
+}
 
-  .numero-candidato {
-    font-size: 1.5rem; /* Tamaño grande para el número del candidato */
-    color: #dc3545; /* Color del número del candidato en rojo */
-    font-weight: bold;
-  }
+.numero-candidato {
+  font-size: 1.5rem; /* Tamaño grande para el número del candidato */
+  color: #dc3545; /* Color del número del candidato en rojo */
+  font-weight: bold;
+}

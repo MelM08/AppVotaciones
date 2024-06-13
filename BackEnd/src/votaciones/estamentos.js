@@ -32,7 +32,7 @@ router.get('/elecciones/:id_eleccion/estamentos', async (req, res) => {
     const { id_eleccion } = req.params;
     const { rol, grado, id} = req.query || {};
 
-    //console.log('Datos del usuario estamento:', { rol, grado });
+    // console.log('Datos del usuario estamento:', { rol, grado });
 
     try {
         const query = `
@@ -42,8 +42,8 @@ router.get('/elecciones/:id_eleccion/estamentos', async (req, res) => {
             WHERE e.id_eleccion = $2
             AND (v.id_votante IS NULL OR v.id_votante <> $1);  -- Filtrar estamentos no votados por el usuario
         `;
-        console.log('id del votante', id)
-        console.log('id de la eleccion', id_eleccion)
+        // console.log('id del votante', id)
+        // console.log('id de la eleccion', id_eleccion)
         const result = await pool.query(query, [id, id_eleccion]);
 
 
@@ -51,16 +51,16 @@ router.get('/elecciones/:id_eleccion/estamentos', async (req, res) => {
         const rolDB = rolMapping[rol.toLowerCase()];
 
         // Verificar que `rolDB` se ha mapeado correctamente
-        console.log('Rol mapeado en DB:', rolDB);
+        // console.log('Rol mapeado en DB:', rolDB);
 
         // Convertir el grado numérico a su representación en la base de datos
         const gradoDB = Object.entries(gradoMapping).find(([key, value]) => value == grado)?.[0];
 
         // Verificar que `gradoDB` se ha mapeado correctamente
-        console.log('Grado mapeado en DB:', gradoDB);
+        // console.log('Grado mapeado en DB:', gradoDB);
 
         const estamentosFiltrados = result.rows.filter(estamento => {
-            console.log('Procesando estamento:', estamento);
+            // console.log('Procesando estamento:', estamento);
 
             // Verificar condiciones de filtrado
             const rolCondition = estamento.rol_habilitado_para_votar === 'Todos' || estamento.rol_habilitado_para_votar === rolDB;
@@ -68,8 +68,8 @@ router.get('/elecciones/:id_eleccion/estamentos', async (req, res) => {
                                     estamento.grados_habilitados === 'Ninguno' && gradoDB === undefined ||
                                     estamento.grados_habilitados === gradoDB;
 
-            console.log(`RolCondition (${estamento.rol_habilitado_para_votar} === ${rolDB}):`, rolCondition);
-            console.log(`GradoCondition (${estamento.grados_habilitados} === ${gradoDB}):`, gradoCondition);
+            // console.log(`RolCondition (${estamento.rol_habilitado_para_votar} === ${rolDB}):`, rolCondition);
+            // console.log(`GradoCondition (${estamento.grados_habilitados} === ${gradoDB}):`, gradoCondition);
 
             return (
                 estamento.estado === 'ACTIVO' &&
@@ -80,7 +80,7 @@ router.get('/elecciones/:id_eleccion/estamentos', async (req, res) => {
 
         // Verificar si hay estamentos filtrados
         if (estamentosFiltrados.length > 0) {
-            console.log('Estamentos filtrados:', estamentosFiltrados);
+            // console.log('Estamentos filtrados:', estamentosFiltrados);
             res.status(200).json(estamentosFiltrados); // Enviar solo el array
         } else {
             res.status(404).json({ message: 'No se encontraron estamentos que cumplan con los criterios de filtrado.' });

@@ -10,8 +10,7 @@ import { EleccionesService } from '../usuario/elecciones.service';
 export class ResultadosComponent implements OnInit {
   eleccionesActivas: any[] = [];
   estamentoSeleccionado: number | null = null; // Variable para almacenar el estamento seleccionado
-
-
+  idEstamento: number = 0
 
   constructor(private eleccionesService: EleccionesService) {}
 
@@ -71,6 +70,7 @@ export class ResultadosComponent implements OnInit {
           });
         });
         this.eleccionesActivas = Array.from(eleccionesMap.values());
+        console.log(this.eleccionesActivas)
       },
       error => {
         console.error('Error al cargar los resultados por elección:', error);
